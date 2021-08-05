@@ -24,7 +24,7 @@
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <StackPanel Orientation="Vertical">
                             <DockPanel>
-                                <CheckBox  Padding="2,2,2,2" VerticalAlignment="Center" Click="checkBox_Clicked"/>
+                                <CheckBox  IsChecked="{Binding chk}"  Margin="2,2,2,2" VerticalAlignment="Center" Click="checkBox_Clicked" /> <!--Click="checkBox_Clicked"-->
                                 <TextBox Text="{Binding Path}" Margin="3,3,3,3" Width="350" Height="25" Padding="2,2,2,2"/>
                                 <Button Content="-->" Margin="5,3,3,3" VerticalAlignment="Top" Width="25"  Height="25" Click="cmdOpen_Clicked"/>
                                 <ComboBox Text="{Binding Port}" Margin="5,3,3,3" Width="100" Height="25" ItemsSource="{Binding portNames}"/>
@@ -34,8 +34,7 @@
 
                             </DockPanel>
                             <!--MAC COM-->
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >                         
-                            </StackPanel>
+                            
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>

@@ -30,7 +30,9 @@ namespace WpfApp1
         public string Port { get; set; }
 
         public string[] portNames { get; set; }
-        
+
+        public bool chk { get; set; }
+
 
         public FlahInfo(string Path, string Port)
         {
@@ -44,35 +46,35 @@ namespace WpfApp1
         string[] portNames; // порты СОМ
         string user; //пользователь
         //string idfPath = ""; //на конце пути должен быть слэш "\"
-        List <FlahInfo> spisflash = new List<FlahInfo>();
+        List<FlahInfo> spisflash = new List<FlahInfo>();
         public MainWindow()
         {
-            
+
             InitializeComponent();
             ShowPorts();
-           // MessageBox.Show(Properties.Settings.Default.spifflash);
+            // MessageBox.Show(Properties.Settings.Default.spifflash);
 
             spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Properties.Settings.Default.spifflash);
-/*
-            spisflash.Add(new FlahInfo("Nekiy Put", "COM5") { portNames= portNames });
-            spisflash.Add(new FlahInfo("", "") { portNames = portNames });
-            spisflash.Add(new FlahInfo("", "") { portNames = portNames });
-            spisflash.Add(new FlahInfo("666", "COM144") { portNames = portNames });
-            spisflash.Add(new FlahInfo("666", "") { portNames = portNames });
-            //MessageBox.Show(spisflash[0].Path);
-*/
+            /*
+                        spisflash.Add(new FlahInfo("Nekiy Put", "COM5") { portNames= portNames });
+                        spisflash.Add(new FlahInfo("", "") { portNames = portNames });
+                        spisflash.Add(new FlahInfo("", "") { portNames = portNames });
+                        spisflash.Add(new FlahInfo("666", "COM144") { portNames = portNames });
+                        spisflash.Add(new FlahInfo("666", "") { portNames = portNames });
+                        //MessageBox.Show(spisflash[0].Path);
+            */
             lb.ItemsSource = spisflash;
 
             user = Environment.UserName;
 
-            if (Properties.Settings.Default.espPath != "" && Properties.Settings.Default.espPath!=null)
+            if (Properties.Settings.Default.espPath != "" && Properties.Settings.Default.espPath != null)
             {
-              txt_espressif.Text    = Properties.Settings.Default.espPath;
-              
+                txt_espressif.Text = Properties.Settings.Default.espPath;
+
             }
-            
-            else 
-                MessageBox.Show("Укажите путь до esp папки X:\\yourPath\\ESP\\ на конце должен быть \\ - бэкслеш","",MessageBoxButton.OK,MessageBoxImage.Information);
+
+            else
+                MessageBox.Show("Укажите путь до esp папки X:\\yourPath\\ESP\\ на конце должен быть \\ - бэкслеш", "", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
 
@@ -90,17 +92,17 @@ namespace WpfApp1
             }
 
             portNames = SerialPort.GetPortNames();//получить список всех доступнх портов
-          
-            if (portNames.Length>0)
+
+            if (portNames.Length > 0)
             {
                 //lb.ItemsSource = portNames;
-               
+
             }
             else MessageBox.Show("Необнаружено ни одного устройства.", "Подключите устройства!", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        string [] MACiCOM = new string[2];
-        
+        string[] MACiCOM = new string[2];
+
         private void myProcess_Exited(object sender, System.EventArgs e)
         {
             //MessageBox.Show("fghh");
@@ -110,9 +112,9 @@ namespace WpfApp1
             {
                 if (line.Contains("MAC: ")) MACiCOM[0] = line; //MAC
                 if (line.Contains("Serial port ")) MACiCOM[1] = line; //COM
-               
+
             }
-            
+
 
             MACiCOM[0] = MACiCOM[0].Remove(0, 5);//MAC 
             MACiCOM[0] = MACiCOM[0].Replace(":", ""); // удаляем : из МАС адреса
@@ -121,7 +123,7 @@ namespace WpfApp1
 
 
             MessageBox.Show($"{MACiCOM[0]}\n{MACiCOM[1]}");//{ MACiCOM[1]}
-            
+
             //Array.Clear(MACiCOM, 0, MACiCOM.Length);
 
 
@@ -138,7 +140,7 @@ namespace WpfApp1
                 //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --port COM3 chip_id |clip""
                 startInfo.WorkingDirectory = GetIdfPath();
                 Process process = new Process();
-                process.StartInfo=startInfo;
+                process.StartInfo = startInfo;
                 process.EnableRaisingEvents = true;
                 process.Exited += new EventHandler(myProcess_Exited);
                 process.Start();
@@ -153,16 +155,16 @@ namespace WpfApp1
 
         private void cmdId_Clicked(object sender, RoutedEventArgs e)
         {
-              
+
             Button cmd = (Button)sender;
             if (cmd.DataContext is FlahInfo)
             {
 
                 FlahInfo msg = (FlahInfo)cmd.DataContext;
-              
+
                 //MessageBox.Show(msg.Port);
-                if(msg.Port!="") 
-                 ChipId(msg.Port);
+                if (msg.Port != "")
+                    ChipId(msg.Port);
                 else MessageBox.Show($"Не выбран COM порт!", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             }
@@ -173,16 +175,16 @@ namespace WpfApp1
             Button cmd = (Button)sender;
             if (cmd.DataContext is FlahInfo)
             {
-                
+
                 FlahInfo msg = (FlahInfo)cmd.DataContext;
                 //MessageBox.Show(msg.Port);
                 if (msg.Port != "")
                     erase_flash(msg.Port);
                 else MessageBox.Show($"Не выбран COM порт!", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
-                
-                
+
+
             }
-            
+
         }
 
 
@@ -199,9 +201,9 @@ namespace WpfApp1
                 {
                     if (msg.Path != "" && msg.Path != "Ничего не выбрано!")
                     {
-                                                                                         
+
                         flashtool(msg.Path, msg.Port);
-                     
+
 
                     }
 
@@ -210,11 +212,11 @@ namespace WpfApp1
                 else MessageBox.Show($"Не выбран COM порт", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             }
-       
+
 
         }
 
-         
+
         private void cmdOpen_Clicked(object sender, RoutedEventArgs e)
         {
 
@@ -227,7 +229,7 @@ namespace WpfApp1
             }
         }
 
-       
+
         public string OpenFile() // выбор bin файла
         {
 
@@ -236,7 +238,7 @@ namespace WpfApp1
             dlg.DefaultExt = ".bin";
             dlg.Filter = "Binary files |*.bin";
             Nullable<bool> result = dlg.ShowDialog();//? 
-            if (result== true)
+            if (result == true)
             {
                 string filename = dlg.FileName;
                 return filename;
@@ -259,7 +261,7 @@ namespace WpfApp1
             }
             catch (Exception er)
             {
-                MessageBox.Show(er.Message+ $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(er.Message + $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
@@ -281,15 +283,15 @@ namespace WpfApp1
             }
             catch (Exception er)
             {
-                MessageBox.Show(er.Message+ $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
-            } 
-            
+                MessageBox.Show(er.Message + $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
 
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-           //MessageBox.Show (cb1.SelectedItem as String);
+            //MessageBox.Show (cb1.SelectedItem as String);
         }
 
 
@@ -299,8 +301,8 @@ namespace WpfApp1
             {
                 spisflash = null;
                 spisflash = new List<FlahInfo>();
-               // spisflash.Clear();
-          
+                // spisflash.Clear();
+
                 ShowPorts();
                 spisflash.Add(new FlahInfo("", "") { portNames = portNames });
                 spisflash.Add(new FlahInfo("", "") { portNames = portNames });
@@ -316,13 +318,13 @@ namespace WpfApp1
             ShowPorts();
             if (spisflash != null)
             {
-              
-            for (int i = 0; i < spisflash.Count; i++)
-            {
-                spisflash[i].portNames = portNames;
-                spisflash[i].Port = "";
+
+                for (int i = 0; i < spisflash.Count; i++)
+                {
+                    spisflash[i].portNames = portNames;
+                    spisflash[i].Port = "";
                 }
-               
+
             }
 
             lb.Items.Refresh();
@@ -330,47 +332,56 @@ namespace WpfApp1
 
         private void checkBox_Clicked(object sender, RoutedEventArgs e)
         {
+
             CheckBox cmd = (CheckBox)sender;
-            if (cmd.DataContext is FlahInfo)
+            if (cmd.IsChecked == true) //если выбран прошиваем, иначе нет
             {
+                if (cmd.DataContext is FlahInfo) {
 
-                FlahInfo msg = (FlahInfo)cmd.DataContext;
+                    FlahInfo msg = (FlahInfo)cmd.DataContext;
 
-                if (msg.Port != "")
-                {
-                    if (msg.Path != "" && msg.Path != "Ничего не выбрано!")
+                    if (msg.Port != "")
                     {
-                        flashtool(msg.Path, msg.Port);
+                        if (msg.Path != "" && msg.Path != "Ничего не выбрано!")
+                        {
+                            //flashtool(msg.Path, msg.Port);
+                        }
+                        else cmdOpen_Clicked(sender, e);
                     }
-                    else cmdOpen_Clicked(sender, e);
-                }
-                else MessageBox.Show($"Не выбран COM порт", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    else MessageBox.Show($"Не выбран COM порт", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
 
+                }
             }
+
         }
 
         private void flash_all_Click(object sender, RoutedEventArgs e)
         {
-            
-            if (MessageBox.Show($"Вы уверены что хотите прошить несколько плат сразу?", "Прошить?", MessageBoxButton.YesNo, MessageBoxImage.Question)== MessageBoxResult.Yes)
+
+            if (MessageBox.Show($"Вы уверены что хотите прошить несколько плат сразу?", "Прошить?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                
-
+                for (int i = 0; i < spisflash.Count; i++)
+                {
+                    if (spisflash[i].chk == true)
+                    {
+                        if (spisflash[i].Path != "" && spisflash[i].Path != "Ничего не выбрано!" && spisflash[i].Port != "")
+                            flashtool(spisflash[i].Path, spisflash[i].Port);
+                        else if (MessageBox.Show("", "Пропустить", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel);
+                    }
+                    
+                }
             }
-
-
         }
-
 
         private void Window_Closed(object sender, EventArgs e)
         {
             string json = JsonConvert.SerializeObject(spisflash);
-         
+
             Properties.Settings.Default.spifflash = json;
             Properties.Settings.Default.espPath = GetIdfPath();
             Properties.Settings.Default.Save();
 
-          //  MessageBox.Show(jsonString);
+            //  MessageBox.Show(jsonString);
         }
 
         
@@ -378,4 +389,4 @@ namespace WpfApp1
 
   
 }
-//Created 02/08/2021
+//Created 02/08/2021 -- ...
