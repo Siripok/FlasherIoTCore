@@ -85,7 +85,7 @@ namespace WpfApp1
 
         public string GetIdfPath()
         {
-            return txt_espressif.Text.Trim().Trim('\\') + "\\";
+            return @"C:\esp\";// txt_espressif.Text.Trim().Trim('\\') + "\\";
         }
         public void ShowPorts()
         {
@@ -108,23 +108,30 @@ namespace WpfApp1
 
         string[] MACiCOM = new string[2];
 
-        private void myProcess_Exited(object sender, System.EventArgs e)
+        private void myProcess_Exited(object sender, System.EventArgs e, String port, bool multik=false, int num=0 )
         {
             //MessageBox.Show("fghh");
-            string MACpath = @$"C:\Users\{user}\AppData\Local\Temp\espMACiCOM.txt";
+            string MACpath = @$"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{port}.txt";
 
             foreach (string line in File.ReadLines(MACpath))
             {
-                if (line.Contains("MAC: ")) MACiCOM[0] = line; //MAC
-                if (line.Contains("Serial port ")) MACiCOM[1] = line; //COM
+                if (line.Contains("MAC: "))
+                {
+                    MACiCOM[0] = line; //MAC
+                    MACiCOM[0] = MACiCOM[0].Remove(0, 5);//MAC 
+                    MACiCOM[0] = MACiCOM[0].Replace(":", ""); // удаляем : из МАС адреса
+                }
+                if (line.Contains("Serial port ")){ 
+                    MACiCOM[1] = line; //COM
+                    MACiCOM[1] = MACiCOM[1].Remove(0, 12).Trim();//COM     
+                }
 
             }
 
 
-            MACiCOM[0] = MACiCOM[0].Remove(0, 5);//MAC 
-            MACiCOM[0] = MACiCOM[0].Replace(":", ""); // удаляем : из МАС адреса
+          
 
-            MACiCOM[1] = MACiCOM[1].Remove(0, 12).Trim();//COM     
+          
 
 
 
@@ -134,49 +141,40 @@ namespace WpfApp1
 
             //Array.Clear(MACiCOM, 0, MACiCOM.Length);
 
-
-        }
-        public void ChipId(string PORT)
-        {
-            try
+            if (multik)
             {
-
-                var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /c \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --p {PORT} chip_id >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACiCOM.txt\"\"");//chip_id |clip
-
-                //в bat файле
-                //esptool.py --chip esp32 --port COM3 erase_flash
-                //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --port COM3 chip_id |clip""
-                startInfo.WorkingDirectory = GetIdfPath();
-                Process process = new Process();
-                process.StartInfo = startInfo;
-                process.EnableRaisingEvents = true;
-                process.Exited += new EventHandler(myProcess_Exited);
-                process.Start();
-
-
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.Message + $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (spisflash.Count - 1 >= num + 1)
+                {
+                    flashtool(spisflash[num + 1].Path, spisflash[num + 1].Port, true, num + 1);
+                }
             }
         }
+        //public void ChipId(string PORT)
+        //{
+        //    try
+        //    {
 
-        private void cmdId_Clicked(object sender, RoutedEventArgs e)
-        {
+        //        var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /c \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --p {PORT} chip_id >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACiCOM.txt\"\"");//chip_id |clip
 
-            Button cmd = (Button)sender;
-            if (cmd.DataContext is FlahInfo)
-            {
+        //        //в bat файле
+        //        //esptool.py --chip esp32 --port COM3 erase_flash
+        //        //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --port COM3 chip_id |clip""
+        //        startInfo.WorkingDirectory = GetIdfPath();
+        //        Process process = new Process();
+        //        process.StartInfo = startInfo;
+        //        process.EnableRaisingEvents = true;
+        //        process.Exited += new EventHandler(myProcess_Exited);
+        //        process.Start();
 
-                FlahInfo msg = (FlahInfo)cmd.DataContext;
 
-                //MessageBox.Show(msg.Port);
-                if (msg.Port != "")
-                    ChipId(msg.Port);
-                else MessageBox.Show($"Не выбран COM порт!", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    }
+        //    catch (Exception er)
+        //    {
+        //        MessageBox.Show(er.Message + $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
 
-            }
-        }
+     
         private void cmdErase_Clicked(object sender, RoutedEventArgs e)
         {
 
@@ -272,26 +270,42 @@ namespace WpfApp1
 
         }
 
-        public void flashtool(string binPath, string PORT)//прошивка платы bin файлом
+        public void flashtool(string binPath, string PORT, bool allflash=false, int num=0)//прошивка платы bin файлом
         {
-            try
-            {
-                var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /c \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 {binPath} --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACiCOM.txt\"\"");
-                //в bat файле
-                //esptool.py --chip esp32 -p COM3 -b 115200 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 garage.bin --erase-all
-                //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --chip ESP32 -p COM3 -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 yourbin.bin --erase-all""
-                startInfo.WorkingDirectory = GetIdfPath();
-                Process process = new Process();
-                process.StartInfo = startInfo;
-                process.EnableRaisingEvents = true;
-                process.Exited += new EventHandler(myProcess_Exited);
-                process.Start();
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.Message + $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+           
 
+
+
+
+            if (spisflash[num].chk == true || allflash==false)
+            {
+                try
+                {
+                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /k \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACiCOM{PORT}.txt\"\"");
+                    //в bat файле
+                    //esptool.py --chip esp32 -p COM3 -b 115200 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 garage.bin --erase-all
+                    //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --chip ESP32 -p COM3 -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 yourbin.bin --erase-all""
+                    startInfo.WorkingDirectory = GetIdfPath();
+                    Process process = new Process();
+                    process.StartInfo = startInfo;
+                    process.EnableRaisingEvents = true;
+                    process.Exited += new EventHandler((sender, e) => myProcess_Exited(sender, e, PORT, allflash, num));
+                    process.Start();
+                }
+                catch (Exception er)
+                {
+                    MessageBox.Show(er.Message + $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                //   5      3
+                if (spisflash.Count - 1 >=num+1)
+                {                 
+               
+                flashtool(spisflash[num+1].Path, spisflash[num + 1].Port, true, num + 1);
+                }
+            }
 
         }
 
@@ -369,6 +383,12 @@ namespace WpfApp1
 
         private void flash_all_Click(object sender, RoutedEventArgs e)
         {
+            
+                flashtool(spisflash[0].Path, spisflash[0].Port, true, 0);
+            
+
+
+            /*
             int u = 0;
             for (int i = 0; i < spisflash.Count; i++) 
             {
@@ -395,7 +415,7 @@ namespace WpfApp1
 
                     }
                 }
-            }
+            }*/
         }
 
         private void Window_Closed(object sender, EventArgs e)
