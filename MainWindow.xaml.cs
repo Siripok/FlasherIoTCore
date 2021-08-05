@@ -16,6 +16,10 @@ using System.IO.Ports;//
 using System.Diagnostics;// Process.Start, File.Exists
 using Newtonsoft.Json;
 using System.IO;
+using Google.Apis.CloudIot.v1;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.CloudIot.v1.Data;
 
 namespace WpfApp1
 {
@@ -119,8 +123,11 @@ namespace WpfApp1
             MACiCOM[0] = MACiCOM[0].Remove(0, 5);//MAC 
             MACiCOM[0] = MACiCOM[0].Replace(":", ""); // удаляем : из МАС адреса
 
-            MACiCOM[1] = MACiCOM[1].Remove(0, 12);//COM     
+            MACiCOM[1] = MACiCOM[1].Remove(0, 12).Trim();//COM     
 
+
+
+            CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
 
             MessageBox.Show($"{MACiCOM[0]}\n{MACiCOM[1]}");//{ MACiCOM[1]}
 
@@ -384,7 +391,69 @@ namespace WpfApp1
             //  MessageBox.Show(jsonString);
         }
 
-        
+
+
+        public static CloudIotService CreateAuthorizedClient()
+        {
+            GoogleCredential credential =
+                GoogleCredential.GetApplicationDefaultAsync().Result;
+            // Inject the Cloud IoT Core Service scope
+            if (credential.IsCreateScopedRequired)
+            {
+                credential = credential.CreateScoped(new[]
+                {
+                    CloudIotService.Scope.CloudPlatform // Used for IoT + PubSub + IAM
+                    //CloudIotService.Scope.Cloudiot // Can be used if not accessing Pub/Sub
+                });
+            }
+            return new CloudIotService(new BaseClientService.Initializer
+            {
+                HttpClientInitializer = credential,
+                GZipEnabled = false
+            });
+        }
+
+        public static object CreateEsDevice(string projectId, string cloudRegion, string registryId, string deviceId, string keyPath)
+        {
+            var cloudIot = CreateAuthorizedClient();
+            var parent = $"projects/{projectId}/locations/{cloudRegion}/registries/{registryId}";
+
+            try
+            {
+                String keyText = File.ReadAllText(keyPath);
+                Device body = new Device()
+                {
+                    Id = deviceId
+                };
+                body.Credentials = new List<DeviceCredential>();
+                body.Credentials.Add(new DeviceCredential()
+                {
+                    PublicKey = new PublicKeyCredential()
+                    {
+                        Key = keyText,
+                        Format = "ES256_PEM"
+                    },
+                });
+
+                var device = cloudIot.Projects.Locations.Registries.Devices.Create(body, parent).Execute();
+                Console.WriteLine("Device created: ");
+                Console.WriteLine($"{device.Id}");
+                Console.WriteLine($"\tBlocked: {device.Blocked == true}");
+                Console.WriteLine($"\tConfig version: {device.Config.Version}");
+                Console.WriteLine($"\tName: {device.Name}");
+                Console.WriteLine($"\tState:{device.State}");
+            }
+            catch (Google.GoogleApiException e)
+            {
+                Console.WriteLine(e.Message);
+              MessageBox.Show( deviceId + " - " + (e.Error.Code == 409 ? "Уже существует" : e.Message) + Environment.NewLine);
+                if (e.Error != null) return e.Error.Code;
+                return -1;
+            }
+            return 0;
+        }
+
+
     }
 
   
