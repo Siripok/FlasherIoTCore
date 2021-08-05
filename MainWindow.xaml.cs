@@ -30,10 +30,6 @@ namespace WpfApp1
         public string Port { get; set; }
 
         public string[] portNames { get; set; }
-
-
-        public string flMAC { get; set; }
-        public string flPort { get; set; }
         
 
         public FlahInfo(string Path, string Port)
@@ -324,21 +320,36 @@ namespace WpfApp1
             lb.Items.Refresh();
         }
 
+        private void checkBox_Clicked(object sender, RoutedEventArgs e)
+        {
+            CheckBox cmd = (CheckBox)sender;
+            if (cmd.DataContext is FlahInfo)
+            {
 
+                FlahInfo msg = (FlahInfo)cmd.DataContext;
+
+                if (msg.Port != "")
+                {
+                    if (msg.Path != "" && msg.Path != "Ничего не выбрано!")
+                    {
+                        flashtool(msg.Path, msg.Port);
+                    }
+                    else cmdOpen_Clicked(sender, e);
+                }
+                else MessageBox.Show($"Не выбран COM порт", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            }
+        }
 
         private void flash_all_Click(object sender, RoutedEventArgs e)
         {
             
             if (MessageBox.Show($"Вы уверены что хотите прошить несколько плат сразу?", "Прошить?", MessageBoxButton.YesNo, MessageBoxImage.Question)== MessageBoxResult.Yes)
             {
-                //if (ch1.IsChecked == true) flash_1_Click(sender, e);
-                //if (ch2.IsChecked == true) flash_2_Click(sender, e);
-                //if (ch3.IsChecked == true) flash_3_Click(sender, e);
-                //if (ch4.IsChecked == true) flash_4_Click(sender, e);
-                //if (ch5.IsChecked == true) flash_5_Click(sender, e);
+                
 
             }
-           
+
 
         }
 
