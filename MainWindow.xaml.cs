@@ -36,6 +36,7 @@ namespace WpfApp1
         public string[] portNames { get; set; }
 
         public bool chk { get; set; }
+        public int elem { get; set; }
 
 
         public FlahInfo(string Path, string Port)
@@ -127,7 +128,7 @@ namespace WpfApp1
 
 
 
-            CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
+            //CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
 
             MessageBox.Show($"{MACiCOM[0]}\n{MACiCOM[1]}");//{ MACiCOM[1]}
 
@@ -210,8 +211,6 @@ namespace WpfApp1
                     {
 
                         flashtool(msg.Path, msg.Port);
-
-
                     }
 
                     else cmdOpen_Clicked(sender, e);
@@ -311,13 +310,18 @@ namespace WpfApp1
                 // spisflash.Clear();
 
                 ShowPorts();
-                spisflash.Add(new FlahInfo("", "") { portNames = portNames });
-                spisflash.Add(new FlahInfo("", "") { portNames = portNames });
-                spisflash.Add(new FlahInfo("", "") { portNames = portNames });
-                spisflash.Add(new FlahInfo("", "") { portNames = portNames });
-                spisflash.Add(new FlahInfo("", "") { portNames = portNames });
+                for(int i=0;i<5;i++)
+                {                    
+                    spisflash.Add(new FlahInfo("", "") { portNames = portNames });
+                    spisflash[i].elem = i + 1;
+                }
+               // spisflash.Add(new FlahInfo("", "") { portNames = portNames });
+              //  spisflash.Add(new FlahInfo("", "") { portNames = portNames });
+                //spisflash.Add(new FlahInfo("", "") { portNames = portNames });
+               // spisflash.Add(new FlahInfo("", "") { portNames = portNames });
                 lb.ItemsSource = spisflash;
                 lb.Items.Refresh();
+                
             }
         }
         private void Update_Click(object sender, RoutedEventArgs e)
@@ -330,14 +334,15 @@ namespace WpfApp1
                 {
                     spisflash[i].portNames = portNames;
                     spisflash[i].Port = "";
+                    
                 }
 
             }
-
+            
             lb.Items.Refresh();
         }
 
-        private void checkBox_Clicked(object sender, RoutedEventArgs e)
+        /*private void checkBox_Clicked(object sender, RoutedEventArgs e)
         {
 
             CheckBox cmd = (CheckBox)sender;
@@ -360,22 +365,35 @@ namespace WpfApp1
                 }
             }
 
-        }
+        }*/
 
         private void flash_all_Click(object sender, RoutedEventArgs e)
         {
-
-            if (MessageBox.Show($"Вы уверены что хотите прошить несколько плат сразу?", "Прошить?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            int u = 0;
+            for (int i = 0; i < spisflash.Count; i++) 
             {
-                for (int i = 0; i < spisflash.Count; i++)
+                if (spisflash[i].chk == true) u++;
+            }
+
+            if (u == 0) //если ничего не выбрано
+                MessageBox.Show("Для записи необходимо выбрать хотя бы один элемент.\nВыберите нужные элементы поставив галочку в чекбоксе.", "Отметьте нужне элемент!", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            else
+            {
+                if (MessageBox.Show($"Вы уверены что хотите прошить несколько плат сразу?", "Прошить?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    if (spisflash[i].chk == true)
+                    bool b = true;
+                    for (int i = 0; i < spisflash.Count && b == true; i++)
                     {
-                        if (spisflash[i].Path != "" && spisflash[i].Path != "Ничего не выбрано!" && spisflash[i].Port != "")
-                            flashtool(spisflash[i].Path, spisflash[i].Port);
-                        else if (MessageBox.Show("", "Пропустить", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel);
+                        if (spisflash[i].chk == true)
+                        {
+                            if (spisflash[i].Path != "" && spisflash[i].Path != "Ничего не выбрано!" && spisflash[i].Port != "")
+                                flashtool(spisflash[i].Path, spisflash[i].Port);
+                            else if (MessageBox.Show($"Незаполнены некоторе поля у {spisflash[i].elem} элемента!\nНажмите <ОК> чтобы пропустить этот элемент.\nНажмите <Отмена> чтобы выйти.", $"Ошибка! Элемент №{spisflash[i].elem}", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel)
+                                b = false;
+                        }
+
                     }
-                    
                 }
             }
         }
