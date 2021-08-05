@@ -1,0 +1,50 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="524" Width="864" Closed="Window_Closed">
+    <Grid Margin="-13,1,8,7">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="4" HorizontalAlignment="Left" Margin="11,212,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="4"/>
+        <Button x:Name="Update" Content="Обновить порты" Grid.Column="1" HorizontalAlignment="Left" Margin="719,405,0,0" VerticalAlignment="Top" Width="98" Click="Update_Click" Background="#FF5DA3DE" Height="40"/>
+        <Button x:Name="Clear" Content="Очистить поля" Grid.Column="1" HorizontalAlignment="Left" Margin="610,405,0,0" VerticalAlignment="Top" Width="96" Click="Clear_Click" Background="#FFF75F5F" Height="40"/>
+
+        <Button x:Name="flash_all" Content="Прошить все" Grid.Column="1" HorizontalAlignment="Left" Margin="609,370,0,0" VerticalAlignment="Top" Width="207" Background="#FFFB9E69" Foreground="#FF232323" Click="flash_all_Click" Height="20"/>
+        <TextBox x:Name="txt_espressif" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="67,435,0,0" TextWrapping="Wrap" Width="120" Height="18" VerticalAlignment="Top"/>
+        <Label Content="Путь до ESP:" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="64,408,0,0" Height="26" VerticalAlignment="Top"/>
+        <ListBox x:Name="lb"  Grid.ColumnSpan="2" Margin="68,28,0,0" Height="315" VerticalAlignment="Top" HorizontalAlignment="Left" Width="748">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:Name="DoubleLineDataTemplate">
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <StackPanel Orientation="Vertical">
+                            <DockPanel>
+                                <TextBox Text="{Binding Path}" Margin="3,3,3,3" Width="350" Height="25" Padding="2,2,2,2"/>
+                                <Button Content="-->" Margin="5,3,3,3" VerticalAlignment="Top" Width="25"  Height="25" Click="cmdOpen_Clicked"/>
+                                <ComboBox Text="{Binding Port}" Margin="5,3,3,3" Width="100" Height="25" ItemsSource="{Binding portNames}"/>
+                                <Button Content="Очистить ESP"  HorizontalAlignment="Left" Margin="5,3,3,3" VerticalAlignment="Top" Width="100" Background="#FFF3FB51" Height="25" Click="cmdErase_Clicked"/>
+                                <Button Content="Прошить" Margin="5,3,3,3" VerticalAlignment="Top" Width="95" Background="#FFFB9E69" Foreground="#FF232323" Height="25" Click="cmdFlash_Clicked"/>
+
+
+                            </DockPanel>
+                            <!--MAC COM-->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                                <TextBlock FontWeight="Bold" Text="MAC: " Foreground="DarkOrange" DockPanel.Dock="Left" Margin="5,0,0,0"/>
+                                <TextBlock Text="{Binding flMAC}"  Margin="2,0,5,0" FontWeight="Bold"/>
+
+                                <TextBlock Text="Port:" Foreground="Green" FontWeight="Bold" />
+                                <TextBlock Text="{Binding flPort}"  Margin="2,0,5,0" FontWeight="Bold"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</Window>
