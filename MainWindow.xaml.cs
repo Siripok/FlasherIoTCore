@@ -256,7 +256,6 @@ namespace WpfApp1
         }
 
 
-
         private void flash_all_Click(object sender, RoutedEventArgs e)
         {
 
@@ -355,8 +354,6 @@ namespace WpfApp1
             //  MessageBox.Show(jsonString);
         }
 
-
-
         public static CloudIotService CreateAuthorizedClient()
         {
             GoogleCredential credential =
@@ -420,6 +417,6 @@ namespace WpfApp1
 
     }
 
-  
 }
 //Created 02/08/2021 -- ...
+//v 1.0
