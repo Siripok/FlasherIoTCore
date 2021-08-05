@@ -94,7 +94,7 @@ namespace WpfApp1
             }
 
             portNames = SerialPort.GetPortNames();//получить список всех доступнх портов
-
+          
             if (portNames.Length>0)
             {
                 //lb.ItemsSource = portNames;
@@ -301,24 +301,32 @@ namespace WpfApp1
         {
             if (MessageBox.Show("Будут очищены пути к bin файлам, а так же выбранные COM-порты.\nПродолжить?", "Очистить все поля?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                spisflash.Clear();
+                spisflash = null;
+                spisflash = new List<FlahInfo>();
+               // spisflash.Clear();
+          
                 ShowPorts();
                 spisflash.Add(new FlahInfo("", "") { portNames = portNames });
                 spisflash.Add(new FlahInfo("", "") { portNames = portNames });
                 spisflash.Add(new FlahInfo("", "") { portNames = portNames });
                 spisflash.Add(new FlahInfo("", "") { portNames = portNames });
                 spisflash.Add(new FlahInfo("", "") { portNames = portNames });
+                lb.ItemsSource = spisflash;
                 lb.Items.Refresh();
             }
         }
         private void Update_Click(object sender, RoutedEventArgs e)
         {
             ShowPorts();
-
-            for (int i = 0; i < 5; i++)
+            if (spisflash != null)
+            {
+              
+            for (int i = 0; i < spisflash.Count; i++)
             {
                 spisflash[i].portNames = portNames;
                 spisflash[i].Port = "";
+                }
+               
             }
 
             lb.Items.Refresh();
