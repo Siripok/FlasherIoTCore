@@ -34,10 +34,14 @@
                                 <Button Content="Прошить" Margin="5,3,3,3" VerticalAlignment="Top" Width="95" Background="#FFFB9E69" Foreground="#FF232323" Height="25" Click="cmdFlash_Clicked"/>
 
 
-                            </DockPanel>
-                            <!--MAC COM-->
-
+                            </DockPanel>                            <!--MAC COM-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold" Text="MAC:" Foreground="DarkOrange" Margin="35,0,0,0"/>
+                                <TextBlock FontWeight="Bold" Text="{Binding flMAC}" Foreground="#222222" Margin="4,0,0,0"/>
+                                <TextBlock FontWeight="Bold" Text="{Binding status}" Foreground="#e80000" Margin="20,0,0,0"/>                             
+                            </StackPanel>
                         </StackPanel>
+                        
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
