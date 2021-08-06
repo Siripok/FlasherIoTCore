@@ -118,6 +118,7 @@ namespace WpfApp1
             {
                 if (line.Contains("A fatal error occurred:"))
                 {
+                    if(line.Contains("Serial port COM"))
                     spisflash[num].status = "Не удалось подключится к плате :(";
                 }
 
@@ -126,6 +127,11 @@ namespace WpfApp1
                     MACiCOM[0] = line; //MAC
                     MACiCOM[0] = MACiCOM[0].Remove(0, 5);//MAC 
                     MACiCOM[0] = MACiCOM[0].Replace(":", "");// удаляем : из МАС адреса
+
+                    if (num != 0)                    
+                        spisflash[num].flMAC = MACiCOM[0];                    
+                    else
+                        spisflash[w].flMAC = MACiCOM[0];                  
                 }
 
                 if (line.Contains("Serial port "))
@@ -134,11 +140,16 @@ namespace WpfApp1
                     MACiCOM[1] = MACiCOM[1].Remove(0, 12).Trim();//COM     
                 }
 
+                this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
+                {
+                    lb.Items.Refresh();
+                    //CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
+                });
             }
 
-            //CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
+            
 
-            MessageBox.Show($"{MACiCOM[0]}\n{MACiCOM[1]}\n{spisflash[num].status}");//{ MACiCOM[1]}
+            //MessageBox.Show($"{MACiCOM[0]}\n{MACiCOM[1]}\n{spisflash[num].status}");//{ MACiCOM[1]}
                    
 
             if (multik)
@@ -203,6 +214,7 @@ namespace WpfApp1
                     process.EnableRaisingEvents = true;
                     process.Exited += new EventHandler((sender, e) => myProcess_Exited(sender, e, PORT, allflash, num));
                     process.Start();
+                   
                 }
                 catch (Exception er)
                 {
@@ -308,10 +320,11 @@ namespace WpfApp1
             }
         }
 
+        int w;
 
         private void cmdFlash_Clicked(object sender, RoutedEventArgs e)
         {
-
+            w = 0;
             Button cmd = (Button)sender;
             if (cmd.DataContext is FlahInfo)
             {
@@ -321,6 +334,7 @@ namespace WpfApp1
                 {
                     if (msg.Path != "" && msg.Path != "Ничего не выбрано!")
                     {
+                        w = msg.elem - 1;
 
                         flashtool(msg.Path, msg.Port);
                     }
