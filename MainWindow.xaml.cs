@@ -55,6 +55,7 @@ namespace WpfApp1
         string user; //пользователь
         string idfPath = @""; //на конце пути должен быть слэш "\"
         const int BoardsMAX = 5;// кол-во строк т.е подключаемых плат
+        public string[] projects;
         char k;
         List<FlahInfo> spisflash = new List<FlahInfo>();
         public MainWindow()
@@ -62,13 +63,16 @@ namespace WpfApp1
 
             InitializeComponent();
             ShowPorts();
+            GetProjects();
             // MessageBox.Show(Properties.Settings.Default.spifflash);
 
             spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Properties.Settings.Default.spifflash);
             
-            lb.ItemsSource = spisflash;
+            lb.ItemsSource = spisflash;     
 
             user = Environment.UserName;
+
+            if (Properties.Settings.Default.select!=-1) cbProjectNames.SelectedIndex = Properties.Settings.Default.select;
 
             if (Properties.Settings.Default.noClosing == true)
             {
@@ -84,13 +88,26 @@ namespace WpfApp1
             if (Properties.Settings.Default.espPath != "" && Properties.Settings.Default.espPath != null)
             {
                 txt_espressif.Text = Properties.Settings.Default.espPath;
-                idfPath = GetIdfPath();
+                idfPath = GetIdfPath();//
             }
 
             else
                 MessageBox.Show("Укажите путь до esp папки\nX:\\yourPath\\ESP\\ на конце должен быть \\ - бэкслеш", "", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+        public void GetProjects()
+        {
+            if (Properties.Settings.Default.prj != "" && Properties.Settings.Default.prj != null)
+            {
+                if(projects!=null) Array.Clear(projects, 0, projects.Length);
 
+                string g = Properties.Settings.Default.prj;
+                projects = g.Split("\r" + "\n");
+                
+                cbProjectNames.ItemsSource = projects;
+                
+            }
+            cbProjectNames.Items.Refresh();
+        }
 
         public string GetIdfPath() //?!
         {
@@ -276,6 +293,7 @@ namespace WpfApp1
         private void Update_Click(object sender, RoutedEventArgs e)
         {
             ShowPorts();
+            GetProjects();
             if (spisflash != null)
             {
                 for (int i = 0; i < spisflash.Count; i++)
@@ -284,7 +302,13 @@ namespace WpfApp1
                     spisflash[i].Port = ""; //чтобы порты оставались, даже если устр-во было отключено, нужно закоментировать
                 }
             }
-            
+
+            if (projects != null)
+            {
+                cbProjectNames.ItemsSource = projects;
+            }
+          
+                     
             lb.Items.Refresh();
         }
 
@@ -383,6 +407,7 @@ namespace WpfApp1
             Properties.Settings.Default.spifflash = json;
             Properties.Settings.Default.noClosing = (bool) chk_noClose.IsChecked;
             Properties.Settings.Default.espPath = GetIdfPath();
+            Properties.Settings.Default.select = cbProjectNames.SelectedIndex;
             Properties.Settings.Default.Save();
 
             //  MessageBox.Show(jsonString);
@@ -461,7 +486,7 @@ namespace WpfApp1
             {
                 k = 'c'; //cloing
             }
-
+         
 
         }
 
@@ -470,6 +495,7 @@ namespace WpfApp1
             Window1 nf = new Window1();
             nf.ShowDialog();
         }
+       
     }
 
 }

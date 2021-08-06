@@ -20,19 +20,35 @@ namespace WpfApp1
         public Window1()
         {
             InitializeComponent();
-            //rich.Document.Blocks.Clear();
+            Fresh();
+        }
+        public void Fresh()
+        {
+            if (Properties.Settings.Default.prj != "" & Properties.Settings.Default.prj != null)
+            {
+                string g = Properties.Settings.Default.prj;
+                string[] s = g.Split("\r" + "\n");
+
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if (!String.IsNullOrWhiteSpace(s[i]))
+                        rich.AppendText(s[i] + "\r" + "\n");
+
+                }
+
+
+            }
         }
 
         private void SaveClose_Click(object sender, RoutedEventArgs e)
         {
-           string RichText = new TextRange(rich.Document.ContentStart, rich.Document.ContentEnd).Text;
-           string[] s = RichText.Split(' ');
-          // MessageBox.Show(s[]);
+            string g = rich.Text;
+            string[] s = g.Split("\r" + "\n");
 
-            
-            
-            
-           this.Close();
+            Properties.Settings.Default.prj = g;           
+            Properties.Settings.Default.Save();
+
+            this.Close();
         }
     }
 }

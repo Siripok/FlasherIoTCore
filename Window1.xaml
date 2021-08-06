@@ -7,15 +7,10 @@
         mc:Ignorable="d"
         Title="Project" Height="469" Width="398" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="0,0,0,-6">
-        <RichTextBox x:Name="rich" Margin="25,44,28,100">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text=""/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
+
         <Button x:Name="SaveClose" Content="Сохранить и выйти" FontWeight="Bold" HorizontalAlignment="Left" Margin="25,382,0,0" VerticalAlignment="Top" Width="345"  Foreground="#e80000" Height="23" Click="SaveClose_Click"/>
         <Label Content="Каждый проект с новой строки" HorizontalAlignment="Left" Margin="25,18,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="rich" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left" Margin="25,49,0,0"  VerticalAlignment="Top" Width="345" Height="300"/>
 
     </Grid>
 </Window>
