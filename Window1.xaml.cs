@@ -32,7 +32,7 @@ namespace WpfApp1
                 for (int i = 0; i < s.Length; i++)
                 {
                     if (!String.IsNullOrWhiteSpace(s[i]))
-                        rich.AppendText(s[i] + "\r" + "\n");
+                        rich.AppendText(s[i].Trim() + "\r" + "\n");
 
                 }
 
@@ -42,7 +42,7 @@ namespace WpfApp1
 
         private void SaveClose_Click(object sender, RoutedEventArgs e)
         {
-            string g = rich.Text;
+            string g = rich.Text.Trim();
             string[] s = g.Split("\r" + "\n");
 
             Properties.Settings.Default.prj = g;           

@@ -101,7 +101,7 @@ namespace WpfApp1
                 if(projects!=null) Array.Clear(projects, 0, projects.Length);
 
                 string g = Properties.Settings.Default.prj;
-                projects = g.Split("\r" + "\n");
+                projects = g.Split("\r"+"\n",StringSplitOptions.RemoveEmptyEntries);
                 
                 cbProjectNames.ItemsSource = projects;
                 
@@ -494,6 +494,7 @@ namespace WpfApp1
         {
             Window1 nf = new Window1();
             nf.ShowDialog();
+            GetProjects();
         }
        
     }
