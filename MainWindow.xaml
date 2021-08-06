@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="524" Width="864" Closed="Window_Closed">
+        Title="Главная helpTool" Height="524" Width="864" Closed="Window_Closed">
     <Grid Margin="-13,1,8,7">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Content="4" HorizontalAlignment="Left" Margin="11,212,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="4"/>
         <Button x:Name="Update" Content="Обновить порты" Grid.Column="1" HorizontalAlignment="Left" Margin="734,405,0,0" VerticalAlignment="Top" Width="98" Click="Update_Click" Background="#FF5DA3DE" Height="40"/>
@@ -30,22 +30,26 @@
                                 <TextBox Text="{Binding Path}" Margin="3,3,3,3" Width="350" Height="25" Padding="2,2,2,2"/>
                                 <Button Content="-->" Margin="5,3,3,3" VerticalAlignment="Top" Width="25"  Height="25" Click="cmdOpen_Clicked"/>
                                 <ComboBox Text="{Binding Port}" Margin="5,3,3,3" Width="100" Height="25" ItemsSource="{Binding portNames}"/>
-                                <Button Content="Очистить ESP"  HorizontalAlignment="Left" Margin="5,3,3,3" VerticalAlignment="Top" Width="100" Background="#FFF3FB51" Height="25" Click="cmdErase_Clicked"/>
+                                <Button Content="X" ToolTip="Очистить ESP" FontWeight="ExtraBold"  HorizontalAlignment="Left" Margin="5,3,3,3" VerticalAlignment="Top" Width="25" BorderBrush="#ee0000" Foreground="#ee0000" Background="#eeeeee" Height="25" Click="cmdErase_Clicked"/>
                                 <Button Content="Прошить" Margin="5,3,3,3" VerticalAlignment="Top" Width="95" Background="#FFFB9E69" Foreground="#FF232323" Height="25" Click="cmdFlash_Clicked"/>
 
 
-                            </DockPanel>                            <!--MAC COM-->
+                            </DockPanel>
+                            <!--MAC COM-->
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock FontWeight="Bold" Text="MAC:" Foreground="DarkOrange" Margin="35,0,0,0"/>
                                 <TextBlock FontWeight="Bold" Text="{Binding flMAC}" Foreground="#222222" Margin="4,0,0,0"/>
-                                <TextBlock FontWeight="Bold" Text="{Binding status}" Foreground="#e80000" Margin="20,0,0,0"/>                             
+                                <TextBlock FontWeight="Bold" Text="{Binding status}" Foreground="#e80000" Margin="20,0,0,0"/>
                             </StackPanel>
                         </StackPanel>
-                        
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <CheckBox x:Name="chk_noClose" Content="Не закрвать консоль" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="70,365,0,0" VerticalAlignment="Top" Click="chk_noClose_Click"/>
+        <Label Content="Путь до ESP:" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="64,408,0,0" Height="26" VerticalAlignment="Top"/>
+        <Label Content="Проект" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="271,400,0,0" VerticalAlignment="Top" Height="28" Width="52"/>
+        <Button x:Name="project" Content="+" HorizontalContentAlignment="Center" FontSize="16"  VerticalContentAlignment="Center" Padding="0,-4,0,0" FontWeight="Bold" HorizontalAlignment="Left" Margin="468,427,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="#009900" Foreground="#009900" Background="#eeeeee" Grid.Column="1" Click="project_Click" RenderTransformOrigin="0.833,0.668"/>
 
     </Grid>
 </Window>

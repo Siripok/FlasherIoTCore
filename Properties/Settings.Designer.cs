@@ -46,5 +46,17 @@ namespace WpfApp1.Properties {
                 this["spifflash"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool noClosing {
+            get {
+                return ((bool)(this["noClosing"]));
+            }
+            set {
+                this["noClosing"] = value;
+            }
+        }
     }
 }

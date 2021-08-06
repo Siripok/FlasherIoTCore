@@ -39,6 +39,7 @@ namespace WpfApp1
         public int elem { get; set; } //№ элемента в списке
         public string flMAC { get; set; } //flashMAC
         public string status { get; set; } 
+       
 
 
         public FlahInfo(string Path, string Port)
@@ -54,7 +55,7 @@ namespace WpfApp1
         string user; //пользователь
         string idfPath = @""; //на конце пути должен быть слэш "\"
         const int BoardsMAX = 5;// кол-во строк т.е подключаемых плат
-
+        char k;
         List<FlahInfo> spisflash = new List<FlahInfo>();
         public MainWindow()
         {
@@ -68,6 +69,17 @@ namespace WpfApp1
             lb.ItemsSource = spisflash;
 
             user = Environment.UserName;
+
+            if (Properties.Settings.Default.noClosing == true)
+            {
+                chk_noClose.IsChecked = true;
+                k = 'k';
+            }
+            else
+            {
+                chk_noClose.IsChecked = false;
+                k = 'c';
+            }
 
             if (Properties.Settings.Default.espPath != "" && Properties.Settings.Default.espPath != null)
             {
@@ -192,7 +204,8 @@ namespace WpfApp1
         {
             try
             {
-                var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /k \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --chip esp32 --port {PORT} erase_flash\"\"");
+                
+                var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --chip esp32 --port {PORT} erase_flash\"\"");
                 //в bat файле
                 //esptool.py --chip esp32 --port COM3 erase_flash
                 //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --chip esp32 --port COM3 erase_flash""
@@ -212,7 +225,7 @@ namespace WpfApp1
             {
                 try
                 {
-                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /c \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
                     //в bat файле
                     //esptool.py --chip esp32 -p COM3 -b 115200 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 garage.bin --erase-all
                     //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --chip ESP32 -p COM3 -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 yourbin.bin --erase-all""
@@ -368,6 +381,7 @@ namespace WpfApp1
             string json = JsonConvert.SerializeObject(spisflash);
 
             Properties.Settings.Default.spifflash = json;
+            Properties.Settings.Default.noClosing = (bool) chk_noClose.IsChecked;
             Properties.Settings.Default.espPath = GetIdfPath();
             Properties.Settings.Default.Save();
 
@@ -434,7 +448,28 @@ namespace WpfApp1
             return 0;
         }
 
+     
+        private void chk_noClose_Click(object sender, RoutedEventArgs e)
+        {
+            if (chk_noClose.IsChecked == true) 
+            {
+               
+                k = 'k'; 
+            }
+            //no closing
+            else
+            {
+                k = 'c'; //cloing
+            }
 
+
+        }
+
+        private void project_Click(object sender, RoutedEventArgs e)
+        {
+            Window1 nf = new Window1();
+            nf.ShowDialog();
+        }
     }
 
 }
