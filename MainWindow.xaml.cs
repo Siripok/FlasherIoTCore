@@ -64,14 +64,7 @@ namespace WpfApp1
             // MessageBox.Show(Properties.Settings.Default.spifflash);
 
             spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Properties.Settings.Default.spifflash);
-            /*
-                        spisflash.Add(new FlahInfo("Nekiy Put", "COM5") { portNames= portNames });
-                        spisflash.Add(new FlahInfo("", "") { portNames = portNames });
-                        spisflash.Add(new FlahInfo("", "") { portNames = portNames });
-                        spisflash.Add(new FlahInfo("666", "COM144") { portNames = portNames });
-                        spisflash.Add(new FlahInfo("666", "") { portNames = portNames });
-                        //MessageBox.Show(spisflash[0].Path);
-            */
+            
             lb.ItemsSource = spisflash;
 
             user = Environment.UserName;
@@ -88,7 +81,15 @@ namespace WpfApp1
 
         public string GetIdfPath() //?!
         {
-            return @"C:\esp\";// txt_espressif.Text.Trim().Trim('\\') + "\\";
+
+            return @"C:\esp\";
+            //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
+            
+            //return txt_espressif.Text.Trim().Trim('\\') + "\\"; //System.InvalidOperationException:
+            //"Вызывающий поток не может получить доступ к данному объекту,
+            //так как владельцем этого объекта является другой поток."
+            //если прошиваем несколько!
+
         }
 
         public void ShowPorts()
@@ -115,7 +116,7 @@ namespace WpfApp1
             string MACpath = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{port}.txt";
 
             if (num != 0) 
-                w = num;//если несколько прошиваем несколько
+                w = num;//если прошиваем несколько сразу
             //иначе оставляем w если прошиваем по одной w=w;
 
 
@@ -149,14 +150,13 @@ namespace WpfApp1
                 {
                     lb.Items.Refresh();
                     
-                    //if(spisflash[w].flMAC!="")
+                    //if(spisflash[w].flMAC!="") //коннектимся если есть МАС адрес
                     //CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
                 });
             }
+                        
 
-            
-
-            //MessageBox.Show($"{MACiCOM[0]}\n{MACiCOM[1]}\n{spisflash[num].status}");//{ MACiCOM[1]}
+            //MessageBox.Show($"{MACiCOM[0]}\n{MACiCOM[1]}\n{spisflash[num].status}");
                    
 
             if (multik)
@@ -207,7 +207,7 @@ namespace WpfApp1
 
         public void flashtool(string binPath, string PORT, bool allflash=false, int num=0) //прошивка платы bin файлом
         {
-             if (spisflash[num].chk == true || allflash==false)
+            if (spisflash[num].chk == true || allflash==false)
             {
                 try
                 {
