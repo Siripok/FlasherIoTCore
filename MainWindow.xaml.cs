@@ -52,7 +52,7 @@ namespace WpfApp1
     {
         string[] portNames; // порты СОМ
         string user; //пользователь
-        //string idfPath = ""; //на конце пути должен быть слэш "\"
+        string idfPath = @""; //на конце пути должен быть слэш "\"
         const int BoardsMAX = 5;// кол-во строк т.е подключаемых плат
 
         List<FlahInfo> spisflash = new List<FlahInfo>();
@@ -72,6 +72,7 @@ namespace WpfApp1
             if (Properties.Settings.Default.espPath != "" && Properties.Settings.Default.espPath != null)
             {
                 txt_espressif.Text = Properties.Settings.Default.espPath;
+                idfPath = GetIdfPath();
             }
 
             else
@@ -122,13 +123,13 @@ namespace WpfApp1
 
             foreach (string line in File.ReadLines(MACpath))
             {
-                if (line.Contains("A fatal error occurred:")) 
+                if (line.Contains("A fatal error occurred:"))
                 {
-                    if(line.Contains("Serial port COM"))
-                    {                        
+                    if (line.Contains("Serial port COM"))
+                    {
                         spisflash[w].status = "Не удалось подключится к плате :(";
                     }
-                    
+
                 }
 
                 if (line.Contains("MAC: "))
@@ -137,7 +138,7 @@ namespace WpfApp1
                     MACiCOM[0] = MACiCOM[0].Remove(0, 5);//MAC 
                     MACiCOM[0] = MACiCOM[0].Replace(":", "");// удаляем : из МАС адреса
                                                              // 
-                    spisflash[w].flMAC = MACiCOM[0];                  
+                    spisflash[w].flMAC = MACiCOM[0];
                 }
 
                 if (line.Contains("Serial port "))
@@ -149,7 +150,7 @@ namespace WpfApp1
                 this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
                 {
                     lb.Items.Refresh();
-                    
+
                     //if(spisflash[w].flMAC!="") //коннектимся если есть МАС адрес
                     //CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
                 });
@@ -248,8 +249,8 @@ namespace WpfApp1
                 // spisflash.Clear();
 
                 ShowPorts();
-                for(int i=0;i<BoardsMAX; i++)
-                {                    
+                for (int i = 0; i < BoardsMAX; i++)
+                {
                     spisflash.Add(new FlahInfo("", "") { portNames = portNames });
                     spisflash[i].elem = i + 1;
                 }
