@@ -248,7 +248,7 @@ namespace WpfApp1
                 for (int i = 0; i < spisflash.Count; i++)
                 {
                     spisflash[i].portNames = portNames;
-                    //spisflash[i].Port = ""; //чтобы порты оставались, даже если устр-во было отключено, закоментировал
+                    spisflash[i].Port = ""; //чтобы порты оставались, даже если устр-во было отключено, нужно закоментировать
                 }
             }
             
