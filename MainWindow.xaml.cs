@@ -114,12 +114,20 @@ namespace WpfApp1
            
             string MACpath = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{port}.txt";
 
+            if (num != 0) 
+                w = num;//если несколько прошиваем несколько
+            //иначе оставляем w если прошиваем по одной w=w;
+
+
             foreach (string line in File.ReadLines(MACpath))
             {
-                if (line.Contains("A fatal error occurred:"))
+                if (line.Contains("A fatal error occurred:")) 
                 {
                     if(line.Contains("Serial port COM"))
-                    spisflash[num].status = "Не удалось подключится к плате :(";
+                    {                        
+                        spisflash[w].status = "Не удалось подключится к плате :(";
+                    }
+                    
                 }
 
                 if (line.Contains("MAC: "))
@@ -127,11 +135,8 @@ namespace WpfApp1
                     MACiCOM[0] = line; //MAC
                     MACiCOM[0] = MACiCOM[0].Remove(0, 5);//MAC 
                     MACiCOM[0] = MACiCOM[0].Replace(":", "");// удаляем : из МАС адреса
-
-                    if (num != 0)                    
-                        spisflash[num].flMAC = MACiCOM[0];                    
-                    else
-                        spisflash[w].flMAC = MACiCOM[0];                  
+                                                             // 
+                    spisflash[w].flMAC = MACiCOM[0];                  
                 }
 
                 if (line.Contains("Serial port "))
@@ -143,6 +148,8 @@ namespace WpfApp1
                 this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
                 {
                     lb.Items.Refresh();
+                    
+                    //if(spisflash[w].flMAC!="")
                     //CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
                 });
             }
@@ -320,8 +327,7 @@ namespace WpfApp1
             }
         }
 
-        int w;
-
+        int w;//узнаёт какой элемент был выбран чтобы присвоить ему мак адрес
         private void cmdFlash_Clicked(object sender, RoutedEventArgs e)
         {
             w = 0;
@@ -335,7 +341,6 @@ namespace WpfApp1
                     if (msg.Path != "" && msg.Path != "Ничего не выбрано!")
                     {
                         w = msg.elem - 1;
-
                         flashtool(msg.Path, msg.Port);
                     }
 
