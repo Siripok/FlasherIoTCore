@@ -20,13 +20,19 @@ namespace WpfApp1
         public Window1()
         {
             InitializeComponent();
+            //rich.Document.Blocks.Clear();
         }
 
         private void SaveClose_Click(object sender, RoutedEventArgs e)
         {
+           string RichText = new TextRange(rich.Document.ContentStart, rich.Document.ContentEnd).Text;
+           string[] s = RichText.Split(' ');
+          // MessageBox.Show(s[]);
 
-
-            this.Close();
+            
+            
+            
+           this.Close();
         }
     }
 }

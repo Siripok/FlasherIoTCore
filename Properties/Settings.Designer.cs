@@ -58,5 +58,17 @@ namespace WpfApp1.Properties {
                 this["noClosing"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string prj {
+            get {
+                return ((string)(this["prj"]));
+            }
+            set {
+                this["prj"] = value;
+            }
+        }
     }
 }
