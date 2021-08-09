@@ -236,6 +236,8 @@ namespace WpfApp1
 
         }
 
+     
+
         public void flashtool(string binPath, string PORT, bool allflash=false, int num=0) //прошивка платы bin файлом
         {
             if (spisflash[num].chk == true || allflash==false)
@@ -376,6 +378,35 @@ namespace WpfApp1
                 else
                     MessageBox.Show($"Не выбран COM порт!", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
 
+            }
+        }
+
+        private void cmdLog_Clicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Button cmd = (Button)sender;
+                if (cmd.DataContext is FlahInfo)
+                {
+                    FlahInfo msg = (FlahInfo)cmd.DataContext;
+
+                    string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{msg.Port}.txt";
+                    if (File.Exists(open))
+                    {
+                        var startInfo = new ProcessStartInfo("explorer.exe", $"\"{open}\"");                  
+                        Process process = new Process();
+                        process.StartInfo = startInfo;
+                        if (msg.Port != "") process.Start();
+                        else MessageBox.Show("Выбериет COM порт!");
+                    }
+                    else
+                        MessageBox.Show("Не удалось найти лог!", "Log file not found!", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
+            }
+            catch (Exception er)
+            {
+                MessageBox.Show(er.Message, "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
