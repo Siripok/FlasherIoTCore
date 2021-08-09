@@ -175,18 +175,22 @@ namespace WpfApp1
                     MACiCOM[1] = line; //COM
                     MACiCOM[1] = MACiCOM[1].Remove(0, 12).Trim();//COM     
                 }
-
-                this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
-                {
-                    lb.Items.Refresh();
-                    //if(spisflash[w].flMAC!="") //коннектимся если есть МАС адрес
-                    //CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
-                });
+        
             }
-                        
+
+           // MessageBox.Show(MACiCOM[0]);
+            this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
+            {
+                lb.Items.Refresh();
+                 if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
+                     CreateEsDevice(cbProjectNames.SelectedItem.ToString(), "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
+
+            });
+
+
 
             //MessageBox.Show($"{MACiCOM[0]}\n{MACiCOM[1]}\n{spisflash[num].status}");
-                   
+
 
             if (multik)
             {
@@ -451,6 +455,11 @@ namespace WpfApp1
 
         public static object CreateEsDevice(string projectId, string cloudRegion, string registryId, string deviceId, string keyPath)
         {
+            //MessageBox.Show(projectId);
+            //MessageBox.Show(cloudRegion);
+            //MessageBox.Show(registryId);
+            //MessageBox.Show(deviceId);
+       
             var cloudIot = CreateAuthorizedClient();
             var parent = $"projects/{projectId}/locations/{cloudRegion}/registries/{registryId}";
 
