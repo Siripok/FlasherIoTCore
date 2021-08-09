@@ -88,7 +88,7 @@ namespace WpfApp1
             if (Properties.Settings.Default.espPath != "" && Properties.Settings.Default.espPath != null)
             {
                 txt_espressif.Text = Properties.Settings.Default.espPath;
-                idfPath = GetIdfPath();//
+                idfPath = GetIdfPath();//!!
             }
 
             else
@@ -166,7 +166,7 @@ namespace WpfApp1
                     MACiCOM[0] = line; //MAC
                     MACiCOM[0] = MACiCOM[0].Remove(0, 5);//MAC 
                     MACiCOM[0] = MACiCOM[0].Replace(":", "");// удаляем : из МАС адреса
-                                                             // 
+                                                           
                     spisflash[w].flMAC = MACiCOM[0];
                 }
 
@@ -179,7 +179,6 @@ namespace WpfApp1
                 this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
                 {
                     lb.Items.Refresh();
-
                     //if(spisflash[w].flMAC!="") //коннектимся если есть МАС адрес
                     //CreateEsDevice("giulia-novars-smart-realtime", "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
                 });
@@ -222,16 +221,16 @@ namespace WpfApp1
             try
             {
                 
-                var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --chip esp32 --port {PORT} erase_flash\"\"");
+                var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{idfPath}components\\esptool_py\\esptool\\esptool.py\" --chip esp32 --port {PORT} erase_flash\"\"");
                 //в bat файле
                 //esptool.py --chip esp32 --port COM3 erase_flash
                 //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --chip esp32 --port COM3 erase_flash""
-                startInfo.WorkingDirectory = GetIdfPath();
+                startInfo.WorkingDirectory = idfPath;
                 Process.Start(startInfo);
             }
             catch (Exception er)
             {
-                MessageBox.Show(er.Message + $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(er.Message + $"\n{idfPath}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
@@ -242,11 +241,11 @@ namespace WpfApp1
             {
                 try
                 {
-                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{GetIdfPath()}components\\esptool_py\\esptool\\esptool.py\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{idfPath}components\\esptool_py\\esptool\\esptool.py\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
                     //в bat файле
                     //esptool.py --chip esp32 -p COM3 -b 115200 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 garage.bin --erase-all
                     //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --chip ESP32 -p COM3 -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 yourbin.bin --erase-all""
-                    startInfo.WorkingDirectory = GetIdfPath();
+                    startInfo.WorkingDirectory = idfPath;
                     Process process = new Process();
                     process.StartInfo = startInfo;
                     process.EnableRaisingEvents = true;
@@ -256,7 +255,7 @@ namespace WpfApp1
                 }
                 catch (Exception er)
                 {
-                    MessageBox.Show(er.Message + $"\n{GetIdfPath()}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(er.Message + $"\n{idfPath}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
@@ -486,8 +485,6 @@ namespace WpfApp1
             {
                 k = 'c'; //cloing
             }
-         
-
         }
 
         private void project_Click(object sender, RoutedEventArgs e)
