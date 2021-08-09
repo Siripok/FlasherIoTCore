@@ -93,7 +93,11 @@ namespace WpfApp1
             if (Parameters.espPath != "" && Parameters.espPath != null)
             {
                 txt_espressif.Text = Parameters.espPath;
-                idfPath = GetIdfPath();//!!
+
+                if (Directory.Exists(txt_espressif.Text))
+                    idfPath = GetIdfPath();
+                else MessageBox.Show("Не удалось найти ESP-папку! Попробуйте другой путь!", ":(", MessageBoxButton.OK, MessageBoxImage.Warning);
+
             }
 
             else
@@ -118,7 +122,7 @@ namespace WpfApp1
         {
 
             //return @"C:\esp\";
-            return txt_espressif.Text.Trim().Trim('\\') + "\\";          
+            return txt_espressif.Text.Trim().Trim('\\') + "\\";          //txt_espressif.Text.Trim().Trim('\\') + "\\"
 
         }
 
@@ -221,10 +225,7 @@ namespace WpfApp1
             try
             {
                 
-                var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{idfPath}components\\esptool_py\\esptool\\esptool.py\" --chip esp32 --port {PORT} erase_flash\"\"");
-                //в bat файле
-                //esptool.py --chip esp32 --port COM3 erase_flash
-                //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --chip esp32 --port COM3 erase_flash""
+                var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\esptool.py\"\" --chip esp32 --port {PORT} erase_flash\"\"");
                 startInfo.WorkingDirectory = idfPath;
                 Process.Start(startInfo);
             }
@@ -241,10 +242,7 @@ namespace WpfApp1
             {
                 try
                 {
-                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{idfPath}components\\esptool_py\\esptool\\esptool.py\" --chip ESP32 --p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
-                    //в bat файле
-                    //esptool.py --chip esp32 -p COM3 -b 115200 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 garage.bin --erase-all
-                    //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --chip ESP32 -p COM3 -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 yourbin.bin --erase-all""
+                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\esptool.py\"\" --chip ESP32 --p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
                     startInfo.WorkingDirectory = idfPath;
                     Process process = new Process();
                     process.StartInfo = startInfo;

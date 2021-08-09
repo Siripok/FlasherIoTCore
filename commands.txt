@@ -1,0 +1,18 @@
+@echo off
+::09/08/2021
+
+set user=yourUser
+set PORT=COM3 
+set idfPath=C:\esp\
+set binPath=X:\yourBinPath\yourFile.bin
+
+::erase_flash
+::call "C:\Windows\system32\cmd.exe" " /k ""C:\Users\{user}\.espressif\idf_cmd_init.bat" &"python" ""{idfPath}components\esptool_py\esptool\esptool.py"" --chip esp32 --port {PORT} erase_flash""
+
+
+::flashtool
+::call
+
+::id
+::bat file C:\esp\
+call C:\Windows\system32\cmd.exe /k ""C:\Users\%user%\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --port COM3 chip_id >MACaddressOfBoard.txt"" 
