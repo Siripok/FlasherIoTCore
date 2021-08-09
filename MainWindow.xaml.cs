@@ -58,23 +58,28 @@ namespace WpfApp1
         public string[] projects;
         char k;
         List<FlahInfo> spisflash = new List<FlahInfo>();
+
+
+        Properties.Settings Parameters = Properties.Settings.Default;
+
+
         public MainWindow()
         {
 
             InitializeComponent();
             ShowPorts();
             GetProjects();
-            // MessageBox.Show(Properties.Settings.Default.spifflash);
+           
 
-            spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Properties.Settings.Default.spifflash);
+            spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Parameters.spifflash);
             
             lb.ItemsSource = spisflash;     
 
             user = Environment.UserName;
 
-            if (Properties.Settings.Default.select!=-1) cbProjectNames.SelectedIndex = Properties.Settings.Default.select;
+            if (Parameters.select!=-1) cbProjectNames.SelectedIndex = Parameters.select;
 
-            if (Properties.Settings.Default.noClosing == true)
+            if (Parameters.noClosing == true)
             {
                 chk_noClose.IsChecked = true;
                 k = 'k';
@@ -85,9 +90,9 @@ namespace WpfApp1
                 k = 'c';
             }
 
-            if (Properties.Settings.Default.espPath != "" && Properties.Settings.Default.espPath != null)
+            if (Parameters.espPath != "" && Parameters.espPath != null)
             {
-                txt_espressif.Text = Properties.Settings.Default.espPath;
+                txt_espressif.Text = Parameters.espPath;
                 idfPath = GetIdfPath();//!!
             }
 
@@ -96,11 +101,11 @@ namespace WpfApp1
         }
         public void GetProjects()
         {
-            if (Properties.Settings.Default.prj != "" && Properties.Settings.Default.prj != null)
+            if (Parameters.prj != "" && Parameters.prj != null)
             {
                 if(projects!=null) Array.Clear(projects, 0, projects.Length);
 
-                string g = Properties.Settings.Default.prj;
+                string g = Parameters.prj;
                 projects = g.Split("\r"+"\n",StringSplitOptions.RemoveEmptyEntries);
                 
                 cbProjectNames.ItemsSource = projects;
@@ -112,13 +117,8 @@ namespace WpfApp1
         public string GetIdfPath() //?!
         {
 
-            return @"C:\esp\";
-            //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
-            
-            //return txt_espressif.Text.Trim().Trim('\\') + "\\"; //System.InvalidOperationException:
-            //"Вызывающий поток не может получить доступ к данному объекту,
-            //так как владельцем этого объекта является другой поток."
-            //если прошиваем несколько!
+            //return @"C:\esp\";
+            return txt_espressif.Text.Trim().Trim('\\') + "\\";          
 
         }
 
@@ -241,7 +241,7 @@ namespace WpfApp1
             {
                 try
                 {
-                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{idfPath}components\\esptool_py\\esptool\\esptool.py\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"{idfPath}components\\esptool_py\\esptool\\esptool.py\" --chip ESP32 --p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
                     //в bat файле
                     //esptool.py --chip esp32 -p COM3 -b 115200 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 garage.bin --erase-all
                     //call C:\Windows\system32\cmd.exe /k ""C:\Users\Siripok\.espressif\idf_cmd_init.bat" &"python" "C:\esp\components\esptool_py\esptool\esptool.py" --chip ESP32 -p COM3 -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 yourbin.bin --erase-all""
@@ -314,8 +314,25 @@ namespace WpfApp1
 
         private void flash_all_Click(object sender, RoutedEventArgs e)
         {
+            bool b = false;
+            for (int i = 0; i < spisflash.Count; i++) //проверки
+            {
+                if (spisflash[i].Port == "" && spisflash[i].chk == true)
+                {
+                    MessageBox.Show($"Заполние COM порт!\nНет порта у {spisflash[i].elem} элемента!", "Error!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    b = true;
+                }
 
-            flashtool(spisflash[0].Path, spisflash[0].Port, true, 0);
+                if((spisflash[i].Path=="" || spisflash[i].Path == "Ничего не выбрано!")&& spisflash[i].chk == true)
+                {
+                    MessageBox.Show($"Заполние bin путь \nОткуда взять путь для {spisflash[i].elem} элемента?!", "Error!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    b = true;
+                }
+
+            }
+            if(b!=true)
+                flashtool(spisflash[0].Path, spisflash[0].Port, true, 0);
+          
 
 
             /*
@@ -403,11 +420,11 @@ namespace WpfApp1
         {
             string json = JsonConvert.SerializeObject(spisflash);
 
-            Properties.Settings.Default.spifflash = json;
-            Properties.Settings.Default.noClosing = (bool) chk_noClose.IsChecked;
-            Properties.Settings.Default.espPath = GetIdfPath();
-            Properties.Settings.Default.select = cbProjectNames.SelectedIndex;
-            Properties.Settings.Default.Save();
+            Parameters.spifflash = json;
+            Parameters.noClosing = (bool) chk_noClose.IsChecked;
+            Parameters.espPath = GetIdfPath();
+            Parameters.select = cbProjectNames.SelectedIndex;
+            Parameters.Save();
 
             //  MessageBox.Show(jsonString);
         }
