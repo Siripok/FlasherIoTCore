@@ -21,6 +21,8 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.CloudIot.v1.Data;
 
+using System.Windows.Threading;
+
 namespace WpfApp1
 {
     /// <summary>
@@ -181,13 +183,15 @@ namespace WpfApp1
                 }
         
             }
+           // File.Delete(MACpath);
 
            // MessageBox.Show(MACiCOM[0]);
             this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
             {
+                timerWorking = false;
                 lb.Items.Refresh();
-                 if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
-                     CreateEsDevice(cbProjectNames.SelectedItem.ToString(), "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
+              //   if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
+                //     CreateEsDevice(cbProjectNames.SelectedItem.ToString(), "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
 
             });
 
@@ -204,7 +208,7 @@ namespace WpfApp1
                 }
             }
         }
-
+        bool timerWorking = false;
 
         public string OpenFile() // выбор bin файла
         {
@@ -251,11 +255,21 @@ namespace WpfApp1
                     var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\esptool.py\"\" --chip ESP32 --p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
                     startInfo.WorkingDirectory = idfPath;
                     Process process = new Process();
+
+                    if (chk_noClose.IsChecked == false)
+                    {
+                        startInfo.CreateNoWindow = true;
+                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    }
+                      
                     process.StartInfo = startInfo;
                     process.EnableRaisingEvents = true;
                     process.Exited += new EventHandler((sender, e) => myProcess_Exited(sender, e, PORT, allflash, num));
+                    
                     process.Start();
-                   
+                    ChekLog(PORT);
+
+
                 }
                 catch (Exception er)
                 {
@@ -291,6 +305,17 @@ namespace WpfApp1
                 lb.ItemsSource = spisflash;
                 lb.Items.Refresh();
                 
+            }
+
+            DeleteMACiCOM();
+        }
+
+        public void DeleteMACiCOM()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                if (File.Exists($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt"))
+                    File.Delete($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt");
             }
         }
         private void Update_Click(object sender, RoutedEventArgs e)
@@ -544,11 +569,89 @@ namespace WpfApp1
 
         private void project_Click(object sender, RoutedEventArgs e)
         {
-            Window1 nf = new Window1();
-            nf.ShowDialog();
+            Window1 nw = new Window1();
+            nw.ShowDialog();
             GetProjects();
         }
-       
+
+        DispatcherTimer timer ;
+
+        private void ChekLog(string PORT)
+        {
+            txt_log.Clear();
+
+            string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{PORT}.txt";
+            if (File.Exists(open))
+                File.Delete(open);
+            timer = new DispatcherTimer();
+
+            
+            timer.Tick += new EventHandler((sender, e) => dispatcherTimer_Tick(sender, e, PORT));
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timerWorking = true;
+            timer.Start();      
+
+
+
+
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e, string PORT)
+        {
+
+            string s = ""; //
+
+            string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{PORT}.txt";
+         
+
+            if (File.Exists(open))
+            {
+                FileStream f = new FileStream(open, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);//65536, FileOptions.Asynchronous
+
+                StreamReader sr = new StreamReader(f);
+                // while (s != "Hard resetting via RTS pin..." && b == true)
+                //  {
+                s = sr.ReadToEnd();
+                //s = sr.ReadLine();
+                if (!String.IsNullOrWhiteSpace(s))
+                {
+                    txt_log.Text = s ;
+                    txt_log.CaretIndex = s.Length;
+                    txt_log.ScrollToEnd();
+                }
+                    
+                //System.Threading.Thread.Sleep(1000);
+                //Task.Delay(TimeSpan.FromSeconds(1));
+
+                //    }
+                sr.Close();
+                f.Close();
+                //if (s == "Hard resetting via RTS pin...") b = false;
+
+
+            }
+            //Task.Delay(TimeSpan.FromSeconds(1));
+            if (timerWorking == false)
+                timer.Stop();
+        }
+
+        //private async  timer_TickAsync()
+        //{
+
+        //    string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACiCOM3.txt";
+        //    string s = ""; //
+        //  var skk=  await File.ReadAllLinesAsync(open);
+        //    txt_log.AppendText(skk + "\r" + "\n");
+        //    //StreamReader sr = new StreamReader(open);
+        //    //while (sr.EndOfStream == false)
+        //    //{
+        //    //    s = sr.ReadLine();
+        //    //}
+        //    //sr.Close();
+        //    //txt_log.AppendText(s+ "\r" + "\n");
+
+        //}
+
     }
 
 }

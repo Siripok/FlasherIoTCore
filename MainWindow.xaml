@@ -5,20 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="Главная helpTool" Height="524" Width="864" Closed="Window_Closed">
+        Title="Главная helpTool" Height="524" Width="1080" Closed="Window_Closed">
     <Grid Margin="-13,1,8,7">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Content="4" HorizontalAlignment="Left" Margin="11,212,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="4"/>
-        <Button x:Name="Update" Content="Обновить" Grid.Column="1" HorizontalAlignment="Left" Margin="734,412,0,0" VerticalAlignment="Top" Width="98" Click="Update_Click" Background="#FF5DA3DE" Height="40"/>
-        <Button x:Name="Clear" Content="Очистить поля" Grid.Column="1" HorizontalAlignment="Left" Margin="625,412,0,0" VerticalAlignment="Top" Width="96" Click="Clear_Click" Background="#FFF75F5F" Height="40"/>
+        <Button x:Name="Update" Content="Обновить" Grid.Column="1" HorizontalAlignment="Left" Margin="716,412,0,0" VerticalAlignment="Top" Width="98" Click="Update_Click" Background="#FF5DA3DE" Height="40"/>
+        <Button x:Name="Clear" Content="Очистить поля" Grid.Column="1" HorizontalAlignment="Left" Margin="607,412,0,0" VerticalAlignment="Top" Width="96" Click="Clear_Click" Background="#FFF75F5F" Height="40"/>
 
-        <Button x:Name="flash_all" Content="Прошить все" Grid.Column="1" HorizontalAlignment="Left" Margin="624,377,0,0" VerticalAlignment="Top" Width="207" Background="#FFFB9E69" Foreground="#FF232323" Click="flash_all_Click" Height="20"/>
+        <Button x:Name="flash_all" Content="Прошить все" Grid.Column="1" HorizontalAlignment="Left" Margin="606,377,0,0" VerticalAlignment="Top" Width="207" Background="#FFFB9E69" Foreground="#FF232323" Click="flash_all_Click" Height="20"/>
         <TextBox x:Name="txt_espressif" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="67,435,0,0" TextWrapping="Wrap" Width="151" Height="18" VerticalAlignment="Top"/>
         <Label Content="Путь до ESP:" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="64,408,0,0" Height="26" VerticalAlignment="Top"/>
-        <ListBox x:Name="lb"  Grid.ColumnSpan="2" Margin="68,28,0,0" Height="315" VerticalAlignment="Top" HorizontalAlignment="Left" Width="765">
+        <ListBox x:Name="lb"  Grid.ColumnSpan="2" Margin="68,28,0,0" Height="315" VerticalAlignment="Top" HorizontalAlignment="Left" Width="745">
             <ListBox.ItemTemplate>
                 <DataTemplate x:Name="DoubleLineDataTemplate">
                     <StackPanel Orientation="Horizontal" Margin="3">
@@ -53,6 +53,7 @@
         <ComboBox x:Name="cbProjectNames" ItemsSource="{Binding projects}" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="271,431,0,0" VerticalAlignment="Top" Width="179"/>
         <TextBox x:Name="txt_pref" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="329,362,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="Префикс" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="268,357,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txt_log" Grid.ColumnSpan="2" Margin="819,28,10,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Height="424"/>
 
     </Grid>
 </Window>
