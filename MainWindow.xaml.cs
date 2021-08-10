@@ -71,17 +71,19 @@ namespace WpfApp1
             InitializeComponent();
             ShowPorts();
             GetProjects();
-           
+
 
             spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Parameters.spifflash);
-            
-            lb.ItemsSource = spisflash;     
+
+            lb.ItemsSource = spisflash;
 
             user = Environment.UserName;
 
-            if (Parameters.select!=-1) cbProjectNames.SelectedIndex = Parameters.select;
+            if (Parameters.select != -1) 
+                cbProjectNames.SelectedIndex = Parameters.select;
 
-            if(Parameters.pref!=null) txt_pref.Text = Parameters.pref;
+            if (Parameters.pref != null) 
+                txt_pref.Text = Parameters.pref;
 
             if (Parameters.noClosing == true)
             {
@@ -111,22 +113,22 @@ namespace WpfApp1
         {
             if (Parameters.prj != "" && Parameters.prj != null)
             {
-                if(projects!=null) Array.Clear(projects, 0, projects.Length);
+                if (projects != null) Array.Clear(projects, 0, projects.Length);
 
                 string g = Parameters.prj;
-                projects = g.Split("\r"+"\n",StringSplitOptions.RemoveEmptyEntries);
-                
+                projects = g.Split("\r" + "\n", StringSplitOptions.RemoveEmptyEntries);
+
                 cbProjectNames.ItemsSource = projects;
-                
+
             }
             cbProjectNames.Items.Refresh();
         }
 
-        public string GetIdfPath() //?!
+        public string GetIdfPath() 
         {
 
             //return @"C:\esp\";
-            return txt_espressif.Text.Trim().Trim('\\') + "\\";          //txt_espressif.Text.Trim().Trim('\\') + "\\"
+            return txt_espressif.Text.Trim().Trim('\\') + "\\";      
 
         }
 
@@ -148,14 +150,14 @@ namespace WpfApp1
 
         string[] MACiCOM = new string[2];
 
-        private void myProcess_Exited(object sender, System.EventArgs e, String port, bool multik=false, int num=0 )
+        private void myProcess_Exited(object sender, System.EventArgs e, String port, bool multik = false, int num = 0)
         {
-           
+
             string MACpath = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{port}.txt";
 
-            if (num != 0) 
+            if (num != 0)
                 w = num;//если прошиваем несколько сразу
-            //иначе оставляем w если прошиваем по одной w=w;
+            //иначе оставляем w, если прошиваем по одной w=w;
 
 
             foreach (string line in File.ReadLines(MACpath))
@@ -174,7 +176,7 @@ namespace WpfApp1
                     MACiCOM[0] = line; //MAC
                     MACiCOM[0] = MACiCOM[0].Remove(0, 5);//MAC 
                     MACiCOM[0] = MACiCOM[0].Replace(":", "");// удаляем : из МАС адреса
-                                                           
+
                     spisflash[w].flMAC = MACiCOM[0];
                 }
 
@@ -183,21 +185,19 @@ namespace WpfApp1
                     MACiCOM[1] = line; //COM
                     MACiCOM[1] = MACiCOM[1].Remove(0, 12).Trim();//COM     
                 }
-        
-            }
-           // File.Delete(MACpath);
 
-           // MessageBox.Show(MACiCOM[0]);
+            }
+       
+
+            // MessageBox.Show(MACiCOM[0]);
             this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
             {
                 timerWorking = false;
                 lb.Items.Refresh();
-              //   if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
+                //   if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
                 //     CreateEsDevice(cbProjectNames.SelectedItem.ToString(), "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
 
             });
-
-
 
             //MessageBox.Show($"{MACiCOM[0]}\n{MACiCOM[1]}\n{spisflash[num].status}");
 
@@ -234,7 +234,7 @@ namespace WpfApp1
         {
             try
             {
-                
+
                 var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\esptool.py\"\" --chip esp32 --port {PORT} erase_flash\"\"");
                 startInfo.WorkingDirectory = idfPath;
                 Process.Start(startInfo);
@@ -246,11 +246,11 @@ namespace WpfApp1
 
         }
 
-     
 
-        public void flashtool(string binPath, string PORT, bool allflash=false, int num=0) //прошивка платы bin файлом
+
+        public void flashtool(string binPath, string PORT, bool allflash = false, int num = 0) //прошивка платы bin файлом
         {
-            if (spisflash[num].chk == true || allflash==false)
+            if (spisflash[num].chk == true || allflash == false)
             {
                 try
                 {
@@ -263,11 +263,11 @@ namespace WpfApp1
                         startInfo.CreateNoWindow = true;
                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     }
-                      
+
                     process.StartInfo = startInfo;
                     process.EnableRaisingEvents = true;
                     process.Exited += new EventHandler((sender, e) => myProcess_Exited(sender, e, PORT, allflash, num));
-                    
+
                     process.Start();
                     ChekLog(PORT);
 
@@ -281,12 +281,12 @@ namespace WpfApp1
             else
             {
                 //   5      3
-                if (spisflash.Count - 1 >=num+1)
-                { 
-                flashtool(spisflash[num+1].Path, spisflash[num + 1].Port, true, num + 1);
+                if (spisflash.Count - 1 >= num + 1)
+                {
+                    flashtool(spisflash[num + 1].Path, spisflash[num + 1].Port, true, num + 1);
                 }
             }
-           
+
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
@@ -303,10 +303,10 @@ namespace WpfApp1
                     spisflash.Add(new FlahInfo("", "") { portNames = portNames });
                     spisflash[i].elem = i + 1;
                 }
-      
+
                 lb.ItemsSource = spisflash;
                 lb.Items.Refresh();
-                
+
             }
 
             DeleteMACiCOM();
@@ -337,8 +337,8 @@ namespace WpfApp1
             {
                 cbProjectNames.ItemsSource = projects;
             }
-          
-                     
+
+
             lb.Items.Refresh();
         }
 
@@ -351,52 +351,22 @@ namespace WpfApp1
             {
                 if (spisflash[i].Port == "" && spisflash[i].chk == true)
                 {
-                    str += $"[{spisflash[i].elem}] элемент - заполните COM порт!\n";               
+                    str += $"[{spisflash[i].elem}] элемент - заполните COM порт!\n";
                     error = true;
                 }
-                else 
-                if((spisflash[i].Path=="" || spisflash[i].Path == "Ничего не выбрано!") && spisflash[i].chk == true)
+
+                if ((spisflash[i].Path == "" || spisflash[i].Path == "Ничего не выбрано!") && spisflash[i].chk == true)
                 {
-                    str += $"[{spisflash[i].elem}] элемент - заполните bin-путь\n";             
+                    str += $"[{spisflash[i].elem}] элемент - заполните bin-путь!\n";
                     error = true;
                 }
-
             }
-            if (error == true) MessageBox.Show("Список проблем:\n\n"+str, "Ошибки при заполнении!", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-            if(error!=true)
+            if (error == true) MessageBox.Show("Список проблем:\n\n" + str, "Ошибки при заполнении!", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            if (error == false)
                 flashtool(spisflash[0].Path, spisflash[0].Port, true, 0);
-          
 
-
-            /*
-            int u = 0;
-            for (int i = 0; i < spisflash.Count; i++) 
-            {
-                if (spisflash[i].chk == true) u++;
-            }
-
-            if (u == 0) //если ничего не выбрано
-                MessageBox.Show("Для записи необходимо выбрать хотя бы один элемент.\nВыберите нужные элементы поставив галочку в чекбоксе.", "Отметьте нужне элемент!", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            else
-            {
-                if (MessageBox.Show($"Вы уверены что хотите прошить несколько плат сразу?", "Прошить?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                {
-                    bool b = true;
-                    for (int i = 0; i < spisflash.Count && b == true; i++)
-                    {
-                        if (spisflash[i].chk == true)
-                        {
-                            if (spisflash[i].Path != "" && spisflash[i].Path != "Ничего не выбрано!" && spisflash[i].Port != "")
-                                flashtool(spisflash[i].Path, spisflash[i].Port);
-                            else if (MessageBox.Show($"Незаполнены некоторе поля у {spisflash[i].elem} элемента!\nНажмите <ОК> чтобы пропустить этот элемент.\nНажмите <Отмена> чтобы выйти.", $"Ошибка! Элемент №{spisflash[i].elem}", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel)
-                                b = false;
-                        }
-
-                    }
-                }
-            }*/
         }
 
         private void cmdErase_Clicked(object sender, RoutedEventArgs e)
@@ -564,12 +534,12 @@ namespace WpfApp1
             if (chk_noClose.IsChecked == true) 
             {
                
-                k = 'k'; 
+                k = 'k';  //no closing console
             }
-            //no closing
+           
             else
             {
-                k = 'c'; //cloing
+                k = 'c'; //closing console
             }
         }
 
@@ -580,8 +550,8 @@ namespace WpfApp1
             GetProjects();
         }
 
-        DispatcherTimer timer ;
 
+        DispatcherTimer timer ;
         private void ChekLog(string PORT)
         {
             txt_log.Clear();
@@ -589,16 +559,12 @@ namespace WpfApp1
             string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{PORT}.txt";
             if (File.Exists(open))
                 File.Delete(open);
-            timer = new DispatcherTimer();
 
-            
+            timer = new DispatcherTimer();
             timer.Tick += new EventHandler((sender, e) => dispatcherTimer_Tick(sender, e, PORT));
             timer.Interval = new TimeSpan(0, 0, 1);
             timerWorking = true;
-            timer.Start();      
-
-
-
+            timer.Start();
 
         }
 
@@ -608,32 +574,25 @@ namespace WpfApp1
             string s = ""; //
 
             string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{PORT}.txt";
-         
+
 
             if (File.Exists(open))
             {
                 FileStream f = new FileStream(open, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);//65536, FileOptions.Asynchronous
 
                 StreamReader sr = new StreamReader(f);
-                // while (s != "Hard resetting via RTS pin..." && b == true)
-                //  {
+
                 s = sr.ReadToEnd();
-                //s = sr.ReadLine();
+
                 if (!String.IsNullOrWhiteSpace(s))
                 {
-                    txt_log.Text = s ;
+                    txt_log.Text = s;
                     txt_log.CaretIndex = s.Length;
                     txt_log.ScrollToEnd();
                 }
-                    
-                //System.Threading.Thread.Sleep(1000);
-                //Task.Delay(TimeSpan.FromSeconds(1));
 
-                //    }
                 sr.Close();
                 f.Close();
-                //if (s == "Hard resetting via RTS pin...") b = false;
-
 
             }
             //Task.Delay(TimeSpan.FromSeconds(1));
@@ -641,23 +600,53 @@ namespace WpfApp1
                 timer.Stop();
         }
 
-        //private async  timer_TickAsync()
-        //{
+        private void chk_all_Click(object sender, RoutedEventArgs e)
+        {
+            bool b = true;
+            if (chk_all.IsChecked == false) b = false;
 
-        //    string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACiCOM3.txt";
-        //    string s = ""; //
-        //  var skk=  await File.ReadAllLinesAsync(open);
-        //    txt_log.AppendText(skk + "\r" + "\n");
-        //    //StreamReader sr = new StreamReader(open);
-        //    //while (sr.EndOfStream == false)
-        //    //{
-        //    //    s = sr.ReadLine();
-        //    //}
-        //    //sr.Close();
-        //    //txt_log.AppendText(s+ "\r" + "\n");
+            //Работа с элементами
+           /* byte nplus = 0;
+            byte nminus = 0;
+            for (byte i = 0; i < spisflash.Count; i++) 
+            {
+                if (spisflash[i].chk == true) nplus++;
+                else nminus++;
+            }
 
-        //}
+            if (nminus > nplus)
+            {
+                if (chk_all.IsChecked == true)
+                    b = true;
+                else
+                {
+                    b = false;
+                    chk_all.IsChecked = false;
+                }
+            }
+            else
+            {
+                if (chk_all.IsChecked == true)
+                {
+                    chk_all.IsChecked = true;
 
+                    b = true;
+                }
+                else
+                {
+                    chk_all.IsChecked = false; 
+                    b = false;
+                }
+            }*/
+         
+            
+
+            for(int i = 0; i < spisflash.Count; i++)
+            {
+                spisflash[i].chk = b;
+            }
+            lb.Items.Refresh();
+        }
     }
 
 }
