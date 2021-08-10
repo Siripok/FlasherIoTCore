@@ -616,25 +616,15 @@ namespace WpfApp1
 
             if (nplus > nminus)
             {
-                if (chk_all.IsChecked == true)
-                {
-                    b = false;
-                    chk_all.IsChecked = false;
-
-                }
-                else
-                {
-                    chk_all.IsChecked = false;
-                    b = false;
-                }
-
+                b = false;
+                chk_all.IsChecked = false;
             }
             else
             {
                 if (chk_all.IsChecked == true)
                 {
                     b = true;
-                    chk_all.IsChecked = true;                   
+                    chk_all.IsChecked = true;
                 }
                 else
                 {
