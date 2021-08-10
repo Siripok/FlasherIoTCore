@@ -81,6 +81,8 @@ namespace WpfApp1
 
             if (Parameters.select!=-1) cbProjectNames.SelectedIndex = Parameters.select;
 
+            if(Parameters.pref!=null) txt_pref.Text = Parameters.pref;
+
             if (Parameters.noClosing == true)
             {
                 chk_noClose.IsChecked = true;
@@ -343,23 +345,26 @@ namespace WpfApp1
 
         private void flash_all_Click(object sender, RoutedEventArgs e)
         {
-            bool b = false;
+            string str = "";
+            bool error = false;
             for (int i = 0; i < spisflash.Count; i++) //проверки
             {
                 if (spisflash[i].Port == "" && spisflash[i].chk == true)
                 {
-                    MessageBox.Show($"Заполние COM порт!\nНет порта у {spisflash[i].elem} элемента!", "Error!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    b = true;
+                    str += $"[{spisflash[i].elem}] элемент - заполните COM порт!\n";               
+                    error = true;
                 }
-
-                if((spisflash[i].Path=="" || spisflash[i].Path == "Ничего не выбрано!")&& spisflash[i].chk == true)
+                else 
+                if((spisflash[i].Path=="" || spisflash[i].Path == "Ничего не выбрано!") && spisflash[i].chk == true)
                 {
-                    MessageBox.Show($"Заполние bin путь \nОткуда взять путь для {spisflash[i].elem} элемента?!", "Error!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    b = true;
+                    str += $"[{spisflash[i].elem}] элемент - заполните bin-путь\n";             
+                    error = true;
                 }
 
             }
-            if(b!=true)
+            if (error == true) MessageBox.Show("Список проблем:\n\n"+str, "Ошибки при заполнении!", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            if(error!=true)
                 flashtool(spisflash[0].Path, spisflash[0].Port, true, 0);
           
 
@@ -482,6 +487,7 @@ namespace WpfApp1
             Parameters.noClosing = (bool) chk_noClose.IsChecked;
             Parameters.espPath = GetIdfPath();
             Parameters.select = cbProjectNames.SelectedIndex;
+            Parameters.pref = txt_pref.Text;
             Parameters.Save();
 
             //  MessageBox.Show(jsonString);

@@ -82,5 +82,17 @@ namespace WpfApp1.Properties {
                 this["select"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string pref {
+            get {
+                return ((string)(this["pref"]));
+            }
+            set {
+                this["pref"] = value;
+            }
+        }
     }
 }
