@@ -79,10 +79,10 @@ namespace WpfApp1
 
             user = Environment.UserName;
 
-            if (Parameters.select != -1) 
+            if (Parameters.select != -1)
                 cbProjectNames.SelectedIndex = Parameters.select;
 
-            if (Parameters.pref != null) 
+            if (Parameters.pref != null)
                 txt_pref.Text = Parameters.pref;
 
             if (Parameters.noClosing == true)
@@ -124,11 +124,11 @@ namespace WpfApp1
             cbProjectNames.Items.Refresh();
         }
 
-        public string GetIdfPath() 
+        public string GetIdfPath()
         {
 
             //return @"C:\esp\";
-            return txt_espressif.Text.Trim().Trim('\\') + "\\";      
+            return txt_espressif.Text.Trim().Trim('\\') + "\\";
 
         }
 
@@ -187,7 +187,7 @@ namespace WpfApp1
                 }
 
             }
-       
+
 
             // MessageBox.Show(MACiCOM[0]);
             this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
@@ -397,7 +397,7 @@ namespace WpfApp1
                     string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{msg.Port}.txt";
                     if (File.Exists(open))
                     {
-                        var startInfo = new ProcessStartInfo("explorer.exe", $"\"{open}\"");                  
+                        var startInfo = new ProcessStartInfo("explorer.exe", $"\"{open}\"");
                         Process process = new Process();
                         process.StartInfo = startInfo;
                         if (msg.Port != "") process.Start();
@@ -454,7 +454,7 @@ namespace WpfApp1
             string json = JsonConvert.SerializeObject(spisflash);
 
             Parameters.spifflash = json;
-            Parameters.noClosing = (bool) chk_noClose.IsChecked;
+            Parameters.noClosing = (bool)chk_noClose.IsChecked;
             Parameters.espPath = GetIdfPath();
             Parameters.select = cbProjectNames.SelectedIndex;
             Parameters.pref = txt_pref.Text;
@@ -489,7 +489,7 @@ namespace WpfApp1
             //MessageBox.Show(cloudRegion);
             //MessageBox.Show(registryId);
             //MessageBox.Show(deviceId);
-       
+
             var cloudIot = CreateAuthorizedClient();
             var parent = $"projects/{projectId}/locations/{cloudRegion}/registries/{registryId}";
 
@@ -521,22 +521,22 @@ namespace WpfApp1
             catch (Google.GoogleApiException e)
             {
                 Console.WriteLine(e.Message);
-              MessageBox.Show( deviceId + " - " + (e.Error.Code == 409 ? "Уже существует" : e.Message) + Environment.NewLine);
+                MessageBox.Show(deviceId + " - " + (e.Error.Code == 409 ? "Уже существует" : e.Message) + Environment.NewLine);
                 if (e.Error != null) return e.Error.Code;
                 return -1;
             }
             return 0;
         }
 
-     
+
         private void chk_noClose_Click(object sender, RoutedEventArgs e)
         {
-            if (chk_noClose.IsChecked == true) 
+            if (chk_noClose.IsChecked == true)
             {
-               
+
                 k = 'k';  //no closing console
             }
-           
+
             else
             {
                 k = 'c'; //closing console
@@ -551,7 +551,7 @@ namespace WpfApp1
         }
 
 
-        DispatcherTimer timer ;
+        DispatcherTimer timer;
         private void ChekLog(string PORT)
         {
             txt_log.Clear();
@@ -603,45 +603,49 @@ namespace WpfApp1
         private void chk_all_Click(object sender, RoutedEventArgs e)
         {
             bool b = true;
-            if (chk_all.IsChecked == false) b = false;
+            // if (chk_all.IsChecked == false) b = false;
 
             //Работа с элементами
-           /* byte nplus = 0;
+            byte nplus = 0;
             byte nminus = 0;
-            for (byte i = 0; i < spisflash.Count; i++) 
+            for (byte i = 0; i < spisflash.Count; i++)
             {
                 if (spisflash[i].chk == true) nplus++;
                 else nminus++;
             }
 
-            if (nminus > nplus)
+            if (nplus > nminus)
             {
                 if (chk_all.IsChecked == true)
+                {
+                    b = false;
+                    chk_all.IsChecked = false;
+
+                }
+                else
+                {
+                    chk_all.IsChecked = false;
+                    b = false;
+                }
+
+            }
+            else
+            {
+                if (chk_all.IsChecked == true)
+                {
                     b = true;
+                    chk_all.IsChecked = true;                   
+                }
                 else
                 {
                     b = false;
                     chk_all.IsChecked = false;
                 }
             }
-            else
-            {
-                if (chk_all.IsChecked == true)
-                {
-                    chk_all.IsChecked = true;
 
-                    b = true;
-                }
-                else
-                {
-                    chk_all.IsChecked = false; 
-                    b = false;
-                }
-            }*/
-         
-            
 
-            for(int i = 0; i < spisflash.Count; i++)
+
+            for (int i = 0; i < spisflash.Count; i++)
             {
                 spisflash[i].chk = b;
             }

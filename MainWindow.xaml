@@ -46,7 +46,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <CheckBox x:Name="chk_noClose" Content="Не закрвать консоль" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="70,365,0,0" VerticalAlignment="Top" Click="chk_noClose_Click"/>
+        <CheckBox x:Name="chk_noClose" ToolTip="Оставит консоль открытой, удобно при отладке, и поиске проблем" Content="Не закрвать консоль" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="70,365,0,0" VerticalAlignment="Top" Click="chk_noClose_Click"/>
         <Label Content="Путь до ESP:" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="64,408,0,0" Height="26" VerticalAlignment="Top"/>
         <Label Content="Проект" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="271,404,0,0" VerticalAlignment="Top" Height="28" Width="52"/>
         <Button x:Name="project" ToolTip="Управление проектами" Content="+" HorizontalContentAlignment="Center" FontSize="16"  VerticalContentAlignment="Center" Padding="0,-4,0,0" FontWeight="Bold" HorizontalAlignment="Left" Margin="460,430,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="#009900" Foreground="#009900" Background="#eeeeee" Grid.Column="1" Click="project_Click" RenderTransformOrigin="0.5,0.5"/>
@@ -54,7 +54,7 @@
         <TextBox x:Name="txt_pref" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="329,362,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="Префикс" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="268,357,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txt_log" Grid.ColumnSpan="2" Margin="819,28,10,0" Text="Вывод информации" TextWrapping="Wrap" VerticalAlignment="Top" Height="424"/>
-        <CheckBox x:Name="chk_all" Content="Все" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="89,10,0,0" VerticalAlignment="Top" Click="chk_all_Click" RenderTransformOrigin="1.965,-0.66"/>
+        <CheckBox x:Name="chk_all" ToolTip="Установить либо снять все галочки" Content="Все" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Click="chk_all_Click" RenderTransformOrigin="1.965,-0.66"/>
 
     </Grid>
 </Window>
