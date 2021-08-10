@@ -46,7 +46,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <CheckBox x:Name="chk_noClose" ToolTip="Оставит консоль открытой, удобно при отладке, и поиске проблем" Content="Не закрвать консоль" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="70,365,0,0" VerticalAlignment="Top" Click="chk_noClose_Click"/>
+        <CheckBox x:Name="chk_noClose" ToolTip="Оставит консоль открытой, удобно при отладке, и поиске проблем" Content="Не закрывать консоль" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="70,365,0,0" VerticalAlignment="Top" Click="chk_noClose_Click"/>
         <Label Content="Путь до ESP:" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="64,408,0,0" Height="26" VerticalAlignment="Top"/>
         <Label Content="Проект" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="271,404,0,0" VerticalAlignment="Top" Height="28" Width="52"/>
         <Button x:Name="project" ToolTip="Управление проектами" Content="+" HorizontalContentAlignment="Center" FontSize="16"  VerticalContentAlignment="Center" Padding="0,-4,0,0" FontWeight="Bold" HorizontalAlignment="Left" Margin="460,430,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="#009900" Foreground="#009900" Background="#eeeeee" Grid.Column="1" Click="project_Click" RenderTransformOrigin="0.5,0.5"/>

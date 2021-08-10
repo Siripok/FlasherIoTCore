@@ -64,14 +64,11 @@ namespace WpfApp1
 
         Properties.Settings Parameters = Properties.Settings.Default;
 
-
         public MainWindow()
         {
-
             InitializeComponent();
             ShowPorts();
             GetProjects();
-
 
             spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Parameters.spifflash);
 
@@ -105,9 +102,8 @@ namespace WpfApp1
                 else MessageBox.Show("Не удалось найти ESP-папку! Попробуйте другой путь!", ":(", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             }
-
             else
-                MessageBox.Show("Укажите путь до esp папки\nX:\\yourPath\\ESP\\ на конце должен быть \\ - бэкслеш", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Укажите путь до esp папки\nНапример: X:\\yourPath\\ESP\\", "", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         public void GetProjects()
         {
@@ -139,7 +135,7 @@ namespace WpfApp1
                 Array.Clear(portNames, 0, portNames.Length);//очистка массива, если он не пустой 
             }
 
-            portNames = SerialPort.GetPortNames();//получить список всех доступнх портов
+            portNames = SerialPort.GetPortNames();//получить список всех доступнх COM портов
 
             if (portNames.Length == 0)
                 MessageBox.Show("Необнаружено ни одного устройства.", "Подключите устройства!", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -306,10 +302,9 @@ namespace WpfApp1
 
                 lb.ItemsSource = spisflash;
                 lb.Items.Refresh();
-
+                DeleteMACiCOM();
             }
 
-            DeleteMACiCOM();
         }
 
         public void DeleteMACiCOM()
@@ -329,7 +324,7 @@ namespace WpfApp1
                 for (int i = 0; i < spisflash.Count; i++)
                 {
                     spisflash[i].portNames = portNames;
-                    spisflash[i].Port = ""; //чтобы порты оставались, даже если устр-во было отключено, нужно закоментировать
+                    spisflash[i].Port = ""; //чтобы порты оставались, даже если устр-во было отключено, нужно закоментировать эту строку
                 }
             }
 
@@ -337,32 +332,30 @@ namespace WpfApp1
             {
                 cbProjectNames.ItemsSource = projects;
             }
-
-
             lb.Items.Refresh();
         }
 
 
         private void flash_all_Click(object sender, RoutedEventArgs e)
         {
-            string str = "";
+            string message = "";
             bool error = false;
             for (int i = 0; i < spisflash.Count; i++) //проверки
             {
                 if (spisflash[i].Port == "" && spisflash[i].chk == true)
                 {
-                    str += $"[{spisflash[i].elem}] элемент - заполните COM порт!\n";
+                    message += $"[{spisflash[i].elem}] элемент - заполните COM порт!\n";
                     error = true;
                 }
 
                 if ((spisflash[i].Path == "" || spisflash[i].Path == "Ничего не выбрано!") && spisflash[i].chk == true)
                 {
-                    str += $"[{spisflash[i].elem}] элемент - заполните bin-путь!\n";
+                    message += $"[{spisflash[i].elem}] элемент - заполните bin-путь!\n";
                     error = true;
                 }
             }
 
-            if (error == true) MessageBox.Show("Список проблем:\n\n" + str, "Ошибки при заполнении!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (error == true) MessageBox.Show("Список проблем:\n\n" + message, "Ошибки при заполнении!", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             if (error == false)
                 flashtool(spisflash[0].Path, spisflash[0].Port, true, 0);
