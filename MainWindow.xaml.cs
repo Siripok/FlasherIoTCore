@@ -493,10 +493,10 @@ namespace WpfApp1
 
         public static object CreateEsDevice(string projectId, string cloudRegion, string registryId, string deviceId, string keyPath)
         {
-            MessageBox.Show(projectId);
-            MessageBox.Show(cloudRegion);
-            MessageBox.Show(registryId);
-            MessageBox.Show(deviceId);
+            //MessageBox.Show(projectId);
+            //MessageBox.Show(cloudRegion);
+            //MessageBox.Show(registryId);
+            //MessageBox.Show(deviceId);
 
             var cloudIot = CreateAuthorizedClient();
             var parent = $"projects/{projectId}/locations/{cloudRegion}/registries/{registryId}";
@@ -525,6 +525,8 @@ namespace WpfApp1
                 Console.WriteLine($"\tConfig version: {device.Config.Version}");
                 Console.WriteLine($"\tName: {device.Name}");
                 Console.WriteLine($"\tState:{device.State}");
+
+                MessageBox.Show(deviceId+ " зарегистрирован");
             }
             catch (Google.GoogleApiException e)
             {
