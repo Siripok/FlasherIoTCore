@@ -377,7 +377,7 @@ namespace WpfApp1
 
         }
 
-        private void cmdErase_Clicked(object sender, RoutedEventArgs e)
+        /*private void cmdErase_Clicked(object sender, RoutedEventArgs e)
         {
 
             Button cmd = (Button)sender;
@@ -391,7 +391,7 @@ namespace WpfApp1
                     MessageBox.Show($"Не выбран COM порт!", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             }
-        }
+        }*/
 
         private void cmdLog_Clicked(object sender, RoutedEventArgs e)
         {
