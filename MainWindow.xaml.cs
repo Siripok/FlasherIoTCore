@@ -74,7 +74,6 @@ namespace WpfApp1
         {
             InitializeComponent();
             ShowPorts();
-            GetProjects();
             GetDirectoryProject();
 
             spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Parameters.spifflash);
@@ -85,13 +84,11 @@ namespace WpfApp1
 
             
 
-            if (Parameters.select != -1)
-                cbProjectNames.SelectedIndex = Parameters.select;
+        
             if (Parameters.erase == true)
                 chk_erase.IsChecked = true;
 
-            if (Parameters.pref != null)
-                txt_pref.Text = Parameters.pref;
+          
 
             if (Parameters.noClosing == true)
             {
@@ -104,23 +101,15 @@ namespace WpfApp1
                 k = 'c';
             }
 
-            if (Parameters.espPath != "" && Parameters.espPath != null)
-            {
-                txt_espressif.Text = Parameters.espPath;
-
-                if (Directory.Exists(txt_espressif.Text))
-                    idfPath = GetIdfPath();
-                else MessageBox.Show("Не удалось найти ESP-папку! Попробуйте другой путь!", ":(", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-            }
-            else
-                MessageBox.Show("Укажите путь до esp папки\nНапример: X:\\yourPath\\ESP\\", "", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+      }
        
         public void GetDirectoryProject()
         {
             DirectoryProject = new List<string>();
-           // MessageBox.Show(Directory.GetCurrentDirectory() + "\\projects");
+            // MessageBox.Show(Directory.GetCurrentDirectory() + "\\projects");
+            if (!Directory.Exists("projects"))
+                Directory.CreateDirectory("projects");
+
            foreach (string asas in Directory.GetDirectories("projects"))
             {
                 DirectoryProject.Add(asas.Replace("projects\\", ""));
@@ -129,28 +118,9 @@ namespace WpfApp1
             
             lb.Items.Refresh();
         }
-        public void GetProjects()
-        {
-            if (Parameters.prj != "" && Parameters.prj != null)
-            {
-                if (projects != null) Array.Clear(projects, 0, projects.Length);
+    
 
-                string g = Parameters.prj;
-                projects = g.Split("\r" + "\n", StringSplitOptions.RemoveEmptyEntries);
-
-                cbProjectNames.ItemsSource = projects;
-
-            }
-            cbProjectNames.Items.Refresh();
-        }
-
-        public string GetIdfPath()
-        {
-
-            //return @"C:\esp\";
-            return txt_espressif.Text.Trim().Trim('\\') + "\\";
-
-        }
+      
 
         public void ShowPorts()
         {
@@ -169,7 +139,7 @@ namespace WpfApp1
 
         string[] MACiCOM = new string[2];
 
-        private void myProcess_Exited(object sender, System.EventArgs e, String port, bool multik = false, int num = 0)
+        private void myProcess_Exited(object sender, System.EventArgs e, string binPath, string port, bool multik = false, int num = 0)
         {
 
             string MACpath = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{port}.txt";
@@ -213,8 +183,8 @@ namespace WpfApp1
             {
                 timerWorking = false;
                 lb.Items.Refresh();
-                //   if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
-                //     CreateEsDevice(cbProjectNames.SelectedItem.ToString(), "europe-west1", "atest-registry", MACiCOM[0], "ec_public.pem");
+                   if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
+                     CreateEsDevice(getProject(binPath), "europe-west1", "atest-registry",  getPrefix(binPath) +MACiCOM[0], "ec_public.pem");
 
             });
 
@@ -293,7 +263,7 @@ namespace WpfApp1
 
                     Console.WriteLine(files);
                     var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
-                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 "+files+ "_ino.bin 0x8000 " + files + $"_ino.partitions.bin {erase} " +
+                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 {files}.ino.bin 0x8000 {files}.ino.partitions.bin {erase} " +
                       $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
 
 
@@ -309,7 +279,7 @@ namespace WpfApp1
 
                     process.StartInfo = startInfo;
                     process.EnableRaisingEvents = true;
-                    process.Exited += new EventHandler((sender, e) => myProcess_Exited(sender, e, PORT, allflash, num));
+                    process.Exited += new EventHandler((sender, e) => myProcess_Exited(sender, e, binPath, PORT, allflash, num));
 
                     process.Start();
                     ChekLog(PORT);
@@ -358,14 +328,14 @@ namespace WpfApp1
         {
             for (int i = 0; i < 20; i++)
             {
-                if (File.Exists($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt"))
-                    File.Delete($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt");
+             //   if (File.Exists($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt"))
+               //     File.Delete($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt");
             }
         }
         private void Update_Click(object sender, RoutedEventArgs e)
         {
             ShowPorts();
-            GetProjects();
+          
             GetDirectoryProject();
             if (spisflash != null)
             {
@@ -376,10 +346,7 @@ namespace WpfApp1
                 }
             }
 
-            if (projects != null)
-            {
-                cbProjectNames.ItemsSource = projects;
-            }
+           
             lb.Items.Refresh();
         }
 
@@ -498,9 +465,8 @@ namespace WpfApp1
             Parameters.spifflash = json;
             Parameters.erase = (bool)chk_erase.IsChecked;
             Parameters.noClosing = (bool)chk_noClose.IsChecked;
-            Parameters.espPath = GetIdfPath();
-            Parameters.select = cbProjectNames.SelectedIndex;
-            Parameters.pref = txt_pref.Text;
+        
+        
             Parameters.Save();
 
             //  MessageBox.Show(jsonString);
@@ -528,10 +494,10 @@ namespace WpfApp1
 
         public static object CreateEsDevice(string projectId, string cloudRegion, string registryId, string deviceId, string keyPath)
         {
-            //MessageBox.Show(projectId);
-            //MessageBox.Show(cloudRegion);
-            //MessageBox.Show(registryId);
-            //MessageBox.Show(deviceId);
+            MessageBox.Show(projectId);
+            MessageBox.Show(cloudRegion);
+            MessageBox.Show(registryId);
+            MessageBox.Show(deviceId);
 
             var cloudIot = CreateAuthorizedClient();
             var parent = $"projects/{projectId}/locations/{cloudRegion}/registries/{registryId}";
@@ -590,7 +556,7 @@ namespace WpfApp1
         {
             Window1 nw = new Window1();
             nw.ShowDialog();
-            GetProjects();
+     
         }
 
 
