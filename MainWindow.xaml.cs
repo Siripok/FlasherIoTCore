@@ -250,7 +250,18 @@ namespace WpfApp1
             {
                 try
                 {
-                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\esptool.py\"\" --chip ESP32 --p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                    //var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\" +
+                    //   $"esptool.py\"\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all " +
+                    //   $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+
+
+
+                    var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe", 
+                        @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 C:\Users\{user}\AppData\Local\Temp\arduino_build_56380/SmartKitchen.ino.bin 0x8000 C:\Users\{user}\AppData\Local\Temp\arduino_build_56380/SmartKitchen.ino.partitions.bin --erase-all " +
+                    $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+
+
+
                     startInfo.WorkingDirectory = idfPath;
                     Process process = new Process();
 
