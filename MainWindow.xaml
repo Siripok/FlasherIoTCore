@@ -33,7 +33,7 @@
 
                             <ComboBox  Text="{Binding Path}" ItemsSource="{Binding DirectoryProject}" Margin="3,3,3,3" Width="350" Height="25" Padding="2,2,2,2"/>
 
-                            <Button Content="-->" Margin="5,3,3,3" VerticalAlignment="Top" Width="25"  Height="25" Click="cmdOpen_Clicked"/>
+                            <!--<Button Content="->" Margin="5,3,3,3" VerticalAlignment="Top" Width="25"  Height="25" Click="cmdOpen_Clicked"/>-->
                             <ComboBox Text="{Binding Port}" Margin="5,3,3,3" Width="100" Height="25" ItemsSource="{Binding portNames}"/>
 
                             <Button Content="Прошить" Margin="5,3,3,3" VerticalAlignment="Top" Width="95" Background="#FFFB9E69" Foreground="#FF232323" Height="25" Click="cmdFlash_Clicked"/>
