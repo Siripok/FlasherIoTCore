@@ -94,5 +94,17 @@ namespace WpfApp1.Properties {
                 this["pref"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool erase {
+            get {
+                return ((bool)(this["erase"]));
+            }
+            set {
+                this["erase"] = value;
+            }
+        }
     }
 }

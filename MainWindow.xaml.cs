@@ -22,13 +22,14 @@ using Google.Apis.Services;
 using Google.Apis.CloudIot.v1.Data;
 
 using System.Windows.Threading;
+using System.Reflection;
 
 namespace WpfApp1
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
- 
+
 
     public class FlahInfo
     {
@@ -36,6 +37,9 @@ namespace WpfApp1
         public string Port { get; set; }
 
         public string[] portNames { get; set; }
+        public List<string> DirectoryProject { get; set; }
+
+       
 
         public bool chk { get; set; } //chekbox
         public int elem { get; set; } //№ элемента в списке
@@ -57,7 +61,9 @@ namespace WpfApp1
         string user; //пользователь
         string idfPath = @""; //на конце пути должен быть слэш "\"
         const int BoardsMAX = 5;// кол-во строк т.е подключаемых плат
-        public string[] projects;
+        public string[] projects;//project from 2win
+        public List<string> DirectoryProject;
+
         char k;
         List<FlahInfo> spisflash = new List<FlahInfo>();
 
@@ -69,6 +75,7 @@ namespace WpfApp1
             InitializeComponent();
             ShowPorts();
             GetProjects();
+            GetDirectoryProject();
 
             spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Parameters.spifflash);
 
@@ -76,8 +83,12 @@ namespace WpfApp1
 
             user = Environment.UserName;
 
+            
+
             if (Parameters.select != -1)
                 cbProjectNames.SelectedIndex = Parameters.select;
+            if (Parameters.erase == true)
+                chk_erase.IsChecked = true;
 
             if (Parameters.pref != null)
                 txt_pref.Text = Parameters.pref;
@@ -104,6 +115,19 @@ namespace WpfApp1
             }
             else
                 MessageBox.Show("Укажите путь до esp папки\nНапример: X:\\yourPath\\ESP\\", "", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+       
+        public void GetDirectoryProject()
+        {
+            DirectoryProject = new List<string>();
+           // MessageBox.Show(Directory.GetCurrentDirectory() + "\\projects");
+           foreach (string asas in Directory.GetDirectories("projects"))
+            {
+                DirectoryProject.Add(asas.Replace("projects\\", ""));
+            }
+            //irectoryProject = Directory.GetDirectories("projects").;
+            
+            lb.Items.Refresh();
         }
         public void GetProjects()
         {
@@ -140,7 +164,6 @@ namespace WpfApp1
             if (portNames.Length == 0)
                 MessageBox.Show("Необнаружено ни одного устройства.", "Подключите устройства!", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            //lb.ItemsSource = portNames;
 
         }
 
@@ -251,15 +274,27 @@ namespace WpfApp1
                 try //921600 //115200
                     //--flash_mode dio
                 {
+                    string files = Directory.GetCurrentDirectory() + "\\projects\\"+ binPath+"\\"+binPath;
+                 
+
+                   // MessageBox.Show($"files {files}\n"+$"{binPath}");
                     //var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\" +
                     //   $"esptool.py\"\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all " +
                     //   $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                    string erase = "";
+                    if (chk_erase.IsChecked == true)
+                        erase = "--erase_all";
+                    else
+                        erase = "";
+                    //var startInfo = new ProcessStartInfo("", "");
+                    //var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe", 
+                    //    @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 C:\Users\{user}\AppData\Local\Temp\arduino_build_56380/SmartKitchen.ino.bin 0x8000 C:\Users\{user}\AppData\Local\Temp\arduino_build_56380/SmartKitchen.ino.partitions.bin {erase} " +
+                    //$">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
 
-
-
-                    var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe", 
-                        @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 C:\Users\{user}\AppData\Local\Temp\arduino_build_56380/SmartKitchen.ino.bin 0x8000 C:\Users\{user}\AppData\Local\Temp\arduino_build_56380/SmartKitchen.ino.partitions.bin --erase-all " +
-                    $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                    Console.WriteLine(files);
+                    var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
+                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 "+files+ "_ino.bin 0x8000 " + files + $"_ino.partitions.bin {erase} " +
+                      $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
 
 
 
@@ -308,7 +343,7 @@ namespace WpfApp1
                 ShowPorts();
                 for (int i = 0; i < BoardsMAX; i++)
                 {
-                    spisflash.Add(new FlahInfo("", "") { portNames = portNames });
+                    spisflash.Add(new FlahInfo("", "") { portNames = portNames ,  DirectoryProject = DirectoryProject } );
                     spisflash[i].elem = i + 1;
                 }
 
@@ -331,6 +366,7 @@ namespace WpfApp1
         {
             ShowPorts();
             GetProjects();
+            GetDirectoryProject();
             if (spisflash != null)
             {
                 for (int i = 0; i < spisflash.Count; i++)
@@ -430,10 +466,11 @@ namespace WpfApp1
 
                 if (msg.Port != "")
                 {
-                    if (msg.Path != "" && msg.Path != "Ничего не выбрано!")
+                    if (msg.Path != "")
                     {
                         w = msg.elem - 1;
-                        flashtool(msg.Path, msg.Port);
+                        flashtool(msg.Path,msg.Port);
+                       
                     }
 
                     else cmdOpen_Clicked(sender, e);
@@ -459,6 +496,7 @@ namespace WpfApp1
             string json = JsonConvert.SerializeObject(spisflash);
 
             Parameters.spifflash = json;
+            Parameters.erase = (bool)chk_erase.IsChecked;
             Parameters.noClosing = (bool)chk_noClose.IsChecked;
             Parameters.espPath = GetIdfPath();
             Parameters.select = cbProjectNames.SelectedIndex;
