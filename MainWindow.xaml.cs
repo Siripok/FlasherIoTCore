@@ -20,9 +20,8 @@ using Google.Apis.CloudIot.v1;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.CloudIot.v1.Data;
-
 using System.Windows.Threading;
-using System.Reflection;
+
 
 namespace WpfApp1
 {
@@ -231,7 +230,7 @@ namespace WpfApp1
         }
         bool timerWorking = false;
 
-        public string OpenFile() // выбор bin файла
+        /*public string OpenFile() // выбор bin файла
         {
 
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -247,7 +246,7 @@ namespace WpfApp1
 
             return "Ничего не выбрано!";
 
-        }
+        }*/
 
         public void erase_flash(string PORT) // очистка платы от предыдoщей прошивки
         {
@@ -275,7 +274,7 @@ namespace WpfApp1
                     //--flash_mode dio
                 {
                     string files = Directory.GetCurrentDirectory() + "\\projects\\"+ binPath+"\\"+binPath;
-                 
+                 //MessageBox.Show($"bin {binPath}\nDirectory.GetCurrentDirectory(){Directory.GetCurrentDirectory()}");
 
                    // MessageBox.Show($"files {files}\n"+$"{binPath}");
                     //var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\" +
@@ -286,16 +285,16 @@ namespace WpfApp1
                         erase = "--erase_all";
                     else
                         erase = "";
-                    //var startInfo = new ProcessStartInfo("", "");
-                    //var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe", 
-                    //    @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 C:\Users\{user}\AppData\Local\Temp\arduino_build_56380/SmartKitchen.ino.bin 0x8000 C:\Users\{user}\AppData\Local\Temp\arduino_build_56380/SmartKitchen.ino.partitions.bin {erase} " +
-                    //$">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                 
+                    var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe", 
+                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 D:\000WORK\WpfApp1\bin\Debug\netcoreapp3.0\projects\SmartKitchen\SmartKitchen_ino.bin 0x8000 D:\000WORK\WpfApp1\bin\Debug\netcoreapp3.0\projects\SmartKitchen\SmartKitchen_ino_partitions.bin {erase} " +
+                    $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
 
                     Console.WriteLine(files);
-                    var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
-                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 "+files+ "_ino.bin 0x8000 " + files + $"_ino.partitions.bin {erase} " +
-                      $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
-
+                    //var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
+                     //  @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 "+files+ "_ino.bin 0x8000 " + files + $"_ino.partitions.bin {erase} " +
+                      //$">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+//
 
 
                     startInfo.WorkingDirectory = idfPath;
@@ -373,6 +372,9 @@ namespace WpfApp1
                 {
                     spisflash[i].portNames = portNames;
                     spisflash[i].Port = ""; //чтобы порты оставались, даже если устр-во было отключено, нужно закоментировать эту строку
+
+                    spisflash[i].DirectoryProject = DirectoryProject;
+                    //spisflash[i].Path = "";
                 }
             }
 
@@ -468,18 +470,17 @@ namespace WpfApp1
                 {
                     if (msg.Path != "")
                     {
+                        
                         w = msg.elem - 1;
-                        flashtool(msg.Path,msg.Port);
-                       
+                        flashtool(msg.Path,msg.Port);                       
                     }
-
-                    else cmdOpen_Clicked(sender, e);
+                    
                 }
                 else MessageBox.Show($"Не выбран COM порт", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
-
+        /*
         private void cmdOpen_Clicked(object sender, RoutedEventArgs e)
         {
             Button cmd = (Button)sender;
@@ -489,7 +490,7 @@ namespace WpfApp1
                 msg.Path = OpenFile();
                 lb.Items.Refresh();
             }
-        }
+        }*/
 
         private void Window_Closed(object sender, EventArgs e)
         {
@@ -595,6 +596,7 @@ namespace WpfApp1
 
 
         DispatcherTimer timer;
+        
         private void ChekLog(string PORT)
         {
             txt_log.Clear();
