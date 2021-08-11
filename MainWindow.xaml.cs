@@ -604,6 +604,7 @@ namespace WpfApp1
                 timer.Stop();
         }
 
+
         private void chk_all_Click(object sender, RoutedEventArgs e)
         {
             bool b = true;
@@ -645,6 +646,38 @@ namespace WpfApp1
             }
             lb.Items.Refresh();
         }
+
+        string getPrefix(string nameDir)
+        {
+            string otvet = "";
+            switch (nameDir)
+            {
+                case "Fan":
+                    otvet = "GV_";
+                    break;
+                case "SmartKitchen":
+                    otvet = "GN_";
+                    break;
+
+            }
+            return otvet;
+        }
+        string getProject(string nameDir)
+        {
+            string otvet = "";
+            switch (nameDir)
+            {
+                case "Fan":
+                    otvet = "greenvent-632e2";
+                    break;
+                case "SmartKitchen":
+                    otvet = "giulia-novars-smart-realtime";
+                    break;
+            }
+            return otvet;
+        }
+
+
     }
 
 }
