@@ -256,9 +256,7 @@ namespace WpfApp1
                     else
                         erase = "";
                  
-                    var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe", 
-                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 D:\000WORK\WpfApp1\bin\Debug\netcoreapp3.0\projects\SmartKitchen\SmartKitchen_ino.bin 0x8000 D:\000WORK\WpfApp1\bin\Debug\netcoreapp3.0\projects\SmartKitchen\SmartKitchen_ino_partitions.bin {erase} " +
-                    $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                 
 
                     Console.WriteLine(files);
                     var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
