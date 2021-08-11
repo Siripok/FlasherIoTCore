@@ -248,9 +248,10 @@ namespace WpfApp1
         {
             if (spisflash[num].chk == true || allflash == false)
             {
-                try
+                try //921600 //115200
+                    //--flash_mode dio
                 {
-                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\esptool.py\"\" --chip ESP32 --p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                    var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\esptool.py\"\" --chip ESP32 --p {PORT} -b 921600 --after hard_reset write_flash --flash_size 16MB --flash_mode dio 0x10000 \"{binPath}\" --erase-all >C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
                     startInfo.WorkingDirectory = idfPath;
                     Process process = new Process();
 
