@@ -12,8 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO.Ports;//
+using System.IO.Ports;//SerialPort
 using System.Diagnostics;// Process.Start, File.Exists
+
 using Newtonsoft.Json;
 using System.IO;
 using Google.Apis.CloudIot.v1;
@@ -238,6 +239,7 @@ namespace WpfApp1
 
         public void flashtool(string binPath, string PORT, bool allflash = false, int num = 0) //прошивка платы bin файлом
         {
+            
             if (spisflash[num].chk == true || allflash == false)
             {
                 try //921600 //115200
@@ -763,6 +765,12 @@ namespace WpfApp1
                 }
                 else MessageBox.Show($"Не выбран COM порт", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        private void btn_Settings_Click(object sender, RoutedEventArgs e)
+        {
+            Settings nf = new Settings();
+            nf.ShowDialog();
         }
     }
 

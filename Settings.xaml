@@ -1,0 +1,26 @@
+﻿<Window x:Class="WpfApp1.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="Settings" Height="450" Width="538">
+    <Grid Margin="5,5,5,5">
+        <ListBox x:Name="lb_settings" Margin="10,10,40,50" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:Name="DataTemplateSettings">
+                         <StackPanel Orientation="Horizontal" Margin="3">
+                        <ComboBox ItemsSource="{Binding DevicesSettings}" Width="64"/> <!--Text="{Binding Devices}"-->
+                        </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+        <Button x:Name="btn_refresh" Content="refresh" HorizontalAlignment="Left" Margin="11,392,0,0" VerticalAlignment="Top" Click="btn_refresh_Click"/>
+
+
+
+
+    </Grid>
+</Window>
