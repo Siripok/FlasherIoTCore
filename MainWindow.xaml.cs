@@ -250,9 +250,10 @@ namespace WpfApp1
                     //var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\" +
                     //   $"esptool.py\"\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all " +
                     //   $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+
                     string erase = "";
                     if (chk_erase.IsChecked == true)
-                        erase = "--erase_all";
+                        erase = "--erase-all"; //erase_flash
                     else
                         erase = "";
                  
@@ -260,7 +261,7 @@ namespace WpfApp1
 
                     Console.WriteLine(files);
                     var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
-                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 {files}.ino.bin 0x8000 {files}.ino.partitions.bin {erase} " +
+                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio  {erase} --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 {files}.ino.bin 0x8000 {files}.ino.partitions.bin" +
                       $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
 
 
@@ -332,7 +333,7 @@ namespace WpfApp1
         private void Update_Click(object sender, RoutedEventArgs e)
         {
             ShowPorts();
-          
+            CloseMonitor();
             GetDirectoryProject();
             if (spisflash != null)
             {
@@ -353,6 +354,7 @@ namespace WpfApp1
 
         private void flash_all_Click(object sender, RoutedEventArgs e)
         {
+            CloseMonitor();
             string message = "";
             bool error = false;
             for (int i = 0; i < spisflash.Count; i++) //проверки
@@ -425,6 +427,7 @@ namespace WpfApp1
         int w;//узнаёт какой элемент был выбран чтобы присвоить ему мак адрес
         private void cmdFlash_Clicked(object sender, RoutedEventArgs e)
         {
+            CloseMonitor();
             w = 0;
             Button cmd = (Button)sender;
             if (cmd.DataContext is FlahInfo)
@@ -566,6 +569,7 @@ namespace WpfApp1
         
         private void ChekLog(string PORT)
         {
+            CloseMonitor();
             txt_log.Clear();
 
             string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{PORT}.txt";
@@ -684,13 +688,14 @@ namespace WpfApp1
             }
             return otvet;
         }
-        
-    
 
 
 
+
+        SerialPort sp;
         private void Monitor(string PORT,int baud)
         {
+            CloseMonitor();
             sp = new SerialPort();
             sp.PortName = PORT;
             sp.BaudRate = baud; //921600  //115200
@@ -704,38 +709,13 @@ namespace WpfApp1
             //sp.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
             sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
             sp.Open();
+            txt_log.Clear();
+            txt_log.Text += $"{PORT} {baud} ... \r\n";
+            txt_log.Text += "\r\n";
         }
 
-        SerialPort sp;
-        private void monitor_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
 
-                sp = new SerialPort();
-               
-                sp.PortName = "COM3";
-                sp.BaudRate = 115200; //921600  //115200
-                sp.Parity = Parity.None; 
-                sp.StopBits = StopBits.One;
-                sp.DataBits = 8;                
-                sp.Handshake = Handshake.None;
-                //sp.RtsEnable = true;
-                sp.ReadTimeout= 500;
-                sp.WriteTimeout = 500;
-                //sp.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
-                sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
-                sp.Open();      
-
-
-            }
-            catch (Exception er)
-            {
-                MessageBox.Show(er.ToString(), "Crash!");
-            }
-        }
-
-        private static void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        private  void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e) //static
         {
             try
             {
@@ -744,11 +724,16 @@ namespace WpfApp1
 
 
                 Console.WriteLine($"Read: {mySerialPort}");
-                txt_log
-
                 //Debug.WriteLine(indata);
+                this.Dispatcher.Invoke(() =>
+                {
+                    txt_log.Text += indata;
+                    txt_log.CaretIndex = txt_log.Text.Length;
+                    txt_log.ScrollToEnd();
+
+                });
             }
-            catch (System.TimeoutException err)
+            catch (TimeoutException err)
             {
                 MessageBox.Show(err.ToString(), "TimeoutException");
             }
@@ -756,7 +741,11 @@ namespace WpfApp1
         
         private void CloseMonitor()
         {
-            sp.Close();
+            if (sp!=null)
+            {
+                sp.Close();
+            }
+            
         }
 
         private void cmdMonitor_Clicked(object sender, RoutedEventArgs e)
