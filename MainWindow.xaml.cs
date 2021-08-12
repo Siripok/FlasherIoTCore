@@ -182,8 +182,8 @@ namespace WpfApp1
             {
                 timerWorking = false;
                 lb.Items.Refresh();
-                   if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
-                     CreateEsDevice(getProject(binPath), "europe-west1", "atest-registry",  getPrefix(binPath) +MACiCOM[0], "ec_public.pem");
+                  // if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
+                  //   CreateEsDevice(getProject(binPath), "europe-west1", "atest-registry",  getPrefix(binPath) +MACiCOM[0], "ec_public.pem");
 
             });
 
@@ -218,7 +218,7 @@ namespace WpfApp1
 
         }*/
 
-        public void erase_flash(string PORT) // очистка платы от предыдoщей прошивки
+        /*public void erase_flash(string PORT) // очистка платы от предыдoщей прошивки
         {
             try
             {
@@ -232,7 +232,7 @@ namespace WpfApp1
                 MessageBox.Show(er.Message + $"\n{idfPath}", "Что-то сломалось!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-        }
+        }*/
 
 
 
@@ -455,7 +455,8 @@ namespace WpfApp1
                 msg.Path = OpenFile();
                 lb.Items.Refresh();
             }
-        }*/
+        }
+        */
 
         private void Window_Closed(object sender, EventArgs e)
         {
@@ -683,8 +684,97 @@ namespace WpfApp1
             }
             return otvet;
         }
+        
+    
 
 
+
+        private void Monitor(string PORT,int baud)
+        {
+            sp = new SerialPort();
+            sp.PortName = PORT;
+            sp.BaudRate = baud; //921600  //115200
+            sp.Parity = Parity.None;
+            sp.StopBits = StopBits.One;
+            sp.DataBits = 8;
+            sp.Handshake = Handshake.None;
+            //sp.RtsEnable = true;
+            sp.ReadTimeout = 500;
+            sp.WriteTimeout = 500;
+            //sp.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
+            sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+            sp.Open();
+        }
+
+        SerialPort sp;
+        private void monitor_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                sp = new SerialPort();
+               
+                sp.PortName = "COM3";
+                sp.BaudRate = 115200; //921600  //115200
+                sp.Parity = Parity.None; 
+                sp.StopBits = StopBits.One;
+                sp.DataBits = 8;                
+                sp.Handshake = Handshake.None;
+                //sp.RtsEnable = true;
+                sp.ReadTimeout= 500;
+                sp.WriteTimeout = 500;
+                //sp.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
+                sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+                sp.Open();      
+
+
+            }
+            catch (Exception er)
+            {
+                MessageBox.Show(er.ToString(), "Crash!");
+            }
+        }
+
+        private static void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                SerialPort mySerialPort = (SerialPort)sender;
+                string indata = mySerialPort.ReadExisting();
+
+
+                Console.WriteLine($"Read: {mySerialPort}");
+                txt_log
+
+                //Debug.WriteLine(indata);
+            }
+            catch (System.TimeoutException err)
+            {
+                MessageBox.Show(err.ToString(), "TimeoutException");
+            }
+        }
+        
+        private void CloseMonitor()
+        {
+            sp.Close();
+        }
+
+        private void cmdMonitor_Clicked(object sender, RoutedEventArgs e)
+        {
+            Button cmd = (Button)sender;
+            if (cmd.DataContext is FlahInfo)
+            {
+                FlahInfo msg = (FlahInfo)cmd.DataContext;
+
+                if (msg.Port != "")
+                {
+
+                    Monitor(msg.Port,115200);
+
+                }
+                else MessageBox.Show($"Не выбран COM порт", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
     }
 
 }
