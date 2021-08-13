@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="svet" Height="450" Width="400">
+        Title="svet" Height="400" Width="320
+        ">
     <Grid Margin="0,0,10,24">
         <Label Content="Номер пина" Margin="19,20,0,0" VerticalAlignment="Top" Height="26" HorizontalAlignment="Left" Width="78"/>
         <Label Content="Номер кнопки" HorizontalAlignment="Left" Margin="18,82,0,0" VerticalAlignment="Top" Height="26" Width="90"/>

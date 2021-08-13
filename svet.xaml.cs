@@ -18,28 +18,31 @@ namespace WpfApp1
     public partial class svet : Window
     {
         List<DeviceIOT> t;
-        int elem;
+        int i;
         public svet(List<DeviceIOT> param,int num)
         {
             InitializeComponent();
+         
             t = param;
-            elem = num;
+            i = num;
             ShowElement();
           
         }
 
         public void ShowElement()
         {
-            if (t[elem].numButton.ToString() != ""&& t[elem].numPIN.ToString()!="") //если заполены были поля
+            txt_numPIN.Clear();
+            txt_numBUTTON.Clear();
+            if (t[i].numButton.ToString() != ""&& t[i].numPIN.ToString()!="") //если заполнены были поля
             {
 
-                txt_numPIN.Text = t[elem].numPIN.ToString();
-                txt_numBUTTON.Text = t[elem].numButton.ToString();
+                txt_numPIN.Text = t[i].numPIN.ToString();
+                txt_numBUTTON.Text = t[i].numButton.ToString();
 
-                if (t[elem].reverseBULB == true) chk_reverseBULB.IsChecked = true;
-                if (t[elem].dimBRIGHTNESS == true) chk_dimBRIGHTNESS.IsChecked = true;
-                if (t[elem].SMOTH == true) chk_SMOTH.IsChecked = true;
-                if (t[elem].IKsenor == true) chk_IKsenor.IsChecked = true;
+                if (t[i].reverseBULB == true) chk_reverseBULB.IsChecked = true;
+                if (t[i].dimBRIGHTNESS == true) chk_dimBRIGHTNESS.IsChecked = true;
+                if (t[i].SMOTH == true) chk_SMOTH.IsChecked = true;
+                if (t[i].IKsenor == true) chk_IKsenor.IsChecked = true;
             }
         }
 
@@ -49,28 +52,28 @@ namespace WpfApp1
             if (txt_numPIN.Text != "" && txt_numBUTTON.Text != "")
             {
 
-                t[elem].numPIN = Convert.ToInt32(txt_numPIN.Text);
-                t[elem].numButton = Convert.ToInt32(txt_numBUTTON.Text);
+                t[i].numPIN = Convert.ToInt32(txt_numPIN.Text);
+                t[i].numButton = Convert.ToInt32(txt_numBUTTON.Text);
 
                  if (chk_reverseBULB.IsChecked == true)
-                    t[elem].reverseBULB = true;
+                    t[i].reverseBULB = true;
                  else
-                    t[elem].reverseBULB = false;
+                    t[i].reverseBULB = false;
 
 
                  if (chk_dimBRIGHTNESS.IsChecked == true)
-                    t[elem].dimBRIGHTNESS = true;
-                else t[elem].dimBRIGHTNESS = false;
+                    t[i].dimBRIGHTNESS = true;
+                else t[i].dimBRIGHTNESS = false;
 
 
                  if (chk_SMOTH.IsChecked == true)
-                    t[elem].SMOTH = true;
-                else t[elem].SMOTH = false;
+                    t[i].SMOTH = true;
+                else t[i].SMOTH = false;
 
 
                  if (chk_IKsenor.IsChecked == true)
-                    t[elem].IKsenor = true;
-                 else t[elem].IKsenor = false;
+                    t[i].IKsenor = true;
+                 else t[i].IKsenor = false;
 
                 this.Close();
             }

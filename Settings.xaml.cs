@@ -20,7 +20,7 @@ namespace WpfApp1
     {
 
         public string Type { get; set; }
-       
+
         public string[] TypesDevicesSettings { get; set; }
 
         public int num { get; set; } //№ по списку
@@ -31,7 +31,7 @@ namespace WpfApp1
         public bool SMOTH { get; set; }
         public bool IKsenor { get; set; }
         public bool MechanicBtn { get; set; }
-        public string Opisanie {get;set;}
+        public string Opisanie { get; set; }
 
 
     }
@@ -40,13 +40,14 @@ namespace WpfApp1
     {
         public List<DeviceIOT> Listedevice;
 
-        string[] DevicesSettings = { "svet", "retrotop_up" , "none" };
+        string[] DevicesSettings = { "svet", "retrotop_up", "none" };
 
 
-        public Settings(List <FlashInfo> fi)
+        public Settings(List<FlashInfo> fi)
         {
             InitializeComponent();
-            ShowListBox();            
+            ShowListBox();
+            
 
         }
 
@@ -60,7 +61,7 @@ namespace WpfApp1
             new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
             new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
             new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
-            new DeviceIOT() { Type = "retrotop_up", TypesDevicesSettings=DevicesSettings},
+            new DeviceIOT() {Type = "retrotop_up", TypesDevicesSettings=DevicesSettings},
             new DeviceIOT() {Type= "none",TypesDevicesSettings=DevicesSettings }
         };
 
@@ -72,10 +73,10 @@ namespace WpfApp1
 
             lb_settings.Items.Refresh();
         }
-       
+
         private void btn_refresh_Click(object sender, RoutedEventArgs e)
         {
-           
+
         }
 
         private void cmd_Edit_Clicked(object sender, RoutedEventArgs e)
@@ -87,8 +88,8 @@ namespace WpfApp1
 
                 switch (msg.Type)
                 {
-                    case "svet": 
-                        svet sv = new svet(Listedevice,msg.num);                        
+                    case "svet":
+                        svet sv = new svet(Listedevice, msg.num);
                         sv.ShowDialog();
                         ShowSettingSvet(msg.num);
                         break;
@@ -103,10 +104,10 @@ namespace WpfApp1
                         break;
 
                     default:
-                        MessageBox.Show($"Непонятно(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show($"Непонятно :(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
                         break;
                 }
-              
+
                 lb_settings.Items.Refresh();
             }
         }
@@ -116,22 +117,22 @@ namespace WpfApp1
             //Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
             Listedevice[i].Opisanie = "Выбрано:\n";
             if (Listedevice[i].reverseBULB == true)
-                    Listedevice[i].Opisanie += "Инвертировать, ";
-               
+                Listedevice[i].Opisanie += "Инвертировать, ";
 
-                if(Listedevice[i].dimBRIGHTNESS == true)
-                    Listedevice[i].Opisanie += "Регулировка яркости, ";
-                
 
-               if(Listedevice[i].SMOTH == true)
-                    Listedevice[i].Opisanie += "Плавное включение, ";
-             
+            if (Listedevice[i].dimBRIGHTNESS == true)
+                Listedevice[i].Opisanie += "Регулировка яркости, ";
 
-               if(Listedevice[i].IKsenor == true)
-                    Listedevice[i].Opisanie += "ИК сенсор ";
-              
-            
-          
+
+            if (Listedevice[i].SMOTH == true)
+                Listedevice[i].Opisanie += "Плавное включение, ";
+
+
+            if (Listedevice[i].IKsenor == true)
+                Listedevice[i].Opisanie += "ИК сенсор ";
+
+
+
         }
 
         public void ShowSettingRetrotop(int i)
@@ -140,12 +141,12 @@ namespace WpfApp1
             // Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
             Listedevice[i].Opisanie = "Выбрано: ";
             if (Listedevice[i].MechanicBtn == true)
-                    Listedevice[i].Opisanie += "Механическая кнопка";
-                          
-            
-           
+                Listedevice[i].Opisanie += "Механическая кнопка";
+
+
+
         }
     }
-    
+
 
 }
