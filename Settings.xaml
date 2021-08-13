@@ -5,20 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="538">
-    <Grid Margin="5,5,5,5">
-        <ListBox x:Name="lb_settings" Margin="10,10,40,50" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1">
+        Title="Settings" Height="469" Width="769">
+    <Grid Margin="5,5,24,5">
+        <ListBox x:Name="lb_settings" Margin="10,19,241,55">
             <ListBox.ItemTemplate>
                 <DataTemplate x:Name="DataTemplateSettings">
-                         <StackPanel Orientation="Horizontal" Margin="3">
-                        <ComboBox ItemsSource="{Binding DevicesSettings}" Width="64"/> <!--Text="{Binding Devices}"-->
-                        </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <ComboBox ItemsSource="{Binding DevicesSettings}" Width="64"/>
+                        <!--Text="{Binding Devices}"-->
+                    </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
 
         </ListBox>
-        <Button x:Name="btn_refresh" Content="refresh" HorizontalAlignment="Left" Margin="11,392,0,0" VerticalAlignment="Top" Click="btn_refresh_Click"/>
-
+        <Button x:Name="btn_refresh" Content="refresh" HorizontalAlignment="Left" Margin="10,411,0,0" VerticalAlignment="Top" Click="btn_refresh_Click"/>
+        <TextBox x:Name="txt_numPIN" HorizontalAlignment="Left" Margin="526,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txt_numBUTTON" HorizontalAlignment="Left" Margin="526,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <CheckBox x:Name="chk_reverseBULB" Content="Реверс лампочек" HorizontalAlignment="Left" Margin="523,164,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="chk_dimBRIGHTNESS" Content="Регулировка яркости" HorizontalAlignment="Left" Margin="523,208,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="chk_SMOTH" Content="Плавное включение" HorizontalAlignment="Left" Margin="524,248,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="chk_IKsenor" Content="ИК сенсор" HorizontalAlignment="Left" Margin="524,295,0,0" VerticalAlignment="Top"/>
+        <Label Content="Номер пина" HorizontalAlignment="Left" Margin="524,20,0,0" VerticalAlignment="Top"/>
+        <Label Content="Номер кнопки" HorizontalAlignment="Left" Margin="522,82,0,0" VerticalAlignment="Top"/>
 
 
 

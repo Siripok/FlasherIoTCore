@@ -15,6 +15,16 @@ namespace WpfApp1
     /// <summary>
     /// Логика взаимодействия для Settings.xaml
     /// </summary>
+    /// 
+    class Elem
+    {
+        public int numb { get; set; }
+        public string Devices { get; set; }
+
+        
+
+    }
+
     public partial class Settings : Window
     {
         public string[] DevicesSettings = { "svet", "retrotop-up" };
@@ -30,16 +40,21 @@ namespace WpfApp1
         {
             //lb_settings.ItemsSource = Devices;
             lb_settings.ItemsSource = DevicesSettings;
-            lb_settings.Items.Add("1");
-            lb_settings.Items.Add("2");
+           // lb_settings.Items.Add("1");
+           // lb_settings.Items.Add("2");
         
         }
-
+        Elem el;
         private void btn_refresh_Click(object sender, RoutedEventArgs e)
         {
-
-            lb_settings.Items.Refresh();
+            for(int i = 0; i < 5; i++)
+            {
+                
+            }
+            
 
         }
+
+       
     }
 }
