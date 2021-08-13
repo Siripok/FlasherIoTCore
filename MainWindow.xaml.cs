@@ -22,7 +22,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.CloudIot.v1.Data;
 using System.Windows.Threading;
-
+using System.Reflection;
 
 namespace WpfApp1
 {
@@ -109,6 +109,7 @@ namespace WpfApp1
        
         public void GetDirectoryProject()
         {
+            log.Add("Получим директорию проектов");
             DirectoryProject = new List<string>();
             // MessageBox.Show(Directory.GetCurrentDirectory() + "\\projects");
             if (!Directory.Exists("projects"))
@@ -128,6 +129,7 @@ namespace WpfApp1
 
         public void ShowPorts()
         {
+            log.Add("Обновим порты");
             if (portNames != null)
             {
                 Array.Clear(portNames, 0, portNames.Length);//очистка массива, если он не пустой 
@@ -776,6 +778,26 @@ namespace WpfApp1
             Settings nf = new Settings(spisflash);
             nf.ShowDialog();
         }
+    }
+
+
+
+
+    public static class log
+    {
+        public static void Add(string str = "")
+        {
+
+            string localpath = (new FileInfo(Assembly.GetExecutingAssembly().Location).Directory).ToString();
+            string path = localpath + @"\TreeCadN.log";
+
+            if (File.Exists(path))
+            {
+                string save_log = Environment.NewLine + DateTime.Now + " - " + str;
+                File.AppendAllText(path, save_log, System.Text.Encoding.UTF8);
+            }
+        }
+
     }
 
 }
