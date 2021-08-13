@@ -44,8 +44,12 @@ namespace WpfApp1
         public bool chk { get; set; } //chekbox
         public int elem { get; set; } //№ элемента в списке
         public string flMAC { get; set; } //flashMAC
-        public string status { get; set; } 
-       
+        public string status { get; set; }
+
+
+
+     
+
 
 
         public FlahInfo(string Path, string Port)
@@ -769,7 +773,7 @@ namespace WpfApp1
 
         private void btn_Settings_Click(object sender, RoutedEventArgs e)
         {
-            Settings nf = new Settings();
+            Settings nf = new Settings(spisflash);
             nf.ShowDialog();
         }
     }

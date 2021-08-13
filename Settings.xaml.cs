@@ -16,45 +16,89 @@ namespace WpfApp1
     /// Логика взаимодействия для Settings.xaml
     /// </summary>
     /// 
-    class Elem
-    {
-        public int numb { get; set; }
-        public string Devices { get; set; }
 
-        
-
-    }
 
     public partial class Settings : Window
     {
-        public string[] DevicesSettings = { "svet", "retrotop-up" };
-        public Settings()
+        public List<DeviceIOT> Listevice;
+
+        string[] DevicesSettings = { "svet", "retrotop_up" , "none" };
+
+
+        public Settings(List <FlahInfo> fi)
         {
-            InitializeComponent();           
-            ShowListBox();
-           
+            InitializeComponent();
+            ShowListBox();            
+
         }
-        
+
+
 
         public void ShowListBox()
         {
-            //lb_settings.ItemsSource = Devices;
-            lb_settings.ItemsSource = DevicesSettings;
-           // lb_settings.Items.Add("1");
-           // lb_settings.Items.Add("2");
-        
+
+            Listevice = new List<DeviceIOT>() {
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
+            new DeviceIOT() { Type = "retrotop_up", TypesDevicesSettings=DevicesSettings},
+            new DeviceIOT() {Type= "none",TypesDevicesSettings=DevicesSettings }
+        };
+
+            lb_settings.ItemsSource = Listevice;
         }
-        Elem el;
+       
         private void btn_refresh_Click(object sender, RoutedEventArgs e)
         {
-            for(int i = 0; i < 5; i++)
-            {
-                
-            }
-            
+            lb_settings.Items.Refresh();
+
 
         }
 
-       
+        private void cmd_Edit_Clicked(object sender, RoutedEventArgs e)
+        {
+            Button cmd = (Button)sender;
+            if (cmd.DataContext is DeviceIOT)
+            {
+                DeviceIOT msg = (DeviceIOT)cmd.DataContext;
+
+                if (msg.Type!= "svet")
+                {
+                    svet sv = new svet();
+                    sv.ShowDialog();
+                    lb_settings.Items.Refresh();
+                }
+                else if(msg.Type != "retrotop_up")
+                {
+                    retrotop rt = new retrotop();
+                    rt.ShowDialog();
+                    lb_settings.Items.Refresh();
+                }
+                else MessageBox.Show($"Непонятно(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
     }
+    public class DeviceIOT
+    {
+    
+
+        public string Type { get; set; }
+        public string [] TypesDevicesSettings { get; set; }
+
+        public int numPIN { get; set; }
+
+        public int numButton { get; set; }
+
+        public bool reverseBULB { get; set; }
+
+        public bool dimBRIGHTNESS { get; set; }
+        public bool SMOTH { get; set; }
+        public bool IKsenor { get; set; }
+
+    
+
+
+    }
+
 }
