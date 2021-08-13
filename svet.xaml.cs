@@ -21,5 +21,12 @@ namespace WpfApp1
         {
             InitializeComponent();
         }
+
+        private void btn_Save_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+      
     }
 }

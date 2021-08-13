@@ -15,7 +15,7 @@
         <CheckBox x:Name="chk_dimBRIGHTNESS" Content="Регулировка яркости" Margin="19,200,0,0" VerticalAlignment="Top" Height="15" HorizontalAlignment="Left" Width="136"/>
         <CheckBox x:Name="chk_SMOTH" Content="Плавное включение" Margin="19,240,0,0" VerticalAlignment="Top" Height="15" HorizontalAlignment="Left" Width="132"/>
         <CheckBox x:Name="chk_IKsenor" Content="ИК сенсор" Margin="19,280,0,0" VerticalAlignment="Top" Height="15" HorizontalAlignment="Left" Width="78"/>
-        <Button Content="Применить" HorizontalAlignment="Left" Margin="19,314,0,0" VerticalAlignment="Top" Width="144"/>
+        <Button x:Name="btn_Save" Content="Применить" HorizontalAlignment="Left" Margin="19,314,0,0" VerticalAlignment="Top" Width="144" Click="btn_Save_Click"/>
     </Grid>
 
 

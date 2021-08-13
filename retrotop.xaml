@@ -11,7 +11,7 @@
         <Label Content="Номер кнопки" HorizontalAlignment="Left" Margin="18,82,0,0" VerticalAlignment="Top" Height="26" Width="90"/>
         <TextBox x:Name="txt_numPIN" Margin="17,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="18" HorizontalAlignment="Left" Width="120"/>
         <TextBox x:Name="txt_numBUTTON" HorizontalAlignment="Left" Margin="17,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18"/>
-        <CheckBox x:Name="chk_mechanicBtn" Content="Механическаяк кнопка" Margin="19,160,0,0" VerticalAlignment="Top" Height="15" HorizontalAlignment="Left" Width="115"/>        
-        <Button Content="Применить" HorizontalAlignment="Left" Margin="19,314,0,0" VerticalAlignment="Top" Width="144"/>
+        <CheckBox x:Name="chk_mechanicBtn" Content="Механическаяк кнопка" Margin="19,160,0,0" VerticalAlignment="Top" Height="15" HorizontalAlignment="Left"/>        
+        <Button x:Name="btn_Save" Content="Применить" HorizontalAlignment="Left" Margin="19,314,0,0" VerticalAlignment="Top" Width="144" Click="btn_Save_Click"/>
     </Grid>
 </Window>

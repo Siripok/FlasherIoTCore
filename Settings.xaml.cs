@@ -63,19 +63,29 @@ namespace WpfApp1
             {
                 DeviceIOT msg = (DeviceIOT)cmd.DataContext;
 
-                if (msg.Type!= "svet")
+                switch (msg.Type)
                 {
-                    svet sv = new svet();
-                    sv.ShowDialog();
-                    lb_settings.Items.Refresh();
+
+                    case "svet": 
+                        svet sv = new svet();
+                        sv.ShowDialog();                     
+                        break;
+
+                    case "retrotop_up":
+                        retrotop rt = new retrotop();
+                        rt.ShowDialog();                     
+                        break;
+
+                    case "none":
+                        break;
+
+                    default:
+                        MessageBox.Show($"Непонятно(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        break;
                 }
-                else if(msg.Type != "retrotop_up")
-                {
-                    retrotop rt = new retrotop();
-                    rt.ShowDialog();
-                    lb_settings.Items.Refresh();
-                }
-                else MessageBox.Show($"Непонятно(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+                lb_settings.Items.Refresh();
+
+
             }
         }
     }
