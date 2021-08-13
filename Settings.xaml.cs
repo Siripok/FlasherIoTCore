@@ -20,14 +20,13 @@ namespace WpfApp1
     {
 
         public string Type { get; set; }
+       
         public string[] TypesDevicesSettings { get; set; }
 
+        public int num { get; set; } //№ по списку
         public int numPIN { get; set; }
-
         public int numButton { get; set; }
-
         public bool reverseBULB { get; set; }
-
         public bool dimBRIGHTNESS { get; set; }
         public bool SMOTH { get; set; }
         public bool IKsenor { get; set; }
@@ -66,11 +65,17 @@ namespace WpfApp1
         };
 
             lb_settings.ItemsSource = Listedevice;
+            for (int i = 0; i < 6; i++)
+            {
+                Listedevice[i].num = i;
+            }
+
+            lb_settings.Items.Refresh();
         }
        
         private void btn_refresh_Click(object sender, RoutedEventArgs e)
         {
-            lb_settings.Items.Refresh();
+           
         }
 
         private void cmd_Edit_Clicked(object sender, RoutedEventArgs e)
@@ -83,15 +88,15 @@ namespace WpfApp1
                 switch (msg.Type)
                 {
                     case "svet": 
-                        svet sv = new svet(Listedevice);                        
+                        svet sv = new svet(Listedevice,msg.num);                        
                         sv.ShowDialog();
-                        ShowSettingSvet();
+                        ShowSettingSvet(msg.num);
                         break;
 
                     case "retrotop_up":
                         retrotop rt = new retrotop();
                         rt.ShowDialog();
-                        ShowSettingRetrotop();
+                        ShowSettingRetrotop(msg.num);
                         break;
 
                     case "none":
@@ -101,46 +106,43 @@ namespace WpfApp1
                         MessageBox.Show($"Непонятно(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
                         break;
                 }
+              
                 lb_settings.Items.Refresh();
             }
         }
-        public void ShowSettingSvet()
+        public void ShowSettingSvet(int i)
         {
-            for (int i = 0; i < Listedevice.Count; i++)
-            {
-                Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
+            
+                //Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
 
                 if (Listedevice[i].reverseBULB == true)
-                    Listedevice[i].Opisanie += "Инвертировать, ";
-                else Listedevice[i].Opisanie += "НЕинвертировать, ";
+                    Listedevice[i].Opisanie = "Инвертировать, ";
+               
 
                 if(Listedevice[i].dimBRIGHTNESS == true)
-                    Listedevice[i].Opisanie += "Регилировка яркости-Да, ";
-                else
-                    Listedevice[i].Opisanie += "Регилировка яркости-Нет, ";
+                    Listedevice[i].Opisanie += "Регилировка яркости, ";
+                
 
                if(Listedevice[i].SMOTH == true)
-                    Listedevice[i].Opisanie += "Плавное включение-Да, ";
-               else Listedevice[i].Opisanie += "Плавное включение-Нет, ";
+                    Listedevice[i].Opisanie += "Плавное включение, ";
+             
 
                if(Listedevice[i].IKsenor == true)
-                    Listedevice[i].Opisanie += "ИК сенсор-Да ";
-               else
-                    Listedevice[i].Opisanie += "ИК сенсор-Нет ";
-            }
+                    Listedevice[i].Opisanie += "ИК сенсор ";
+              
+            
           
         }
 
-        public void ShowSettingRetrotop()
+        public void ShowSettingRetrotop(int i)
         {
-            for (int i = 0; i < Listedevice.Count; i++)
-            {
-                Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
+           
+               // Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
 
                 if (Listedevice[i].MechanicBtn == true)
-                    Listedevice[i].Opisanie += "Механическая кнопка-Да ";
-                else Listedevice[i].Opisanie += "Механическая кнопка-Нет ";               
-            }
+                    Listedevice[i].Opisanie = "Механическая кнопка";
+                          
+            
            
         }
     }
