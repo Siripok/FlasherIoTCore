@@ -21,7 +21,7 @@
                             <!--Text="{Binding Devices}"-->
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="1">
-                            <Label Content="Text lorem input"/>
+                            <Label Content="{Binding Opisanie}"/>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>

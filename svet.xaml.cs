@@ -17,38 +17,48 @@ namespace WpfApp1
     /// </summary>
     public partial class svet : Window
     {
-        
+        List<DeviceIOT> t;
         public svet(List<DeviceIOT> param)
         {
             InitializeComponent();
-            param = new List<DeviceIOT>();
+            t = param;
         }
 
         private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
 
             if (txt_numPIN.Text != "" && txt_numBUTTON.Text != "")
-            {
-                DeviceIOT t = new DeviceIOT();
-                t.numPIN = Convert.ToInt32(txt_numPIN.Text);
-                t.numButton = Convert.ToInt32(txt_numBUTTON.Text);
+            {/*
+                Button cmd = (Button)sender;
+                if (cmd.DataContext is DeviceIOT)
+                    DeviceIOT msg = (DeviceIOT)cmd.DataContext;
+                { 
+
+
+
+                msg.numPIN = Convert.ToInt32(txt_numPIN.Text);
+                msg.numButton = Convert.ToInt32(txt_numBUTTON.Text);
 
                 if (chk_reverseBULB.IsChecked == true)
-                    t.reverseBULB = true;
+                    msg.reverseBULB = true;
                 else
-                    t.reverseBULB = false;
+                    msg.reverseBULB = false;
+
 
                 if (chk_dimBRIGHTNESS.IsChecked == true)
-                    t.dimBRIGHTNESS = true;
-                else t.dimBRIGHTNESS = false;
+                    msg.dimBRIGHTNESS = true;
+                else msg.dimBRIGHTNESS = false;
+
 
                 if (chk_SMOTH.IsChecked == true)
-                    t.SMOTH = true;
-                else t.SMOTH = false;
+                    msg.SMOTH = true;
+                else msg.SMOTH = false;
+
 
                 if (chk_IKsenor.IsChecked == true)
-                    t.IKsenor = true;
-                else t.IKsenor = false;
+                    msg.IKsenor = true;
+                else msg.IKsenor = false; 
+            }*/
 
 
                 this.Close();

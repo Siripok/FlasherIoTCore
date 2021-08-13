@@ -31,6 +31,8 @@ namespace WpfApp1
         public bool dimBRIGHTNESS { get; set; }
         public bool SMOTH { get; set; }
         public bool IKsenor { get; set; }
+        public bool MechanicBtn { get; set; }
+        public string Opisanie {get;set;}
 
 
     }
@@ -80,15 +82,16 @@ namespace WpfApp1
 
                 switch (msg.Type)
                 {
-
                     case "svet": 
                         svet sv = new svet(Listedevice);                        
-                        sv.ShowDialog();                     
+                        sv.ShowDialog();
+                        ShowSettingSvet();
                         break;
 
                     case "retrotop_up":
                         retrotop rt = new retrotop();
-                        rt.ShowDialog();                     
+                        rt.ShowDialog();
+                        ShowSettingRetrotop();
                         break;
 
                     case "none":
@@ -98,13 +101,47 @@ namespace WpfApp1
                         MessageBox.Show($"Непонятно(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
                         break;
                 }
-                ShowSetting();                
+                lb_settings.Items.Refresh();
             }
         }
-        public void ShowSetting()
+        public void ShowSettingSvet()
         {
+            for (int i = 0; i < Listedevice.Count; i++)
+            {
+                Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
 
-            lb_settings.Items.Refresh();
+                if (Listedevice[i].reverseBULB == true)
+                    Listedevice[i].Opisanie += "Инвертировать, ";
+                else Listedevice[i].Opisanie += "НЕинвертировать, ";
+
+                if(Listedevice[i].dimBRIGHTNESS == true)
+                    Listedevice[i].Opisanie += "Регилировка яркости-Да, ";
+                else
+                    Listedevice[i].Opisanie += "Регилировка яркости-Нет, ";
+
+               if(Listedevice[i].SMOTH == true)
+                    Listedevice[i].Opisanie += "Плавное включение-Да, ";
+               else Listedevice[i].Opisanie += "Плавное включение-Нет, ";
+
+               if(Listedevice[i].IKsenor == true)
+                    Listedevice[i].Opisanie += "ИК сенсор-Да ";
+               else
+                    Listedevice[i].Opisanie += "ИК сенсор-Нет ";
+            }
+          
+        }
+
+        public void ShowSettingRetrotop()
+        {
+            for (int i = 0; i < Listedevice.Count; i++)
+            {
+                Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
+
+                if (Listedevice[i].MechanicBtn == true)
+                    Listedevice[i].Opisanie += "Механическая кнопка-Да ";
+                else Listedevice[i].Opisanie += "Механическая кнопка-Нет ";               
+            }
+           
         }
     }
     
