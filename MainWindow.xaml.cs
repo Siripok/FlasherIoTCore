@@ -31,7 +31,7 @@ namespace WpfApp1
     /// </summary>
 
 
-    public class FlahInfo
+    public class FlashInfo
     {
         public string Path { get; set; }
         public string Port { get; set; }
@@ -52,7 +52,7 @@ namespace WpfApp1
 
 
 
-        public FlahInfo(string Path, string Port)
+        public FlashInfo(string Path, string Port)
         {
             this.Path = Path;
             this.Port = Port;
@@ -69,7 +69,7 @@ namespace WpfApp1
         public List<string> DirectoryProject;
 
         char k;
-        List<FlahInfo> spisflash = new List<FlahInfo>();
+        List<FlashInfo> spisflash = new List<FlashInfo>();
 
 
         Properties.Settings Parameters = Properties.Settings.Default;
@@ -80,7 +80,7 @@ namespace WpfApp1
             ShowPorts();
             GetDirectoryProject();
 
-            spisflash = JsonConvert.DeserializeObject<List<FlahInfo>>(Parameters.spifflash);
+            spisflash = JsonConvert.DeserializeObject<List<FlashInfo>>(Parameters.spifflash);
 
             lb.ItemsSource = spisflash;
 
@@ -313,13 +313,13 @@ namespace WpfApp1
             if (MessageBox.Show("Будут очищены пути к bin файлам, а так же выбранные COM-порты.\nПродолжить?", "Очистить все поля?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 spisflash = null;
-                spisflash = new List<FlahInfo>();
+                spisflash = new List<FlashInfo>();
                 // spisflash.Clear();
 
                 ShowPorts();
                 for (int i = 0; i < BoardsMAX; i++)
                 {
-                    spisflash.Add(new FlahInfo("", "") { portNames = portNames ,  DirectoryProject = DirectoryProject } );
+                    spisflash.Add(new FlashInfo("", "") { portNames = portNames ,  DirectoryProject = DirectoryProject } );
                     spisflash[i].elem = i + 1;
                 }
 
@@ -408,9 +408,9 @@ namespace WpfApp1
             try
             {
                 Button cmd = (Button)sender;
-                if (cmd.DataContext is FlahInfo)
+                if (cmd.DataContext is FlashInfo)
                 {
-                    FlahInfo msg = (FlahInfo)cmd.DataContext;
+                    FlashInfo msg = (FlashInfo)cmd.DataContext;
 
                     string open = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{msg.Port}.txt";
                     if (File.Exists(open))
@@ -438,9 +438,9 @@ namespace WpfApp1
             CloseMonitor();
             w = 0;
             Button cmd = (Button)sender;
-            if (cmd.DataContext is FlahInfo)
+            if (cmd.DataContext is FlashInfo)
             {
-                FlahInfo msg = (FlahInfo)cmd.DataContext;
+                FlashInfo msg = (FlashInfo)cmd.DataContext;
 
                 if (msg.Port != "")
                 {
@@ -759,9 +759,9 @@ namespace WpfApp1
         private void cmdMonitor_Clicked(object sender, RoutedEventArgs e)
         {
             Button cmd = (Button)sender;
-            if (cmd.DataContext is FlahInfo)
+            if (cmd.DataContext is FlashInfo)
             {
-                FlahInfo msg = (FlahInfo)cmd.DataContext;
+                FlashInfo msg = (FlashInfo)cmd.DataContext;
 
                 if (msg.Port != "")
                 {

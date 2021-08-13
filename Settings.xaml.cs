@@ -16,16 +16,33 @@ namespace WpfApp1
     /// Логика взаимодействия для Settings.xaml
     /// </summary>
     /// 
+    public class DeviceIOT
+    {
 
+        public string Type { get; set; }
+        public string[] TypesDevicesSettings { get; set; }
+
+        public int numPIN { get; set; }
+
+        public int numButton { get; set; }
+
+        public bool reverseBULB { get; set; }
+
+        public bool dimBRIGHTNESS { get; set; }
+        public bool SMOTH { get; set; }
+        public bool IKsenor { get; set; }
+
+
+    }
 
     public partial class Settings : Window
     {
-        public List<DeviceIOT> Listevice;
+        public List<DeviceIOT> Listedevice;
 
         string[] DevicesSettings = { "svet", "retrotop_up" , "none" };
 
 
-        public Settings(List <FlahInfo> fi)
+        public Settings(List <FlashInfo> fi)
         {
             InitializeComponent();
             ShowListBox();            
@@ -37,7 +54,7 @@ namespace WpfApp1
         public void ShowListBox()
         {
 
-            Listevice = new List<DeviceIOT>() {
+            Listedevice = new List<DeviceIOT>() {
             new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,} ,
             new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
             new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
@@ -46,14 +63,12 @@ namespace WpfApp1
             new DeviceIOT() {Type= "none",TypesDevicesSettings=DevicesSettings }
         };
 
-            lb_settings.ItemsSource = Listevice;
+            lb_settings.ItemsSource = Listedevice;
         }
        
         private void btn_refresh_Click(object sender, RoutedEventArgs e)
         {
             lb_settings.Items.Refresh();
-
-
         }
 
         private void cmd_Edit_Clicked(object sender, RoutedEventArgs e)
@@ -67,7 +82,7 @@ namespace WpfApp1
                 {
 
                     case "svet": 
-                        svet sv = new svet();
+                        svet sv = new svet(Listedevice);                        
                         sv.ShowDialog();                     
                         break;
 
@@ -83,32 +98,15 @@ namespace WpfApp1
                         MessageBox.Show($"Непонятно(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
                         break;
                 }
-                lb_settings.Items.Refresh();
-
-
+                ShowSetting();                
             }
         }
+        public void ShowSetting()
+        {
+
+            lb_settings.Items.Refresh();
+        }
     }
-    public class DeviceIOT
-    {
     
-
-        public string Type { get; set; }
-        public string [] TypesDevicesSettings { get; set; }
-
-        public int numPIN { get; set; }
-
-        public int numButton { get; set; }
-
-        public bool reverseBULB { get; set; }
-
-        public bool dimBRIGHTNESS { get; set; }
-        public bool SMOTH { get; set; }
-        public bool IKsenor { get; set; }
-
-    
-
-
-    }
 
 }
