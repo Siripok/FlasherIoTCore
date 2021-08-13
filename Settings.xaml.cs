@@ -112,15 +112,15 @@ namespace WpfApp1
         }
         public void ShowSettingSvet(int i)
         {
-            
-                //Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
 
-                if (Listedevice[i].reverseBULB == true)
-                    Listedevice[i].Opisanie = "Инвертировать, ";
+            //Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
+            Listedevice[i].Opisanie = "Выбрано:\n";
+            if (Listedevice[i].reverseBULB == true)
+                    Listedevice[i].Opisanie += "Инвертировать, ";
                
 
                 if(Listedevice[i].dimBRIGHTNESS == true)
-                    Listedevice[i].Opisanie += "Регилировка яркости, ";
+                    Listedevice[i].Opisanie += "Регулировка яркости, ";
                 
 
                if(Listedevice[i].SMOTH == true)
@@ -136,11 +136,11 @@ namespace WpfApp1
 
         public void ShowSettingRetrotop(int i)
         {
-           
-               // Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
 
-                if (Listedevice[i].MechanicBtn == true)
-                    Listedevice[i].Opisanie = "Механическая кнопка";
+            // Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
+            Listedevice[i].Opisanie = "Выбрано: ";
+            if (Listedevice[i].MechanicBtn == true)
+                    Listedevice[i].Opisanie += "Механическая кнопка";
                           
             
            

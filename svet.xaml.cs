@@ -24,7 +24,23 @@ namespace WpfApp1
             InitializeComponent();
             t = param;
             elem = num;
+            ShowElement();
           
+        }
+
+        public void ShowElement()
+        {
+            if (t[elem].numButton.ToString() != ""&& t[elem].numPIN.ToString()!="") //если заполены были поля
+            {
+
+                txt_numPIN.Text = t[elem].numPIN.ToString();
+                txt_numBUTTON.Text = t[elem].numButton.ToString();
+
+                if (t[elem].reverseBULB == true) chk_reverseBULB.IsChecked = true;
+                if (t[elem].dimBRIGHTNESS == true) chk_dimBRIGHTNESS.IsChecked = true;
+                if (t[elem].SMOTH == true) chk_SMOTH.IsChecked = true;
+                if (t[elem].IKsenor == true) chk_IKsenor.IsChecked = true;
+            }
         }
 
         private void btn_Save_Click(object sender, RoutedEventArgs e)
@@ -59,7 +75,7 @@ namespace WpfApp1
                 this.Close();
             }
             else
-                MessageBox.Show("Заполните поля!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Заполните PIN и укажите кнопку!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
 
 
         }
