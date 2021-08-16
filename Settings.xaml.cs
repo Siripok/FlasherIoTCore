@@ -38,16 +38,16 @@ namespace WpfApp1
 
     public partial class Settings : Window
     {
-        public List<DeviceIOT> Listedevice;
+        public List<DeviceIOT> Listdevice;
 
         string[] DevicesSettings = { "svet", "retrotop_up", "none" };
 
-
-        public Settings(List<FlashInfo> fi)
+        int c;
+        public Settings(int elem)
         {
             InitializeComponent();
             ShowListBox();
-            
+            c = elem;
 
         }
 
@@ -56,7 +56,7 @@ namespace WpfApp1
         public void ShowListBox()
         {
 
-            Listedevice = new List<DeviceIOT>() {
+            Listdevice = new List<DeviceIOT>() {
             new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,} ,
             new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
             new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
@@ -65,10 +65,10 @@ namespace WpfApp1
             new DeviceIOT() {Type= "none",TypesDevicesSettings=DevicesSettings }
         };
 
-            lb_settings.ItemsSource = Listedevice;
+            lb_settings.ItemsSource = Listdevice;
             for (int i = 0; i < 6; i++)
             {
-                Listedevice[i].num = i;
+                Listdevice[i].num = i+1;
             }
 
             lb_settings.Items.Refresh();
@@ -85,26 +85,27 @@ namespace WpfApp1
             if (cmd.DataContext is DeviceIOT)
             {
                 DeviceIOT msg = (DeviceIOT)cmd.DataContext;
-
+                int u = msg.num - 1;
                 switch (msg.Type)
                 {
+                    
                     case "svet":
-                        svet sv = new svet(Listedevice, msg.num);
+                        svet sv = new svet(Listdevice, u);
                         sv.ShowDialog();
-                        ShowSettingSvet(msg.num);
+                        ShowSettingSvet(u);
                         break;
 
                     case "retrotop_up":
-                        retrotop rt = new retrotop(Listedevice,msg.num);
+                        retrotop rt = new retrotop(Listdevice, u);
                         rt.ShowDialog();
-                        ShowSettingRetrotop(msg.num);
+                        ShowSettingRetrotop(u);
                         break;
 
                     case "none":
                         break;
 
                     default:
-                        MessageBox.Show($"Непонятно :(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show($"Непонятно что за тип устр-ва :(", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
                         break;
                 }
 
@@ -115,21 +116,21 @@ namespace WpfApp1
         {
 
             //Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
-            Listedevice[i].Opisanie = "Выбрано:\n";
-            if (Listedevice[i].reverseBULB == true)
-                Listedevice[i].Opisanie += "Инвертировать, ";
+            Listdevice[i].Opisanie = "Выбрано:\n";
+            if (Listdevice[i].reverseBULB == true)
+                Listdevice[i].Opisanie += "Инвертировать, ";
 
 
-            if (Listedevice[i].dimBRIGHTNESS == true)
-                Listedevice[i].Opisanie += "Регулировка яркости, ";
+            if (Listdevice[i].dimBRIGHTNESS == true)
+                Listdevice[i].Opisanie += "Регулировка яркости, ";
 
 
-            if (Listedevice[i].SMOTH == true)
-                Listedevice[i].Opisanie += "Плавное включение, ";
+            if (Listdevice[i].SMOTH == true)
+                Listdevice[i].Opisanie += "Плавное включение, ";
 
 
-            if (Listedevice[i].IKsenor == true)
-                Listedevice[i].Opisanie += "ИК сенсор ";
+            if (Listdevice[i].IKsenor == true)
+                Listdevice[i].Opisanie += "ИК сенсор ";
 
 
 
@@ -139,12 +140,21 @@ namespace WpfApp1
         {
 
             // Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
-            Listedevice[i].Opisanie = "Выбрано: ";
-            if (Listedevice[i].MechanicBtn == true)
-                Listedevice[i].Opisanie += "Механическая кнопка";
+            Listdevice[i].Opisanie = "Выбрано: ";
+            if (Listdevice[i].MechanicBtn == true)
+                Listdevice[i].Opisanie += "Механическая кнопка";
 
 
 
+        }
+
+        private void btn_Post_Click(object sender, RoutedEventArgs e)
+        {
+            foreach(DeviceIOT device in Listdevice)
+            {
+
+            }
+            this.Close();
         }
     }
 

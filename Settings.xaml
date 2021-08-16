@@ -9,7 +9,7 @@
     <Grid Margin="5,5,10,5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40*"/>
-          
+
         </Grid.ColumnDefinitions>
         <ListBox x:Name="lb_settings" Margin="10,19,10,55">
             <ListBox.ItemTemplate>
@@ -29,7 +29,8 @@
             </ListBox.ItemTemplate>
 
         </ListBox>
-        
+        <Button x:Name="btn_Post" Content="Отправить" Margin="0,0,11,23" Width="80" Height="20" Click="btn_Post_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+
 
 
 

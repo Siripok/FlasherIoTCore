@@ -38,7 +38,7 @@
                             <Button Content="Прошить" Margin="5,3,3,3" VerticalAlignment="Top" Width="95" Background="#FFFB9E69" Foreground="#FF232323" Height="25" Click="cmdFlash_Clicked"/>
                             <Button Content="log" Margin="5,3,3,3" VerticalAlignment="Top" Width="40" Background="#cccccc" Foreground="#FF232323" Height="25" Click="cmdLog_Clicked"/>
                             <Button Content="Монитор" Margin="5,3,3,3" VerticalAlignment="Top" Width="60" Background="DeepSkyBlue" Foreground="#FF232323" Height="25" Click="cmdMonitor_Clicked"/>
-
+                            <Button Content="Настройки" Margin="5,3,3,3" VerticalAlignment="Top" Width="80" Background="LightGray" Foreground="#FF232323" Height="25" Click="cmd_Settings_Clicked"/>
                         </StackPanel>
                         <!--MAC COM-->
                         <StackPanel Orientation="Horizontal">
@@ -55,7 +55,7 @@
         <TextBox x:Name="txt_log" Margin="0,10,10,10" Text="Вывод информации" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Column="2" Grid.RowSpan="2" Grid.Row="1"/>
         <CheckBox x:Name="chk_all" ToolTip="Установить либо снять все галочки" Content="Все" HorizontalAlignment="Left" Margin="25,0,0,0" Click="chk_all_Click" RenderTransformOrigin="1.965,-0.66" Height="15" VerticalAlignment="Center"/>
         <CheckBox x:Name="chk_erase" Content="Очищать при прошивке" HorizontalAlignment="Left" Margin="31,30,0,0" Grid.Row="2" VerticalAlignment="Top"/>
-        <Button x:Name="btn_Settings" Content="Настройки" Grid.Column="1" Margin="0,50,211,0" Grid.Row="2" VerticalAlignment="Top" Click="btn_Settings_Click" Height="40" HorizontalAlignment="Right" Width="73"/>
+      
 
 
 

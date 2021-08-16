@@ -19,10 +19,10 @@ namespace WpfApp1
     {
         List<DeviceIOT> t;
         int i;
-        public retrotop(List<DeviceIOT> param, int num)
+        public retrotop(List<DeviceIOT> Listedevice, int num)
         {
             InitializeComponent();
-            t = param;
+            t = Listedevice;
             i = num;
             ShowElement();
         }
@@ -32,6 +32,7 @@ namespace WpfApp1
 
             if (txt_numPIN.Text != "" && txt_numBUTTON.Text != "")
             {
+               
 
                 t[i].numPIN = Convert.ToInt32(txt_numPIN.Text);
                 t[i].numButton = Convert.ToInt32(txt_numBUTTON.Text);

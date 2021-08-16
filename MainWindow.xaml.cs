@@ -39,7 +39,7 @@ namespace WpfApp1
         public string[] portNames { get; set; }
         public List<string> DirectoryProject { get; set; }
 
-       
+
 
         public bool chk { get; set; } //chekbox
         public int elem { get; set; } //№ элемента в списке
@@ -48,7 +48,7 @@ namespace WpfApp1
 
 
 
-     
+
 
 
 
@@ -86,13 +86,13 @@ namespace WpfApp1
 
             user = Environment.UserName;
 
-            
 
-        
+
+
             if (Parameters.erase == true)
                 chk_erase.IsChecked = true;
 
-          
+
 
             if (Parameters.noClosing == true)
             {
@@ -105,8 +105,8 @@ namespace WpfApp1
                 k = 'c';
             }
 
-      }
-       
+        }
+
         public void GetDirectoryProject()
         {
             log.Add("Получим директорию проектов");
@@ -115,17 +115,17 @@ namespace WpfApp1
             if (!Directory.Exists("projects"))
                 Directory.CreateDirectory("projects");
 
-           foreach (string asas in Directory.GetDirectories("projects"))
+            foreach (string asas in Directory.GetDirectories("projects"))
             {
                 DirectoryProject.Add(asas.Replace("projects\\", ""));
             }
             //irectoryProject = Directory.GetDirectories("projects").;
-            
+
             lb.Items.Refresh();
         }
-    
 
-      
+
+
 
         public void ShowPorts()
         {
@@ -189,8 +189,8 @@ namespace WpfApp1
             {
                 timerWorking = false;
                 lb.Items.Refresh();
-                   if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
-                     CreateEsDevice(getProject(binPath), "europe-west1", "atest-registry",  getPrefix(binPath) +MACiCOM[0], "ec_public.pem");
+                if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
+                    CreateEsDevice(getProject(binPath), "europe-west1", "atest-registry", getPrefix(binPath) + MACiCOM[0], "ec_public.pem");
 
             });
 
@@ -245,16 +245,16 @@ namespace WpfApp1
 
         public void flashtool(string binPath, string PORT, bool allflash = false, int num = 0) //прошивка платы bin файлом
         {
-            
+
             if (spisflash[num].chk == true || allflash == false)
             {
                 try //921600 //115200
                     //--flash_mode dio
                 {
-                    string files = Directory.GetCurrentDirectory() + "\\projects\\"+ binPath+"\\"+binPath;
-                 //MessageBox.Show($"bin {binPath}\nDirectory.GetCurrentDirectory(){Directory.GetCurrentDirectory()}");
+                    string files = Directory.GetCurrentDirectory() + "\\projects\\" + binPath + "\\" + binPath;
+                    //MessageBox.Show($"bin {binPath}\nDirectory.GetCurrentDirectory(){Directory.GetCurrentDirectory()}");
 
-                   // MessageBox.Show($"files {files}\n"+$"{binPath}");
+                    // MessageBox.Show($"files {files}\n"+$"{binPath}");
                     //var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\" +
                     //   $"esptool.py\"\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all " +
                     //   $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
@@ -264,8 +264,8 @@ namespace WpfApp1
                         erase = "--erase-all"; //erase_flash
                     else
                         erase = "";
-                 
-                 
+
+
 
                     Console.WriteLine(files);
                     var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
@@ -319,7 +319,7 @@ namespace WpfApp1
                 ShowPorts();
                 for (int i = 0; i < BoardsMAX; i++)
                 {
-                    spisflash.Add(new FlashInfo("", "") { portNames = portNames ,  DirectoryProject = DirectoryProject } );
+                    spisflash.Add(new FlashInfo("", "") { portNames = portNames, DirectoryProject = DirectoryProject });
                     spisflash[i].elem = i + 1;
                 }
 
@@ -334,8 +334,8 @@ namespace WpfApp1
         {
             for (int i = 0; i < 20; i++)
             {
-             //   if (File.Exists($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt"))
-               //     File.Delete($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt");
+                //   if (File.Exists($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt"))
+                //     File.Delete($@"C:\Users\{user}\AppData\Local\Temp\espMACiCOM{i}.txt");
             }
         }
         private void Update_Click(object sender, RoutedEventArgs e)
@@ -355,7 +355,7 @@ namespace WpfApp1
                 }
             }
 
-           
+
             lb.Items.Refresh();
         }
 
@@ -446,11 +446,11 @@ namespace WpfApp1
                 {
                     if (msg.Path != "")
                     {
-                        
+
                         w = msg.elem - 1;
-                        flashtool(msg.Path,msg.Port);                       
+                        flashtool(msg.Path, msg.Port);
                     }
-                    
+
                 }
                 else MessageBox.Show($"Не выбран COM порт", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
@@ -476,8 +476,8 @@ namespace WpfApp1
             Parameters.spifflash = json;
             Parameters.erase = (bool)chk_erase.IsChecked;
             Parameters.noClosing = (bool)chk_noClose.IsChecked;
-        
-        
+
+
             Parameters.Save();
 
             //  MessageBox.Show(jsonString);
@@ -538,7 +538,7 @@ namespace WpfApp1
                 Console.WriteLine($"\tName: {device.Name}");
                 Console.WriteLine($"\tState:{device.State}");
 
-                MessageBox.Show(deviceId+ " зарегистрирован");
+                MessageBox.Show(deviceId + " зарегистрирован");
             }
             catch (Google.GoogleApiException e)
             {
@@ -569,12 +569,12 @@ namespace WpfApp1
         {
             Window1 nw = new Window1();
             nw.ShowDialog();
-     
+
         }
 
 
         DispatcherTimer timer;
-        
+
         private void ChekLog(string PORT)
         {
             CloseMonitor();
@@ -701,7 +701,7 @@ namespace WpfApp1
 
 
         SerialPort sp;
-        private void Monitor(string PORT,int baud)
+        private void Monitor(string PORT, int baud)
         {
             CloseMonitor();
             sp = new SerialPort();
@@ -723,7 +723,7 @@ namespace WpfApp1
         }
 
 
-        private  void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e) //static
+        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e) //static
         {
             try
             {
@@ -746,14 +746,14 @@ namespace WpfApp1
                 MessageBox.Show(err.ToString(), "TimeoutException");
             }
         }
-        
+
         private void CloseMonitor()
         {
-            if (sp!=null)
+            if (sp != null)
             {
                 sp.Close();
             }
-            
+
         }
 
         private void cmdMonitor_Clicked(object sender, RoutedEventArgs e)
@@ -766,40 +766,54 @@ namespace WpfApp1
                 if (msg.Port != "")
                 {
 
-                    Monitor(msg.Port,115200);
+                    Monitor(msg.Port, 115200);
 
                 }
                 else MessageBox.Show($"Не выбран COM порт", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
-        private void btn_Settings_Click(object sender, RoutedEventArgs e)
+        private void cmd_Settings_Clicked(object sender, RoutedEventArgs e)
         {
-            Settings nf = new Settings(spisflash);
-            nf.ShowDialog();
-        }
-    }
-
-
-
-
-    public static class log
-    {
-        public static void Add(string str = "")
-        {
-
-            string localpath = (new FileInfo(Assembly.GetExecutingAssembly().Location).Directory).ToString();
-            string path = localpath + @"\TreeCadN.log";
-
-            if (File.Exists(path))
+            Button cmd = (Button)sender;
+            if (cmd.DataContext is FlashInfo)
             {
-                string save_log = Environment.NewLine + DateTime.Now + " - " + str;
-                File.AppendAllText(path, save_log, System.Text.Encoding.UTF8);
+                FlashInfo msg = (FlashInfo)cmd.DataContext;
+
+                if (msg.flMAC !=null )
+                {
+                    Settings st = new Settings(msg.elem - 1);
+                    st.Title = $"Настройка {msg.elem} элемента: " + msg.flMAC;
+                    st.Show();
+
+
+
+                }
+                else MessageBox.Show($"Без MAC адреса нельзя!", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
-    }
 
+
+
+        public static class log
+        {
+            public static void Add(string str = "")
+            {
+
+                string localpath = (new FileInfo(Assembly.GetExecutingAssembly().Location).Directory).ToString();
+                string path = localpath + @"\TreeCadN.log";
+
+                if (File.Exists(path))
+                {
+                    string save_log = Environment.NewLine + DateTime.Now + " - " + str;
+                    File.AppendAllText(path, save_log, System.Text.Encoding.UTF8);
+                }
+            }
+
+        }
+
+    }
 }
 //Created 02/08/2021 -- ...
 //v 1.0
