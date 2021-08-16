@@ -17,14 +17,50 @@ namespace WpfApp1
     /// </summary>
     public partial class retrotop : Window
     {
-        public retrotop()
+        List<DeviceIOT> t;
+        int i;
+        public retrotop(List<DeviceIOT> param, int num)
         {
             InitializeComponent();
+            t = param;
+            i = num;
+            ShowElement();
         }
 
         private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+
+            if (txt_numPIN.Text != "" && txt_numBUTTON.Text != "")
+            {
+
+                t[i].numPIN = Convert.ToInt32(txt_numPIN.Text);
+                t[i].numButton = Convert.ToInt32(txt_numBUTTON.Text);
+
+                if (chk_mechanicBtn.IsChecked == true)
+                    t[i].MechanicBtn = true;
+                else
+                    t[i].MechanicBtn = false;
+
+                this.Close();
+            }
+            else
+                MessageBox.Show("Заполните PIN и укажите кнопку!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+
+        }
+
+        public void ShowElement()
+        {
+            txt_numPIN.Clear();
+            txt_numBUTTON.Clear();
+            if (t[i].numButton.ToString() != "" && t[i].numPIN.ToString() != "") //если заполнены были поля
+            {
+
+                txt_numPIN.Text = t[i].numPIN.ToString();
+                txt_numBUTTON.Text = t[i].numButton.ToString();
+
+                if (t[i].MechanicBtn == true) chk_mechanicBtn.IsChecked = true;
+                
+            }
         }
     }
 }

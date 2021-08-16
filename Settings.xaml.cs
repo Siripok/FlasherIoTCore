@@ -95,7 +95,7 @@ namespace WpfApp1
                         break;
 
                     case "retrotop_up":
-                        retrotop rt = new retrotop();
+                        retrotop rt = new retrotop(Listedevice,msg.num);
                         rt.ShowDialog();
                         ShowSettingRetrotop(msg.num);
                         break;
