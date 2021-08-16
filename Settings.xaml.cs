@@ -78,14 +78,14 @@ namespace WpfApp1
         {
 
         }
-
+        int u ;
         private void cmd_Edit_Clicked(object sender, RoutedEventArgs e)
         {
             Button cmd = (Button)sender;
             if (cmd.DataContext is DeviceIOT)
             {
                 DeviceIOT msg = (DeviceIOT)cmd.DataContext;
-                int u = msg.num - 1;
+                u = msg.num - 1;
                 switch (msg.Type)
                 {
                     
@@ -150,10 +150,7 @@ namespace WpfApp1
 
         private void btn_Post_Click(object sender, RoutedEventArgs e)
         {
-            foreach(DeviceIOT device in Listdevice)
-            {
-
-            }
+            //Listdevice[u].Type=?
             this.Close();
         }
     }
