@@ -17,13 +17,13 @@ namespace WpfApp1
     /// </summary>
     public partial class retrotop : Window
     {
-        List<DeviceIOT> t;
-        int i;
-        public retrotop(List<DeviceIOT> Listedevice, int num)
+        DeviceIOT t;
+        
+        public retrotop(DeviceIOT Listedevice)
         {
             InitializeComponent();
             t = Listedevice;
-            i = num;
+         
             ShowElement();
         }
 
@@ -34,13 +34,13 @@ namespace WpfApp1
             {
                
 
-                t[i].numPIN = Convert.ToInt32(txt_numPIN.Text);
-                t[i].numButton = Convert.ToInt32(txt_numBUTTON.Text);
+                t.numPIN = Convert.ToInt32(txt_numPIN.Text);
+                t.numButton = Convert.ToInt32(txt_numBUTTON.Text);
 
                 if (chk_mechanicBtn.IsChecked == true)
-                    t[i].MechanicBtn = true;
+                    t.MechanicBtn = true;
                 else
-                    t[i].MechanicBtn = false;
+                    t.MechanicBtn = false;
 
                 this.Close();
             }
@@ -53,13 +53,13 @@ namespace WpfApp1
         {
             txt_numPIN.Clear();
             txt_numBUTTON.Clear();
-            if (t[i].numButton.ToString() != "" && t[i].numPIN.ToString() != "") //если заполнены были поля
+            if (t.numButton.ToString() != "" && t.numPIN.ToString() != "") //если заполнены были поля
             {
 
-                txt_numPIN.Text = t[i].numPIN.ToString();
-                txt_numBUTTON.Text = t[i].numButton.ToString();
+                txt_numPIN.Text = t.numPIN.ToString();
+                txt_numBUTTON.Text = t.numButton.ToString();
 
-                if (t[i].MechanicBtn == true) chk_mechanicBtn.IsChecked = true;
+                if (t.MechanicBtn == true) chk_mechanicBtn.IsChecked = true;
                 
             }
         }

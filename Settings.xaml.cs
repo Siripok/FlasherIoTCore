@@ -26,12 +26,50 @@ namespace WpfApp1
         public int num { get; set; } //№ по списку
         public int numPIN { get; set; }
         public int numButton { get; set; }
+        public int numPIN2 { get; set; }
+        public int numButton2 { get; set; }
         public bool reverseBULB { get; set; }
         public bool dimBRIGHTNESS { get; set; }
         public bool SMOTH { get; set; }
         public bool IKsenor { get; set; }
         public bool MechanicBtn { get; set; }
         public string Opisanie { get; set; }
+
+
+        public void ShowSettingSvet()
+        {
+
+            //Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
+            Opisanie = "Выбрано:\n";
+
+            switch (Type)
+            {
+                case "svet":
+                    if (reverseBULB == true)
+                        Opisanie += "Инвертировать, ";
+
+
+                    if (dimBRIGHTNESS == true)
+                        Opisanie += "Регулировка яркости, ";
+
+
+                    if (SMOTH == true)
+                        Opisanie += "Плавное включение, ";
+
+
+                    if (IKsenor == true)
+                        Opisanie += "ИК сенсор ";
+                    break;
+                case "retrotop_up":
+                    if (MechanicBtn == true)
+                        Opisanie += "Механическая кнопка";
+                    break;
+            }
+            Opisanie= Opisanie == "Выбрано:\n" ?  "" :  Opisanie ;
+            Opisanie = Opisanie.Trim();
+        }
+
+      
 
 
     }
@@ -57,18 +95,20 @@ namespace WpfApp1
         {
 
             Listdevice = new List<DeviceIOT>() {
-            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,} ,
-            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
-            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
-            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings} ,
-            new DeviceIOT() {Type = "retrotop_up", TypesDevicesSettings=DevicesSettings},
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=32,numButton=21,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=33,numButton=22,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=25,numButton=19,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=12,numButton=23,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type = "retrotop_up", TypesDevicesSettings=DevicesSettings,numPIN=27,numButton=18,numPIN2=26,numButton2=5},
             new DeviceIOT() {Type= "none",TypesDevicesSettings=DevicesSettings }
         };
 
             lb_settings.ItemsSource = Listdevice;
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < Listdevice.Count; i++)
             {
                 Listdevice[i].num = i+1;
+
+                Listdevice[i].ShowSettingSvet();
             }
 
             lb_settings.Items.Refresh();
@@ -78,27 +118,27 @@ namespace WpfApp1
         {
 
         }
-        int u ;
+       
         private void cmd_Edit_Clicked(object sender, RoutedEventArgs e)
         {
             Button cmd = (Button)sender;
             if (cmd.DataContext is DeviceIOT)
             {
                 DeviceIOT msg = (DeviceIOT)cmd.DataContext;
-                u = msg.num - 1;
+              
                 switch (msg.Type)
                 {
                     
                     case "svet":
-                        svet sv = new svet(Listdevice, u);
+                        svet sv = new svet(msg);
                         sv.ShowDialog();
-                        ShowSettingSvet(u);
+                        msg.ShowSettingSvet();
                         break;
 
                     case "retrotop_up":
-                        retrotop rt = new retrotop(Listdevice, u);
+                        retrotop rt = new retrotop(msg);
                         rt.ShowDialog();
-                        ShowSettingRetrotop(u);
+                        msg.ShowSettingSvet();
                         break;
 
                     case "none":
@@ -112,41 +152,7 @@ namespace WpfApp1
                 lb_settings.Items.Refresh();
             }
         }
-        public void ShowSettingSvet(int i)
-        {
-
-            //Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
-            Listdevice[i].Opisanie = "Выбрано:\n";
-            if (Listdevice[i].reverseBULB == true)
-                Listdevice[i].Opisanie += "Инвертировать, ";
-
-
-            if (Listdevice[i].dimBRIGHTNESS == true)
-                Listdevice[i].Opisanie += "Регулировка яркости, ";
-
-
-            if (Listdevice[i].SMOTH == true)
-                Listdevice[i].Opisanie += "Плавное включение, ";
-
-
-            if (Listdevice[i].IKsenor == true)
-                Listdevice[i].Opisanie += "ИК сенсор ";
-
-
-
-        }
-
-        public void ShowSettingRetrotop(int i)
-        {
-
-            // Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
-            Listdevice[i].Opisanie = "Выбрано: ";
-            if (Listdevice[i].MechanicBtn == true)
-                Listdevice[i].Opisanie += "Механическая кнопка";
-
-
-
-        }
+     
 
         private void btn_Post_Click(object sender, RoutedEventArgs e)
         {
