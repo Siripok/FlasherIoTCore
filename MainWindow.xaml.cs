@@ -261,15 +261,14 @@ namespace WpfApp1
 
                     string erase = "";
                     if (chk_erase.IsChecked == true)
-                        erase = "--erase-all"; //erase_flash
-                    else
-                        erase = "";
+                        erase = "--erase-all "; //erase_flash
+                
 
 
 
                     Console.WriteLine(files);
                     var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
-                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio  {erase} --flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 {files}.ino.bin 0x8000 {files}.ino.partitions.bin" +
+                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio {erase}--flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 {files}.ino.bin 0x8000 {files}.ino.partitions.bin" +
                       $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
 
 
