@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WpfApp1
 {
@@ -17,14 +8,14 @@ namespace WpfApp1
     /// </summary>
     public partial class svet : Window
     {
-        List<DeviceIOT> t;
-        int i;
-        public svet(List<DeviceIOT> param,int num)
+        DeviceIOT t;
+    
+        public svet(DeviceIOT param)
         {
             InitializeComponent();
          
             t = param;
-            i = num;
+            
             ShowElement();
           
         }
@@ -33,16 +24,16 @@ namespace WpfApp1
         {
             txt_numPIN.Clear();
             txt_numBUTTON.Clear();
-            if (t[i].numButton.ToString() != ""&& t[i].numPIN.ToString()!="") //если заполнены были поля
+            if (t.numButton.ToString() != ""&& t.numPIN.ToString()!="") //если заполнены были поля
             {
 
-                txt_numPIN.Text = t[i].numPIN.ToString();
-                txt_numBUTTON.Text = t[i].numButton.ToString();
+                txt_numPIN.Text = t.numPIN.ToString();
+                txt_numBUTTON.Text = t.numButton.ToString();
 
-                if (t[i].reverseBULB == true) chk_reverseBULB.IsChecked = true;
-                if (t[i].dimBRIGHTNESS == true) chk_dimBRIGHTNESS.IsChecked = true;
-                if (t[i].SMOTH == true) chk_SMOTH.IsChecked = true;
-                if (t[i].IKsenor == true) chk_IKsenor.IsChecked = true;
+                if (t.reverseBULB == true) chk_reverseBULB.IsChecked = true;
+                if (t.dimBRIGHTNESS == true) chk_dimBRIGHTNESS.IsChecked = true;
+                if (t.SMOTH == true) chk_SMOTH.IsChecked = true;
+                if (t.IKsenor == true) chk_IKsenor.IsChecked = true;
             }
         }
 
@@ -52,28 +43,28 @@ namespace WpfApp1
             if (txt_numPIN.Text != "" && txt_numBUTTON.Text != "")
             {
 
-                t[i].numPIN = Convert.ToInt32(txt_numPIN.Text);
-                t[i].numButton = Convert.ToInt32(txt_numBUTTON.Text);
+                t.numPIN = Convert.ToInt32(txt_numPIN.Text);
+                t.numButton = Convert.ToInt32(txt_numBUTTON.Text);
 
-                if (chk_reverseBULB.IsChecked == true)
+                 if (chk_reverseBULB.IsChecked == true)
                     t[i].reverseBULB = true;
-                else
+                 else
                     t[i].reverseBULB = false;
 
 
-                if (chk_dimBRIGHTNESS.IsChecked == true)
+                 if (chk_dimBRIGHTNESS.IsChecked == true)
                     t[i].dimBRIGHTNESS = true;
                 else t[i].dimBRIGHTNESS = false;
 
 
-                if (chk_SMOTH.IsChecked == true)
+                 if (chk_SMOTH.IsChecked == true)
                     t[i].SMOTH = true;
                 else t[i].SMOTH = false;
 
 
-                if (chk_IKsenor.IsChecked == true)
+                 if (chk_IKsenor.IsChecked == true)
                     t[i].IKsenor = true;
-                else t[i].IKsenor = false;
+                 else t[i].IKsenor = false;
 
                 this.Close();
             }
