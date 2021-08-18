@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="SPISflash" Height="524" Width="1080" Closed="Window_Closed">
+        Title="SPISflash" Height="524" Width="1114" Closed="Window_Closed">
     <Grid Margin="-13,1,8,7">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -13,15 +13,15 @@
             <RowDefinition Height="130"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="513*"/>
-            <ColumnDefinition Width="306*"/>
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="246*"/>
+            <ColumnDefinition Width="133*"/>
+            <ColumnDefinition Width="327.013"/>
         </Grid.ColumnDefinitions>
         <Button x:Name="Update" Content="Обновить" Grid.Column="1" Margin="0,50,10,0" VerticalAlignment="Top" Click="Update_Click" Background="#FF5DA3DE" Height="40" Grid.Row="2" HorizontalAlignment="Right" Width="80"/>
         <Button x:Name="Clear" Content="Очистить поля" Grid.Column="1" HorizontalAlignment="Right" Margin="0,50,100,0" VerticalAlignment="Top" Width="100" Click="Clear_Click" Background="#FFF75F5F" Height="40" Grid.Row="2"/>
 
         <Button x:Name="flash_all" Content="Прошить все" Grid.Column="1" Margin="0,10,10,0" VerticalAlignment="Top" Background="#FFFB9E69" Foreground="#FF232323" Click="flash_all_Click" Height="20" Grid.Row="2" HorizontalAlignment="Right" Width="190"/>
-        <ListBox x:Name="lb"  Grid.ColumnSpan="2" Margin="25,10,10,10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1">
+        <ListBox x:Name="lb"  Grid.ColumnSpan="2" Margin="25,10,10,10" Grid.Row="1">
             <ListBox.ItemTemplate>
                 <DataTemplate x:Name="DoubleLineDataTemplate">
 
@@ -51,11 +51,11 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <CheckBox x:Name="chk_noClose" ToolTip="Оставит консоль открытой, удобно при отладке, и поиске проблем" Content="Не закрывать консоль" HorizontalAlignment="Left" Margin="31,10,0,0" VerticalAlignment="Top" Click="chk_noClose_Click" Grid.Row="2"/>
-        <TextBox x:Name="txt_log" Margin="0,10,10,10" Text="Вывод информации" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Column="2" Grid.RowSpan="2" Grid.Row="1"/>
-        <CheckBox x:Name="chk_all" ToolTip="Установить либо снять все галочки" Content="Все" HorizontalAlignment="Left" Margin="25,0,0,0" Click="chk_all_Click" RenderTransformOrigin="1.965,-0.66" Height="15" VerticalAlignment="Center"/>
-        <CheckBox x:Name="chk_erase" Content="Очищать при прошивке" HorizontalAlignment="Left" Margin="31,30,0,0" Grid.Row="2" VerticalAlignment="Top"/>
-      
+        <CheckBox x:Name="chk_noClose" ToolTip="Оставит консоль открытой, удобно при отладке, и поиске проблем" Content="Не закрывать консоль" HorizontalAlignment="Left" Margin="31,10,0,0" VerticalAlignment="Top" Click="chk_noClose_Click" Grid.Row="2" Height="15" Width="143"/>
+        <TextBox x:Name="txt_log" Margin="0,10,10,10" Text="Вывод информации" TextWrapping="Wrap" Grid.Column="2" Grid.RowSpan="2" Grid.Row="1"/>
+        <CheckBox x:Name="chk_all" ToolTip="Установить либо снять все галочки" Content="Все" HorizontalAlignment="Left" Margin="25,0,0,0" Click="chk_all_Click" RenderTransformOrigin="1.965,-0.66" Height="15" VerticalAlignment="Center" Width="39"/>
+        <CheckBox x:Name="chk_erase" Content="Очищать при прошивке" HorizontalAlignment="Left" Margin="31,30,0,0" Grid.Row="2" VerticalAlignment="Top" Height="15" Width="153"/>
+
 
 
 

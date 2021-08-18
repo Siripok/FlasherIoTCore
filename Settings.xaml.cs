@@ -80,16 +80,13 @@ namespace WpfApp1
 
         string[] DevicesSettings = { "svet", "retrotop_up", "none" };
 
-        int c;
+        
         public Settings(int elem)
         {
             InitializeComponent();
             ShowListBox();
-            c = elem;
-
+          
         }
-
-
 
         public void ShowListBox()
         {
@@ -118,7 +115,7 @@ namespace WpfApp1
         {
 
         }
-       
+        int u ;
         private void cmd_Edit_Clicked(object sender, RoutedEventArgs e)
         {
             Button cmd = (Button)sender;
@@ -128,7 +125,7 @@ namespace WpfApp1
               
                 switch (msg.Type)
                 {
-                    
+
                     case "svet":
                         svet sv = new svet(msg);
                         sv.ShowDialog();
@@ -152,7 +149,41 @@ namespace WpfApp1
                 lb_settings.Items.Refresh();
             }
         }
-     
+        public void ShowSettingSvet(int i)
+        {
+
+            //Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
+            Listdevice[i].Opisanie = "Выбрано:\n";
+            if (Listdevice[i].reverseBULB == true)
+                Listdevice[i].Opisanie += "Инвертировать, ";
+
+
+            if (Listdevice[i].dimBRIGHTNESS == true)
+                Listdevice[i].Opisanie += "Регулировка яркости, ";
+
+
+            if (Listdevice[i].SMOTH == true)
+                Listdevice[i].Opisanie += "Плавное включение, ";
+
+
+            if (Listdevice[i].IKsenor == true)
+                Listdevice[i].Opisanie += "ИК сенсор ";
+
+
+
+        }
+
+        public void ShowSettingRetrotop(int i)
+        {
+
+            // Listedevice[i].Opisanie = $"PIN {Listedevice[i].numPIN }, Button {Listedevice[i].numButton}, ";
+            Listdevice[i].Opisanie = "Выбрано: ";
+            if (Listdevice[i].MechanicBtn == true)
+                Listdevice[i].Opisanie += "Механическая кнопка";
+
+
+
+        }
 
         private void btn_Post_Click(object sender, RoutedEventArgs e)
         {

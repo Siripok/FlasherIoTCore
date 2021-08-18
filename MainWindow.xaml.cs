@@ -713,7 +713,6 @@ namespace WpfApp1
             //sp.RtsEnable = true;
             sp.ReadTimeout = 500;
             sp.WriteTimeout = 500;
-            //sp.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
             sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
             sp.Open();
             txt_log.Clear();
@@ -742,7 +741,7 @@ namespace WpfApp1
             }
             catch (TimeoutException err)
             {
-                MessageBox.Show(err.ToString(), "TimeoutException");
+                MessageBox.Show(err.ToString(), "TimeoutException?");
             }
         }
 
@@ -779,21 +778,16 @@ namespace WpfApp1
             {
                 FlashInfo msg = (FlashInfo)cmd.DataContext;
 
-                if (msg.flMAC !=null )
+                if (msg.flMAC !=null)
                 {
                     Settings st = new Settings(msg.elem - 1);
-                    st.Title = $"Настройка {msg.elem} элемента: " + msg.flMAC;
+                    st.Title = $"Настройка {msg.elem} элемента: " + msg.flMAC;                   
                     st.Show();
-
-
-
+                  
                 }
-                else MessageBox.Show($"Без MAC адреса нельзя!", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
+                else MessageBox.Show($"Без MAC адреса нельзя произвести настройку устройства!", "?", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-
-
-
 
         public static class log
         {

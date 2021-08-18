@@ -47,24 +47,24 @@ namespace WpfApp1
                 t.numButton = Convert.ToInt32(txt_numBUTTON.Text);
 
                  if (chk_reverseBULB.IsChecked == true)
-                    t.reverseBULB = true;
+                    t[i].reverseBULB = true;
                  else
-                    t.reverseBULB = false;
+                    t[i].reverseBULB = false;
 
 
                  if (chk_dimBRIGHTNESS.IsChecked == true)
-                    t.dimBRIGHTNESS = true;
-                else t.dimBRIGHTNESS = false;
+                    t[i].dimBRIGHTNESS = true;
+                else t[i].dimBRIGHTNESS = false;
 
 
                  if (chk_SMOTH.IsChecked == true)
-                    t.SMOTH = true;
-                else t.SMOTH = false;
+                    t[i].SMOTH = true;
+                else t[i].SMOTH = false;
 
 
                  if (chk_IKsenor.IsChecked == true)
-                    t.IKsenor = true;
-                 else t.IKsenor = false;
+                    t[i].IKsenor = true;
+                 else t[i].IKsenor = false;
 
                 this.Close();
             }
