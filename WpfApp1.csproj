@@ -24,6 +24,7 @@
     <PackageReference Include="Google.Apis.CloudIot.v1" Version="1.54.0.2273" />
     <PackageReference Include="Google.Apis.Core" Version="1.54.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="System.IO.Ports" Version="5.0.1" />
   </ItemGroup>
 

@@ -9,6 +9,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
+using System.Drawing;
 
 namespace WpfApp1
 {
@@ -16,8 +18,7 @@ namespace WpfApp1
     /// Логика взаимодействия для Settings.xaml
     /// </summary>
     /// 
-    public class DeviceIOT
-    {
+    public class DeviceIOT    {
 
         public string Type { get; set; }
 
@@ -69,14 +70,21 @@ namespace WpfApp1
             Opisanie = Opisanie.Trim();
         }
 
-      
-
 
     }
+    
+    public class Images
+    {
+        public string imgName { get; set; }
+        //public BitmapImage image { get; set; }
+        public System.Windows.Controls.Image image { get; set; } //Image
+    } 
 
     public partial class Settings : Window
     {
-        public List<DeviceIOT> Listdevice;
+        public List <DeviceIOT> Listdevice;
+        public List <Images> Pictures;
+
 
         string[] DevicesSettings = { "svet", "retrotop_up", "none" };
 
@@ -86,7 +94,8 @@ namespace WpfApp1
             InitializeComponent();
             ShowListBox();
             c = elem;
-
+            ShowPreview();
+            DataContext = this;
         }
 
 
@@ -158,6 +167,43 @@ namespace WpfApp1
         {
             //Listdevice[u].Type=?
             this.Close();
+        }
+        public void ShowPreview()
+        {
+            
+            if (!Directory.Exists("img"))
+                Directory.CreateDirectory("img");
+             Pictures = new List<Images>();
+
+            string[] files = Directory.GetFiles("img");
+
+            if (files.Length > 0)
+            {
+                for (int i = 0; i < files.Length; i++)
+                {
+                    System.Windows.Controls.Image im = new System.Windows.Controls.Image();
+                    BitmapImage bi = new BitmapImage(new Uri(files[i],UriKind.RelativeOrAbsolute));
+                    im.Width = 100;
+                    im.Height = 100;
+                    im.Source = bi;
+
+                    Pictures.Add(new Images { imgName = $"{files[i]}",image=im});  //image = new BitmapImage(new Uri($"{files[i]}"))
+                }
+            }
+
+            //System.Windows.Controls.Image im = new System.Windows.Controls.Image();
+            //        im.Width = 100;
+            //        im.Height = 100;
+            //        im.Source = new BitmapImage(new Uri(files[i], UriKind.RelativeOrAbsolute));// UriKind.RelativeOrAbsolute
+                    //lb_preview.Items.Add(im);
+                   // lb_preview.Items.Add(files[i]);
+            // foreach (Ima asas in Directory.GetDirectories("img"))
+            // {
+            //    Picture.Add(asas.Replace("img\\", ""));
+            //  }
+            //irectoryProject = Directory.GetDirectories("projects").;
+            lb_preview.ItemsSource = Pictures;
+            lb_preview.Items.Refresh();
         }
     }
 
