@@ -55,25 +55,25 @@ namespace WpfApp1
                 t[i].numPIN = Convert.ToInt32(txt_numPIN.Text);
                 t[i].numButton = Convert.ToInt32(txt_numBUTTON.Text);
 
-                 if (chk_reverseBULB.IsChecked == true)
+                if (chk_reverseBULB.IsChecked == true)
                     t[i].reverseBULB = true;
-                 else
+                else
                     t[i].reverseBULB = false;
 
 
-                 if (chk_dimBRIGHTNESS.IsChecked == true)
+                if (chk_dimBRIGHTNESS.IsChecked == true)
                     t[i].dimBRIGHTNESS = true;
                 else t[i].dimBRIGHTNESS = false;
 
 
-                 if (chk_SMOTH.IsChecked == true)
+                if (chk_SMOTH.IsChecked == true)
                     t[i].SMOTH = true;
                 else t[i].SMOTH = false;
 
 
-                 if (chk_IKsenor.IsChecked == true)
+                if (chk_IKsenor.IsChecked == true)
                     t[i].IKsenor = true;
-                 else t[i].IKsenor = false;
+                else t[i].IKsenor = false;
 
                 this.Close();
             }

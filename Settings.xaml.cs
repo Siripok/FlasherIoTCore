@@ -42,16 +42,13 @@ namespace WpfApp1
 
         string[] DevicesSettings = { "svet", "retrotop_up", "none" };
 
-        int c;
+        
         public Settings(int elem)
         {
             InitializeComponent();
             ShowListBox();
-            c = elem;
-
+          
         }
-
-
 
         public void ShowListBox()
         {
@@ -78,7 +75,7 @@ namespace WpfApp1
         {
 
         }
-        int u ;
+        int u;//текущий элемент
         private void cmd_Edit_Clicked(object sender, RoutedEventArgs e)
         {
             Button cmd = (Button)sender;
@@ -88,7 +85,7 @@ namespace WpfApp1
                 u = msg.num - 1;
                 switch (msg.Type)
                 {
-                    
+
                     case "svet":
                         svet sv = new svet(Listdevice, u);
                         sv.ShowDialog();
@@ -132,8 +129,6 @@ namespace WpfApp1
             if (Listdevice[i].IKsenor == true)
                 Listdevice[i].Opisanie += "ИК сенсор ";
 
-
-
         }
 
         public void ShowSettingRetrotop(int i)
@@ -143,8 +138,6 @@ namespace WpfApp1
             Listdevice[i].Opisanie = "Выбрано: ";
             if (Listdevice[i].MechanicBtn == true)
                 Listdevice[i].Opisanie += "Механическая кнопка";
-
-
 
         }
 

@@ -29,7 +29,7 @@
             </ListBox.ItemTemplate>
 
         </ListBox>
-        <Button x:Name="btn_Post" Content="Отправить" Margin="0,0,11,23" Width="80" Height="20" Click="btn_Post_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <Button x:Name="btn_Post" Content="Отправить >" Margin="0,0,11,23" Width="80" Height="20" Click="btn_Post_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
 
 
 
