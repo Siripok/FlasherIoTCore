@@ -34,7 +34,7 @@
 
         <Button x:Name="btn_Post" Content="Отправить" Margin="0,0,11,23" Width="80" Height="20" Click="btn_Post_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1"/>
 
-        <ListView x:Name="lb_preview" Margin="20,19,10,55" Grid.Column="1">
+        <ListView x:Name="lb_preview" Margin="20,19,10,55" Grid.Column="1" SelectionChanged="lb_preview_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="DataPreview">
                     <StackPanel Orientation="Vertical">

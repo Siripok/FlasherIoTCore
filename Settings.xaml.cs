@@ -78,27 +78,27 @@ namespace WpfApp1
     {
         public string imgName { get; set; }
         //public BitmapImage image { get; set; }
-        public System.Windows.Controls.Image image { get; set; } //Image
-
-        public Uri ImagePath { get; set; }
+     
+        public string ImagePath { get; set; }
+        public List<DeviceIOT> settings { get; set; }
     }
 
  
 
     public partial class Settings : Window
     {
-        public List <DeviceIOT> Listdevice;
+       // public List <DeviceIOT> Listdevice;
         public List <Images> Pictures;
 
 
         string[] DevicesSettings = { "svet", "retrotop_up", "none" };
 
-        int c;
+   
         public Settings(int elem)
         {
             InitializeComponent();
-            ShowListBox();
-            c = elem;
+           // ShowListBox();
+      
             ShowPreview();
          
            
@@ -109,14 +109,7 @@ namespace WpfApp1
         public void ShowListBox()
         {
 
-            Listdevice = new List<DeviceIOT>() {
-            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=32,numButton=21,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
-            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=33,numButton=22,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
-            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=25,numButton=19,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
-            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=12,numButton=23,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
-            new DeviceIOT() {Type = "retrotop_up", TypesDevicesSettings=DevicesSettings,numPIN=27,numButton=18,numPIN2=26,numButton2=5},
-            new DeviceIOT() {Type= "none",TypesDevicesSettings=DevicesSettings }
-        };
+            List<DeviceIOT> Listdevice = (lb_preview.SelectedItem as Images).settings;
 
             lb_settings.ItemsSource = Listdevice;
             for (int i = 0; i < Listdevice.Count; i++)
@@ -181,32 +174,72 @@ namespace WpfApp1
                 Directory.CreateDirectory("img");
              Pictures = new List<Images>();
 
-            string[] files = Directory.GetFiles("img");
 
-            if (files.Length > 0)
+            Pictures.Add(new Images {
+                ImagePath = Environment.CurrentDirectory + "\\img\\smartkitchen_1.jpg" ,
+                imgName = "SmartKitchen v1",
+                settings= new List<DeviceIOT>() {
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=32,numButton=21,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=33,numButton=22,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=25,numButton=19,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=12,numButton=23,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type = "retrotop_up", TypesDevicesSettings=DevicesSettings,numPIN=27,numButton=18,numPIN2=26,numButton2=5},
+            new DeviceIOT() {Type= "none",TypesDevicesSettings=DevicesSettings }
+        }
+        });
+
+            Pictures.Add(new Images
             {
-                for (int i = 0; i < files.Length; i++)
-                {
-                    files[i] = files[i].Trim().Replace("img\\","");    
-                    Pictures.Add(new Images { ImagePath = new Uri(files[i], UriKind.RelativeOrAbsolute),imgName=files[i] });  //image = new BitmapImage(new Uri($"{files[i]}"))
-                    //lb_preview.Items.Add(Pictures[i]);
-                }
-            }
+                ImagePath = Environment.CurrentDirectory + "\\img\\smartkitchen_2.jpg",
+                imgName = "SmartKitchen v2",
+                settings = new List<DeviceIOT>() {
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=111,numButton=21,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=33,numButton=22,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=25,numButton=19,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type= "svet", TypesDevicesSettings=DevicesSettings,numPIN=12,numButton=23,reverseBULB=true, dimBRIGHTNESS=true, SMOTH=true} ,
+            new DeviceIOT() {Type = "retrotop_up", TypesDevicesSettings=DevicesSettings,numPIN=27,numButton=18,numPIN2=26,numButton2=5},
+            new DeviceIOT() {Type= "none",TypesDevicesSettings=DevicesSettings }
+        }
+            });
+
+
+            //string[] files = Directory.GetFiles("img");
+
+            //if (files.Length > 0)
+            //{
+            //    for (int i = 0; i < files.Length; i++)
+            //    {
+            //        // files[i] = files[i].Trim().Replace("img\\","");
+            //        files[i] =Environment.CurrentDirectory+"\\"+ files[i];
+            //        MessageBox.Show(files[i]);
+            //   //     Pictures.Add(new Images { ImagePath = files[i], imgName=files[i] });  //image = new BitmapImage(new Uri($"{files[i]}"))
+            //        //lb_preview.Items.Add(Pictures[i]);
+            //    }
+            //}
 
             //System.Windows.Controls.Image im = new System.Windows.Controls.Image();
             //        im.Width = 100;
             //        im.Height = 100;
             //        im.Source = new BitmapImage(new Uri(files[i], UriKind.RelativeOrAbsolute));// UriKind.RelativeOrAbsolute
-                    //lb_preview.Items.Add(im);
-                   // lb_preview.Items.Add(files[i]);
+            //lb_preview.Items.Add(im);
+            // lb_preview.Items.Add(files[i]);
             // foreach (Ima asas in Directory.GetDirectories("img"))
             // {
             //    Picture.Add(asas.Replace("img\\", ""));
             //  }
             //irectoryProject = Directory.GetDirectories("projects").;
-            
+
             lb_preview.ItemsSource = Pictures;
-            lb_preview.Items.Refresh();
+                   lb_preview.Items.Refresh();
+
+            lb_preview.SelectedIndex = 0;
+
+           
+        }
+
+        private void lb_preview_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ShowListBox();
         }
     }
 
