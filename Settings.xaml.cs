@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using System.Drawing;
+using System.Collections.ObjectModel;
 
 namespace WpfApp1
 {
@@ -78,7 +79,11 @@ namespace WpfApp1
         public string imgName { get; set; }
         //public BitmapImage image { get; set; }
         public System.Windows.Controls.Image image { get; set; } //Image
-    } 
+
+        public Uri ImagePath { get; set; }
+    }
+
+ 
 
     public partial class Settings : Window
     {
@@ -95,7 +100,8 @@ namespace WpfApp1
             ShowListBox();
             c = elem;
             ShowPreview();
-            DataContext = this;
+         
+           
         }
 
 
@@ -181,13 +187,9 @@ namespace WpfApp1
             {
                 for (int i = 0; i < files.Length; i++)
                 {
-                    System.Windows.Controls.Image im = new System.Windows.Controls.Image();
-                    BitmapImage bi = new BitmapImage(new Uri(files[i],UriKind.RelativeOrAbsolute));
-                    im.Width = 100;
-                    im.Height = 100;
-                    im.Source = bi;
-
-                    Pictures.Add(new Images { imgName = $"{files[i]}",image=im});  //image = new BitmapImage(new Uri($"{files[i]}"))
+                    files[i] = files[i].Trim().Replace("img\\","");    
+                    Pictures.Add(new Images { ImagePath = new Uri(files[i], UriKind.RelativeOrAbsolute),imgName=files[i] });  //image = new BitmapImage(new Uri($"{files[i]}"))
+                    //lb_preview.Items.Add(Pictures[i]);
                 }
             }
 
@@ -202,6 +204,7 @@ namespace WpfApp1
             //    Picture.Add(asas.Replace("img\\", ""));
             //  }
             //irectoryProject = Directory.GetDirectories("projects").;
+            
             lb_preview.ItemsSource = Pictures;
             lb_preview.Items.Refresh();
         }
