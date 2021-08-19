@@ -812,6 +812,11 @@ namespace WpfApp1
 
         }
 
+        private void btn_Close_COM_Click(object sender, RoutedEventArgs e)
+        {
+            CloseMonitor();
+            txt_log.Text += $"\r\n\r\nЧтение из COM порта было остановлено.";
+        }
     }
 }
 //Created 02/08/2021 -- ...
