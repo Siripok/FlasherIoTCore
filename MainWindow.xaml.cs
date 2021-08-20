@@ -159,10 +159,8 @@ namespace WpfApp1
             {
                 if (line.Contains("A fatal error occurred:"))
                 {
-                    if (line.Contains("Serial port COM"))
-                    {
-                        spisflash[w].status = "Не удалось подключится к плате :(";
-                    }
+                    
+                        spisflash[w].status = "Не удалось подключится к плате :(";                  
 
                 }
 
@@ -276,7 +274,7 @@ namespace WpfApp1
                     startInfo.WorkingDirectory = idfPath;
                     Process process = new Process();
 
-                    if (chk_noClose.IsChecked == false)
+                    if (chk_noClose.IsChecked == false) //если не стоит галочка
                     {
                         startInfo.CreateNoWindow = true;
                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -309,7 +307,8 @@ namespace WpfApp1
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Будут очищены пути к bin файлам, а так же выбранные COM-порты.\nПродолжить?", "Очистить все поля?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Будут очищены пути к bin файлам, а так же выбранные COM-порты.\nПродолжить?", "Очистить все поля?",
+                MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 spisflash = null;
                 spisflash = new List<FlashInfo>();
@@ -379,9 +378,9 @@ namespace WpfApp1
                 }
             }
 
-            if (error == true) MessageBox.Show("Список проблем:\n\n" + message, "Ошибки при заполнении!", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-            if (error == false)
+            if (error == true) 
+                MessageBox.Show("Список проблем:\n\n" + message, "Ошибки при заполнении!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            else
                 flashtool(spisflash[0].Path, spisflash[0].Port, true, 0);
 
         }
