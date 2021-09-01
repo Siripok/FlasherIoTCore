@@ -23,6 +23,8 @@ using Google.Apis.Services;
 using Google.Apis.CloudIot.v1.Data;
 using System.Windows.Threading;
 using System.Reflection;
+using Firebase.Database;
+using Firebase.Database.Query;
 
 namespace WpfApp1
 {
@@ -159,8 +161,8 @@ namespace WpfApp1
             {
                 if (line.Contains("A fatal error occurred:"))
                 {
-                    
-                        spisflash[w].status = "Не удалось подключится к плате :(";                  
+
+                    spisflash[w].status = "Не удалось подключится к плате :(";
 
                 }
 
@@ -185,10 +187,64 @@ namespace WpfApp1
             // MessageBox.Show(MACiCOM[0]);
             this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
             {
-                timerWorking = false;
                 lb.Items.Refresh();
-                if (MACiCOM[0] != "") //коннектимся если есть МАС адрес
+                timerWorking = false;
+                if (port != "")
+                {
+                    Monitor(port, 115200);
+                }
+
+                if (MACiCOM[0] != "")
+                { //коннектимся если есть МАС адрес
                     CreateEsDevice(getProject(binPath), "europe-west1", "atest-registry", getPrefix(binPath) + MACiCOM[0], "ec_public.pem");
+                    if (binPath == "Fan")
+                    {
+                        //  MessageBox.Show(msg.Path);
+                        string asdasdasd = @"{
+
+'" + getPrefix(binPath) + MACiCOM[0] + @"_1': 
+{
+        'float' : {
+          'value' : {
+            'co2' : 0,
+            'hum' : 0,
+            'illumination' : 0,
+            'temperature' : 0
+          }
+        },
+        'id' : '" + getPrefix(binPath) + MACiCOM[0] + @"_1',
+        'name' : 'Вентилятор',
+        'parameters' : {
+          'dimmer' : false,
+          'irsens' : false,
+          'mehbtn' : false,
+          'plavnoevkl' : false,
+          'primarybutton' : 21,
+          'primarypin' : 32,
+          'revers' : false,
+          'secondbutton' : 0,
+          'secondpin' : 0
+        },
+        'room' : 'Кухня',
+        'state' : {
+          'value' : {
+            'co2' : 0,
+            'delaytime' : 0,
+            'hash' : 611877,
+            'hum' : 50,
+            'illumination' : 0,
+            'mode' : 'normal',
+            'on' : false,
+            'speed' : 3
+          }
+        },
+        'type' : 'fan'
+      }
+
+}";
+                        registrfirebaseAsync(asdasdasd, getPrefix(binPath) + MACiCOM[0]);
+                    }
+                }
 
             });
 
@@ -260,13 +316,13 @@ namespace WpfApp1
                     string erase = "";
                     if (chk_erase.IsChecked == true)
                         erase = "--erase-all "; //erase_flash
-                
+
 
 
 
                     Console.WriteLine(files);
                     var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
-                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio {erase}--flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 {files}.ino.bin 0x8000 {files}.ino.partitions.bin" +
+                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio {erase}--flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 {files}.ino.bin 0x8000 {Environment.CurrentDirectory}\partitions.bin" +
                       $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
 
 
@@ -378,7 +434,7 @@ namespace WpfApp1
                 }
             }
 
-            if (error == true) 
+            if (error == true)
                 MessageBox.Show("Список проблем:\n\n" + message, "Ошибки при заполнении!", MessageBoxButton.OK, MessageBoxImage.Warning);
             else
                 flashtool(spisflash[0].Path, spisflash[0].Port, true, 0);
@@ -431,9 +487,10 @@ namespace WpfApp1
         }
 
         int w;//узнаёт какой элемент был выбран чтобы присвоить ему мак адрес
-        private void cmdFlash_Clicked(object sender, RoutedEventArgs e)
+        private async void cmdFlash_Clicked(object sender, RoutedEventArgs e)
         {
             CloseMonitor();
+            txt_err.Text = "";
             w = 0;
             Button cmd = (Button)sender;
             if (cmd.DataContext is FlashInfo)
@@ -444,6 +501,8 @@ namespace WpfApp1
                 {
                     if (msg.Path != "")
                     {
+
+
 
                         w = msg.elem - 1;
                         flashtool(msg.Path, msg.Port);
@@ -536,12 +595,12 @@ namespace WpfApp1
                 Console.WriteLine($"\tName: {device.Name}");
                 Console.WriteLine($"\tState:{device.State}");
 
-                MessageBox.Show(deviceId + " зарегистрирован");
+                //   MessageBox.Show(deviceId + " зарегистрирован");
             }
             catch (Google.GoogleApiException e)
             {
                 Console.WriteLine(e.Message);
-                MessageBox.Show(deviceId + " - " + (e.Error.Code == 409 ? "Уже существует" : e.Message) + Environment.NewLine);
+                // MessageBox.Show(deviceId + " - " + (e.Error.Code == 409 ? "Уже существует" : e.Message) + Environment.NewLine);
                 if (e.Error != null) return e.Error.Code;
                 return -1;
             }
@@ -701,6 +760,7 @@ namespace WpfApp1
         SerialPort sp;
         private void Monitor(string PORT, int baud)
         {
+
             CloseMonitor();
             sp = new SerialPort();
             sp.PortName = PORT;
@@ -734,6 +794,39 @@ namespace WpfApp1
                 this.Dispatcher.Invoke(() =>
                 {
                     txt_log.Text += indata;
+
+                    if (indata.IndexOf("ccs does not show co2") != -1)
+                    {
+
+                        txt_err.Text += Environment.NewLine + "ccs does not show co2";
+                        txt_err.Foreground = Brushes.Red;
+                    }
+                    if (indata.IndexOf("sht20 does not show hum") != -1)
+                    {
+
+                        txt_err.Text += Environment.NewLine + "sht20 does not show hum";
+                        txt_err.Foreground = Brushes.Red;
+                    }
+                    if (indata.IndexOf("sht20 does not show temp") != -1)
+                    {
+
+                        txt_err.Text += Environment.NewLine + "sht20 does not show temp";
+                        txt_err.Foreground = Brushes.Red;
+                    }
+                    if (indata.IndexOf("illuminat does not show") != -1)
+                    {
+
+                        txt_err.Text += Environment.NewLine + "illuminat does not show";
+                        txt_err.Foreground = Brushes.Red;
+                    }
+                    if (indata.IndexOf("succes") != -1)
+                    {
+
+                        txt_err.Text = "Успех";
+                        txt_err.Foreground = Brushes.Green;
+                    }
+
+
                     txt_log.CaretIndex = txt_log.Text.Length;
                     txt_log.ScrollToEnd();
 
@@ -778,7 +871,7 @@ namespace WpfApp1
             {
                 FlashInfo msg = (FlashInfo)cmd.DataContext;
 
-                if (msg.flMAC !=null )
+                if (msg.flMAC != null)
                 {
                     Settings st = new Settings(msg.elem - 1);
                     st.Title = $"Настройка {msg.elem} элемента: " + msg.flMAC;
@@ -816,6 +909,59 @@ namespace WpfApp1
             CloseMonitor();
             txt_log.Text += $"\r\n\r\nЧтение из COM порта было остановлено.";
         }
+
+
+        async Task registrfirebaseAsync(string asdasdasd, string macaddr)
+        {
+            try
+            {
+
+                var auth = "zYuNrkNyIeg91tt68nRNEXTILmbB3LQdKDd3MuBA"; // your app secret
+                var firebase = new FirebaseClient(
+                  "https://greenvent-632e2-default-rtdb.europe-west1.firebasedatabase.app/",
+                  new FirebaseOptions
+                  {
+                      AuthTokenAsyncFactory = () => Task.FromResult(auth)
+                  });
+
+
+
+                var m = JsonConvert.DeserializeObject(asdasdasd);
+                /*
+                var dino = await firebase
+      .Child("dinosaurs")
+      .PostAsync(m);
+
+                // note that there is another overload for the PostAsync method which delegates the new key generation to the firebase server
+
+                Console.WriteLine($"Key for the new dinosaur: {dino.Key}");
+                */
+                // add new item directly to the specified location (this will overwrite whatever data already exists at that location)
+                await firebase
+               //   .Child("dinosaurs")
+                  .Child("devices-s/"+ macaddr)               
+                  .PutAsync(m);
+                /*
+                // delete given child node
+                await firebase
+                  .Child("dinosaurs")
+                  .Child("t-rex")
+                  .DeleteAsync();*/
+
+            }
+            catch (Exception easd) { MessageBox.Show(easd.Message); }
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //    registrfirebaseAsync();
+        }
+    }
+
+    public class Dinosaur
+    {
+        public double Height { get; set; }
     }
 }
 //Created 02/08/2021 -- ...

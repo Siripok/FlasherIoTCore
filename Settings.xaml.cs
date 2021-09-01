@@ -73,7 +73,56 @@ namespace WpfApp1
 
 
     }
-    
+
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class Value
+    {
+        public int co2 { get; set; }
+        public double hum { get; set; }
+        public int illumination { get; set; }
+        public double temperature { get; set; }
+        public int delaytime { get; set; }
+        public int hash { get; set; }
+        public string mode { get; set; }
+        public bool on { get; set; }
+        public int speed { get; set; }
+    }
+
+    public class Float
+    {
+        public Value value { get; set; }
+    }
+
+    public class Parameters
+    {
+        public bool dimmer { get; set; }
+        public bool irsens { get; set; }
+        public bool mehbtn { get; set; }
+        public bool plavnoevkl { get; set; }
+        public int primarybutton { get; set; }
+        public int primarypin { get; set; }
+        public bool revers { get; set; }
+        public int secondbutton { get; set; }
+        public int secondpin { get; set; }
+    }
+
+    public class State
+    {
+        public Value value { get; set; }
+    }
+
+    public class DEVICEFB
+    {
+        public Float @float { get; set; }
+        public string id { get; set; }
+        public string name { get; set; }
+        public Parameters parameters { get; set; }
+        public string room { get; set; }
+        public State state { get; set; }
+        public string type { get; set; }
+    }
+
+
     public class Images
     {
         public string imgName { get; set; }
