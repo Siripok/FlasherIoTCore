@@ -185,7 +185,7 @@ namespace WpfApp1
 
 
             // MessageBox.Show(MACiCOM[0]);
-            this.Dispatcher.Invoke(() => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
+            this.Dispatcher.Invoke(async () => //Предотвращает ошибку: Вызывающий поток не может получить доступ к этому объекту, поскольку он принадлежит другому потоку.
             {
                 lb.Items.Refresh();
                 timerWorking = false;
@@ -242,7 +242,55 @@ namespace WpfApp1
       }
 
 }";
-                        registrfirebaseAsync(asdasdasd, getPrefix(binPath) + MACiCOM[0]);
+                   await     registrfirebaseAsync(asdasdasd, getPrefix(binPath) + MACiCOM[0]);
+                    }
+                    if (binPath == "Fan")
+                    {
+                        //  MessageBox.Show(msg.Path);
+                        string asdasdasd = @"{
+
+'" + getPrefix(binPath) + MACiCOM[0] + @"_1': 
+{
+        'float' : {
+          'value' : {
+            'co2' : 0,
+            'hum' : 0,
+            'illumination' : 0,
+            'TVOC' : 0,
+            'temperature' : 0
+          }
+        },
+        'id' : '" + getPrefix(binPath) + MACiCOM[0] + @"_1',
+        'name' : 'CO2 станция',
+        'parameters' : {
+          'dimmer' : false,
+          'irsens' : false,
+          'mehbtn' : false,
+          'plavnoevkl' : false,
+          'primarybutton' : 21,
+          'primarypin' : 32,
+          'revers' : false,
+          'secondbutton' : 0,
+          'secondpin' : 0
+        },
+        'room' : 'Кухня',
+        'state' : {
+          'value' : {
+            'co2' : 0,
+            'delaytime' : 0,
+            'hash' : 611877,
+            'hum' : 50,
+            'illumination' : 0,
+            'mode' : 'normal',
+            'on' : false,
+            'speed' : 3
+          }
+        },
+        'type' : 'co2sta'
+      }
+
+}";
+                        await registrfirebaseAsync(asdasdasd, getPrefix(binPath) + MACiCOM[0]);
                     }
                 }
 
@@ -735,6 +783,9 @@ namespace WpfApp1
                 case "SmartKitchen":
                     otvet = "GN_";
                     break;
+                case "SmartKitchen2":
+                    otvet = "GN_";
+                    break;
 
             }
             return otvet;
@@ -748,6 +799,9 @@ namespace WpfApp1
                     otvet = "greenvent-632e2";
                     break;
                 case "SmartKitchen":
+                    otvet = "giulia-novars-smart-realtime";
+                    break;
+                case "SmartKitchen2":
                     otvet = "giulia-novars-smart-realtime";
                     break;
             }
@@ -795,10 +849,24 @@ namespace WpfApp1
                 {
                     txt_log.Text += indata;
 
-                    if (indata.IndexOf("ccs does not show co2") != -1)
+                    if (indata.IndexOf("ccs co2 levie dannie") != -1)
                     {
 
-                        txt_err.Text += Environment.NewLine + "ccs does not show co2";
+                        txt_err.Text += Environment.NewLine + "ccs co2 levie dannie";
+                        txt_err.Foreground = Brushes.Red;
+                    }
+
+                    if (indata.IndexOf("ccs co2 net dannih") != -1)
+                    {
+
+                        txt_err.Text += Environment.NewLine + "ccs co2 net dannih";
+                        txt_err.Foreground = Brushes.Red;
+                    }
+
+                    if (indata.IndexOf("ccs co2 ne viden na shine") != -1)
+                    {
+
+                        txt_err.Text += Environment.NewLine + "ccs co2 ne viden na shine";
                         txt_err.Foreground = Brushes.Red;
                     }
                     if (indata.IndexOf("sht20 does not show hum") != -1)
@@ -913,6 +981,7 @@ namespace WpfApp1
 
         async Task registrfirebaseAsync(string asdasdasd, string macaddr)
         {
+           // MessageBox.Show("registrfirebaseAsync");
             try
             {
 
