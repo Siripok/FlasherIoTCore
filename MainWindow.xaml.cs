@@ -197,6 +197,7 @@ namespace WpfApp1
                 if (MACiCOM[0] != "")
                 { //коннектимся если есть МАС адрес
                     CreateEsDevice(getProject(binPath), "europe-west1", "atest-registry", getPrefix(binPath) + MACiCOM[0], "ec_public.pem");
+
                     if (binPath == "Fan")
                     {
                         //  MessageBox.Show(msg.Path);
@@ -244,7 +245,7 @@ namespace WpfApp1
 }";
                    await     registrfirebaseAsync(asdasdasd, getPrefix(binPath) + MACiCOM[0]);
                     }
-                    if (binPath == "Fan")
+                    if (binPath == "Co2Sta")
                     {
                         //  MessageBox.Show(msg.Path);
                         string asdasdasd = @"{
@@ -780,6 +781,9 @@ namespace WpfApp1
                 case "Fan":
                     otvet = "GV_";
                     break;
+                case "Co2Sta":
+                    otvet = "GV_";
+                    break;
                 case "SmartKitchen":
                     otvet = "GN_";
                     break;
@@ -796,6 +800,9 @@ namespace WpfApp1
             switch (nameDir)
             {
                 case "Fan":
+                    otvet = "greenvent-632e2";
+                    break;
+                case "Co2Sta":
                     otvet = "greenvent-632e2";
                     break;
                 case "SmartKitchen":
