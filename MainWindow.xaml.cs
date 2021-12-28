@@ -39,7 +39,7 @@ namespace WpfApp1
         public string Port { get; set; }
 
         public string[] portNames { get; set; }
-        public List<string> DirectoryProject { get; set; }
+        public List<devinfo> DirectoryProject { get; set; }
 
 
 
@@ -54,10 +54,11 @@ namespace WpfApp1
 
 
 
-        public FlashInfo(string Path, string Port)
+        public FlashInfo()
         {
-            this.Path = Path;
-            this.Port = Port;
+
+           // this.Path = Path;
+         //   this.Port = Port;
         }
     }
 
@@ -68,7 +69,7 @@ namespace WpfApp1
         string idfPath = @""; //на конце пути должен быть слэш "\"
         const int BoardsMAX = 5;// кол-во строк т.е подключаемых плат
         public string[] projects;//project from 2win
-        public List<string> DirectoryProject;
+        public List<devinfo> DirectoryProject;
 
         char k;
         List<FlashInfo> spisflash = new List<FlashInfo>();
@@ -81,9 +82,28 @@ namespace WpfApp1
             InitializeComponent();
             ShowPorts();
             GetDirectoryProject();
+            try
+            {
+                spisflash = JsonConvert.DeserializeObject<List<FlashInfo>>(Parameters.spifflash);
+            }catch (Exception)
+            {
+                spisflash = null;
+                spisflash = new List<FlashInfo>();
+                // spisflash.Clear();
+              
+                ShowPorts();
+                for (int i = 0; i < BoardsMAX; i++)
+                {
+                    spisflash.Add(new FlashInfo() { portNames = portNames, DirectoryProject = DirectoryProject });
+                    spisflash[i].elem = i + 1;
+                }
 
-            spisflash = JsonConvert.DeserializeObject<List<FlashInfo>>(Parameters.spifflash);
+                lb.ItemsSource = spisflash;
+                lb.Items.Refresh();
+                DeleteMACiCOM();
 
+            }
+       //     MessageBox.Show(Parameters.spifflash);
             lb.ItemsSource = spisflash;
 
             user = Environment.UserName;
@@ -112,14 +132,23 @@ namespace WpfApp1
         public void GetDirectoryProject()
         {
             log.Add("Получим директорию проектов");
-            DirectoryProject = new List<string>();
+            DirectoryProject = new List<devinfo>();
             // MessageBox.Show(Directory.GetCurrentDirectory() + "\\projects");
             if (!Directory.Exists("projects"))
                 Directory.CreateDirectory("projects");
 
             foreach (string asas in Directory.GetDirectories("projects"))
             {
-                DirectoryProject.Add(asas.Replace("projects\\", ""));
+
+
+                string textfile = File.ReadAllText(Directory.GetCurrentDirectory() + "\\" + asas + "\\ino.json");
+
+                var jsonb = JsonConvert.DeserializeObject<devinfo>(textfile);
+            //   jsonb.nameDir = asas.Replace("projects\\","");
+
+              //  MessageBox.Show(jsonb.nameDir);
+
+                DirectoryProject.Add(jsonb);
             }
             //irectoryProject = Directory.GetDirectories("projects").;
 
@@ -147,7 +176,7 @@ namespace WpfApp1
 
         string[] MACiCOM = new string[2];
 
-        private void myProcess_Exited(object sender, System.EventArgs e, string binPath, string port, bool multik = false, int num = 0)
+        private void myProcess_Exited(object sender, System.EventArgs e, string binPath, string port, devinfo devinf0, bool multik = false, int num = 0)
         {
 
             string MACpath = @$"C:\Users\{user}\AppData\Local\Temp\espMACi{port}.txt";
@@ -196,14 +225,17 @@ namespace WpfApp1
 
                 if (MACiCOM[0] != "")
                 { //коннектимся если есть МАС адрес
-                    CreateEsDevice(getProject(binPath), "europe-west1", "atest-registry", getPrefix(binPath) + MACiCOM[0], "ec_public.pem");
 
-                    if (binPath == "Fan")
+                    if (devinf0.intver < 1)
+                    {
+                        CreateEsDevice(devinf0.project, "europe-west1", "atest-registry", devinf0.prefix + MACiCOM[0], "ec_public.pem");
+                    }
+                    if (devinf0.name == "Fan")
                     {
                         //  MessageBox.Show(msg.Path);
                         string asdasdasd = @"{
 
-'" + getPrefix(binPath) + MACiCOM[0] + @"_1': 
+'" + devinf0.prefix + MACiCOM[0] + @"_1': 
 {
         'float' : {
           'value' : {
@@ -213,7 +245,7 @@ namespace WpfApp1
             'temperature' : 0
           }
         },
-        'id' : '" + getPrefix(binPath) + MACiCOM[0] + @"_1',
+        'id' : '" + devinf0.prefix + MACiCOM[0] + @"_1',
         'name' : 'Вентилятор',
         'parameters' : {
           'dimmer' : false,
@@ -243,25 +275,24 @@ namespace WpfApp1
       }
 
 }";
-                   await     registrfirebaseAsync(asdasdasd, getPrefix(binPath) + MACiCOM[0]);
+                   await     registrfirebaseAsync(asdasdasd, devinf0.prefix + MACiCOM[0]);
                     }
-                    if (binPath == "Co2Sta")
+                    if (devinf0.name == "Co2Sta")
                     {
                         //  MessageBox.Show(msg.Path);
                         string asdasdasd = @"{
 
-'" + getPrefix(binPath) + MACiCOM[0] + @"_1': 
+'" + devinf0.prefix + MACiCOM[0] + @"_1': 
 {
         'float' : {
           'value' : {
             'co2' : 0,
-            'hum' : 0,
-            'illumination' : 0,
+            'hum' : 0,       
             'TVOC' : 0,
             'temperature' : 0
           }
         },
-        'id' : '" + getPrefix(binPath) + MACiCOM[0] + @"_1',
+        'id' : '" + devinf0 .prefix+ MACiCOM[0] + @"_1',
         'name' : 'CO2 станция',
         'parameters' : {
           'dimmer' : false,
@@ -291,7 +322,7 @@ namespace WpfApp1
       }
 
 }";
-                        await registrfirebaseAsync(asdasdasd, getPrefix(binPath) + MACiCOM[0]);
+                        await registrfirebaseAsync(asdasdasd, devinf0.prefix + MACiCOM[0]);
                     }
                 }
 
@@ -351,28 +382,29 @@ namespace WpfApp1
 
             if (spisflash[num].chk == true || allflash == false)
             {
-                try //921600 //115200
-                    //--flash_mode dio
+                try                   
                 {
                     string files = Directory.GetCurrentDirectory() + "\\projects\\" + binPath + "\\" + binPath;
-                    //MessageBox.Show($"bin {binPath}\nDirectory.GetCurrentDirectory(){Directory.GetCurrentDirectory()}");
-
-                    // MessageBox.Show($"files {files}\n"+$"{binPath}");
-                    //var startInfo = new ProcessStartInfo(@"C:\Windows\system32\cmd.exe", $" /{k} \"\"C:\\Users\\{user}\\.espressif\\idf_cmd_init.bat\" &\"python\" \"\"{idfPath}components\\esptool_py\\esptool\\" +
-                    //   $"esptool.py\"\" --chip ESP32 -p {PORT} -b 921600 --after hard_reset write_flash --flash_size 4MB --flash_mode dio 0x00000 \"{binPath}\" --erase-all " +
-                    //   $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
-
+                   
                     string erase = "";
                     if (chk_erase.IsChecked == true)
                         erase = "--erase-all "; //erase_flash
 
 
+                string textfile=    File.ReadAllText(Directory.GetCurrentDirectory() + "\\projects\\" + binPath+ "\\ino.json");
+
+                   var jsonb= JsonConvert.DeserializeObject<devinfo>(textfile);
+
+                    string binname = Directory.GetCurrentDirectory() + "\\projects\\" + binPath + "\\"+ jsonb.binname;
+
+                //    MessageBox.Show(binname);
+
 
 
                     Console.WriteLine(files);
                     var startInfo = new ProcessStartInfo($@"C:\Windows\system32\cmd.exe",
-                       @$"/{k} C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio {erase}--flash_freq 80m --flash_size detect 0xe000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/partitions/boot_app0.bin 0x1000 C:\Users\{user}\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4-rc1/tools/sdk/bin/bootloader_dio_80m.bin 0x10000 {files}.ino.bin 0x8000 {Environment.CurrentDirectory}\partitions.bin" +
-                      $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
+                           @$"/{k} {Environment.CurrentDirectory}\partsheme/esptool.exe --chip esp32 --port {PORT} --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio {erase}--flash_freq 80m --flash_size detect 0xe000 {Environment.CurrentDirectory}\partsheme/boot_app0.bin 0x1000 {Environment.CurrentDirectory}\partsheme/bootloader_dio_80m.bin 0x10000 {binname} 0x8000 {Environment.CurrentDirectory}\partsheme/partitions.bin" +
+                          $">C:\\Users\\{user}\\AppData\\Local\\Temp\\espMACi{PORT}.txt\"\"");
 
 
 
@@ -387,7 +419,7 @@ namespace WpfApp1
 
                     process.StartInfo = startInfo;
                     process.EnableRaisingEvents = true;
-                    process.Exited += new EventHandler((sender, e) => myProcess_Exited(sender, e, binPath, PORT, allflash, num));
+                    process.Exited += new EventHandler((sender, e) => myProcess_Exited(sender, e, binPath, PORT, jsonb, allflash, num ));
 
                     process.Start();
                     ChekLog(PORT);
@@ -422,7 +454,7 @@ namespace WpfApp1
                 ShowPorts();
                 for (int i = 0; i < BoardsMAX; i++)
                 {
-                    spisflash.Add(new FlashInfo("", "") { portNames = portNames, DirectoryProject = DirectoryProject });
+                    spisflash.Add(new FlashInfo() { portNames = portNames, DirectoryProject = DirectoryProject });
                     spisflash[i].elem = i + 1;
                 }
 
@@ -538,6 +570,11 @@ namespace WpfApp1
         int w;//узнаёт какой элемент был выбран чтобы присвоить ему мак адрес
         private async void cmdFlash_Clicked(object sender, RoutedEventArgs e)
         {
+
+
+
+
+
             CloseMonitor();
             txt_err.Text = "";
             w = 0;
@@ -545,9 +582,11 @@ namespace WpfApp1
             if (cmd.DataContext is FlashInfo)
             {
                 FlashInfo msg = (FlashInfo)cmd.DataContext;
+               // msg.DirectoryProject = DirectoryProject;
 
                 if (msg.Port != "")
                 {
+                //    MessageBox.Show(msg.Path);
                     if (msg.Path != "")
                     {
 
@@ -578,7 +617,7 @@ namespace WpfApp1
         private void Window_Closed(object sender, EventArgs e)
         {
             string json = JsonConvert.SerializeObject(spisflash);
-
+        //    MessageBox.Show(json);
             Parameters.spifflash = json;
             Parameters.erase = (bool)chk_erase.IsChecked;
             Parameters.noClosing = (bool)chk_noClose.IsChecked;
@@ -772,10 +811,10 @@ namespace WpfApp1
             }
             lb.Items.Refresh();
         }
-
+        /*
         string getPrefix(string nameDir)
         {
-            string otvet = "";
+            string otvet = nameDir.Substring(0,3);
             switch (nameDir)
             {
                 case "Fan":
@@ -796,7 +835,7 @@ namespace WpfApp1
         }
         string getProject(string nameDir)
         {
-            string otvet = "";
+            string otvet = nameDir;
             switch (nameDir)
             {
                 case "Fan":
@@ -806,16 +845,16 @@ namespace WpfApp1
                     otvet = "greenvent-632e2";
                     break;
                 case "SmartKitchen":
-                    otvet = "giulia-novars-smart-realtime";
+                    otvet = "giulia-novars-smart";
                     break;
                 case "SmartKitchen2":
-                    otvet = "giulia-novars-smart-realtime";
+                    otvet = "giulia-novars-smart";
                     break;
             }
             return otvet;
         }
 
-
+        */
 
 
         SerialPort sp;
@@ -1039,6 +1078,20 @@ namespace WpfApp1
     {
         public double Height { get; set; }
     }
+
+
+    public class devinfo
+    {
+        public string binname { get; set; }
+        public string nameDir { get; set; }
+        public string name { get; set; }
+        public string desc { get; set; }
+        public string prefix { get; set; }
+        public int intver { get; set; }
+        public string project { get; set; }
+    }
+
+
 }
 //Created 02/08/2021 -- ...
 //v 1.0
