@@ -266,8 +266,11 @@ namespace WpfApp1
             'hash' : 611877,
             'hum' : 50,
             'illumination' : 0,
+            'illum_revers' : false,
             'mode' : 'normal',
             'on' : false,
+            'gisterezisco2' : 0,
+            'gisterezishum' : 0,
             'speed' : 3
           }
         },
